@@ -34,13 +34,15 @@ class APItests(unittest.TestCase):
  def get(self,path):
   with urllib.request.urlopen(self.url+path) as response:return json.load(response)
  def test_paginated_country_city_search(self):
-  a=self.get('/api/space/properties?country=GB&city=London&limit=2');b=self.get('/api/space/properties?country=GB&city=London&limit=2&offset=2');self.assertEqual(a['total'],4);self.assertEqual(len(a['properties']),2);self.assertFalse(set(p['id'] for p in a['properties'])&set(p['id'] for p in b['properties']))
+  a=self.get('/api/space/properties?country=GB&city=London&limit=2');b=self.get('/api/space/properties?country=GB&city=London&limit=2&offset=2');self.assertGreaterEqual(a['total'],4);self.assertEqual(len(a['properties']),2);self.assertFalse(set(p['id'] for p in a['properties'])&set(p['id'] for p in b['properties']))
  def test_id_lookup_and_world_binding(self):
   p=self.get('/api/space/properties/property-hq1-5601-ne-mlk');self.assertEqual(p['virtual']['status'],'demo');self.assertIsNone(p['worldDestination']);m=self.get('/api/space/world-manifest?country=DE&limit=1');self.assertEqual(m['total'],2);self.assertEqual(len(m['places']),1);self.assertFalse(m['activationAllowed']);self.assertFalse(m['places'][0]['replicaRightsVerified'])
  def test_reject_invalid_query_and_no_file_exposure(self):
   for path,status in [('/api/space/properties?limit=1000',400),('/api/space/properties?q=a&q=b',400),('/api/space/properties?sql=DELETE',400),('/scripts/space_api.py',404),('/api/space/properties/missing',404)]:
    with self.assertRaises(urllib.error.HTTPError) as error:self.get(path)
    self.assertEqual(error.exception.code,status)
+ def test_commercial_use_api_filter(self):
+  data=self.get('/api/space/properties?use=office');self.assertEqual(data['total'],10);self.assertTrue(all('office' in p['spaceUses'] for p in data['properties']))
  def test_source_attribution_lookup(self):
   source=self.get('/api/space/sources/src-aac-contact');self.assertEqual(source['url'],'https://anacostiaartscenter.com/contact/');self.assertIn('operatingNotice',source['scope'])
  def test_writes_disabled(self):

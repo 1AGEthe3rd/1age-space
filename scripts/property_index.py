@@ -2,6 +2,7 @@
 """Validate the shared public catalog; build/query an isolated SQLite FTS index."""
 import argparse, datetime as dt, json, re, sqlite3
 from pathlib import Path
+SPACE_USES={'office','retail','industrial','warehouse','restaurant','workshop','studio','coworking','mixed_use','live_work'}
 COLLECTIONS=('properties','sources','buildings','units','ownerClaims','physicalListings','virtualSpaces','virtualOccupancies','leaseApplications','creatorAssets','workRequests','businessProfiles')
 class CatalogError(ValueError):pass
 def require(ok,message):
@@ -27,6 +28,7 @@ def validate(data,today=None):
   require(isinstance(p.get('name'),str) and bool(p['name'].strip()),'Property name required');a=p.get('address',{})
   require(all(isinstance(a.get(k),str) and a[k].strip() for k in ['line1','city','region','countryCode']),'Structured address required');require(re.fullmatch('[A-Z]{2}',a['countryCode']) is not None,'ISO country code required')
   require(bool(p.get('categories')) and set(p['categories'])<={'commercial','art','live_work'},'Unknown category')
+  uses=p.get('spaceUses',[]);require(isinstance(uses,list) and set(uses)<=SPACE_USES,'Unknown commercial space use')
   v=p.get('verification',{});require(v.get('status') in ['source_checked','research_candidate'],'Invalid verification');refs(v.get('sourceIds'),'sources');require(bool(v['sourceIds']),'Evidence required');require(date(v.get('checkedAt'))<=today,'Verification in future');require(date(p.get('updatedAt'))<=today,'Update in future')
   if v['status']=='source_checked':require(all(sources[k]['kind']!='founder_report' for k in v['sourceIds']),'Founder report alone is not source checked')
   field_sources=v.get('fieldSources',{})
@@ -63,14 +65,15 @@ def build(data,path):
   db.execute("CREATE VIRTUAL TABLE search USING fts5(id UNINDEXED,content,tokenize='unicode61 remove_diacritics 2')")
   for p in data['properties']:
    db.execute('INSERT INTO properties VALUES (?,?,?,?,?,?)',(p['id'],p['name'],p['address']['countryCode'],p['address']['city'],json.dumps(p['categories']),json.dumps(p,ensure_ascii=False)))
-   text=' '.join([p['name'],p['id'],*filter(None,p['address'].values()),p['description'],*p['categories']]);db.execute('INSERT INTO search VALUES (?,?)',(p['id'],text))
+   text=' '.join([p['name'],p['id'],*filter(None,p['address'].values()),p['description'],*p['categories'],*p.get('spaceUses',[])]);db.execute('INSERT INTO search VALUES (?,?)',(p['id'],text))
  return path
-def query(path,text='',country=None,category=None,limit=20,offset=0,city=None):
+def query(path,text='',country=None,category=None,limit=20,offset=0,city=None,space_use=None):
  require(type(limit) is int and 1<=limit<=100 and type(offset) is int and offset>=0,'Invalid pagination')
  tokens=re.findall(r'[^\W_]+',text,flags=re.UNICODE);args=[];where=[]
  if tokens:where.append('p.id IN (SELECT id FROM search WHERE search MATCH ?)');args.append(' AND '.join('"'+t+'"*' for t in tokens))
  if country:where.append('p.country=?');args.append(country)
  if city:where.append('p.city=?');args.append(city)
+ if space_use:where.append("EXISTS (SELECT 1 FROM json_each(json_extract(p.record,'$.spaceUses')) WHERE value=?)");args.append(space_use)
  if category:where.append('EXISTS (SELECT 1 FROM json_each(p.categories) WHERE value=?)');args.append(category)
  clause=' WHERE '+' AND '.join(where) if where else ''
  with sqlite3.connect(Path(path).resolve().as_uri()+'?mode=ro',uri=True) as db:

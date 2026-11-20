@@ -14,11 +14,11 @@ class Handler(BaseHTTPRequestHandler):
  def do_GET(self):
   try:
    url=urlparse(self.path);params=parse_qs(url.query,keep_blank_values=True)
-   if any(len(v)!=1 for v in params.values()) or set(params)-{'q','country','category','city','limit','offset'}:raise CatalogError('Unknown or repeated query parameter')
+   if any(len(v)!=1 for v in params.values()) or set(params)-{'q','country','category','city','use','limit','offset'}:raise CatalogError('Unknown or repeated query parameter')
    get=lambda key,default=None:params.get(key,[default])[0]
    if len(get('q',''))>500:raise CatalogError('Query too long')
    if url.path in ['/api/space/properties','/api/space/world-manifest']:
-    result=query(self.server.index,get('q',''),get('country'),get('category'),int(get('limit','20')),int(get('offset','0')),city=get('city'))
+    result=query(self.server.index,get('q',''),get('country'),get('category'),int(get('limit','20')),int(get('offset','0')),city=get('city'),space_use=get('use'))
     return self.reply(200,manifest(result['properties'],result['total'],result['limit'],result['offset']) if url.path.endswith('world-manifest') else result)
    if url.path.startswith('/api/space/sources/'):
     key=unquote(url.path[len('/api/space/sources/'):])

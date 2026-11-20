@@ -5,7 +5,7 @@ export function isAvailable(p,now=new Date()){const x=p.physical;return x.status
 export function searchProperties(properties,{q='',category='all',country='all',city='all',availability='all',savedOnly=false,saved=[]}={}){
  const words=normalize(q).split(' ').filter(Boolean),savedSet=new Set(saved);
  return properties.filter(p=>{
-  const hay=normalize([p.name,p.id,p.address.line1,p.address.city,p.address.region,countryNames[p.address.countryCode],p.description,...p.categories.map(c=>categoryNames[c]),p.id.includes('5601')?'NorthLeftChef':''].join(' '));
+  const hay=normalize([p.name,p.id,p.address.line1,p.address.city,p.address.region,countryNames[p.address.countryCode],p.description,...(p.spaceUses||[]),...p.categories.map(c=>categoryNames[c]),p.id.includes('5601')?'NorthLeftChef':''].join(' '));
   return words.every(w=>hay.includes(w))&&(category==='all'||p.categories.includes(category))&&(country==='all'||p.address.countryCode===country)&&(city==='all'||p.address.city===city)&&(!savedOnly||savedSet.has(p.id))&&(availability==='all'||(availability==='physical'&&isAvailable(p))||(availability==='virtual'&&p.virtual.status==='demo'));
  });
 }

@@ -1,0 +1,786 @@
+{
+  "batchId": "workspace-reviewed-20261120",
+  "checkedAt": "2026-11-20",
+  "intakeMode": "reviewed_metadata_csv",
+  "sources": [
+    {
+      "id": "src-workspace-pill-box",
+      "title": "Workspace — Pill Box",
+      "url": "https://www.workspace.co.uk/workspaces/pill-box",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-the-chocolate-factory",
+      "title": "Workspace — The Chocolate Factory",
+      "url": "https://www.workspace.co.uk/workspaces/the-chocolate-factory",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-metal-box-factory",
+      "title": "Workspace — Metal Box Factory",
+      "url": "https://www.workspace.co.uk/workspaces/metal-box-factory",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-the-biscuit-factory",
+      "title": "Workspace — The Biscuit Factory",
+      "url": "https://www.workspace.co.uk/workspaces/the-biscuit-factory",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-portsoken-house",
+      "title": "Workspace — Portsoken House",
+      "url": "https://www.workspace.co.uk/workspaces/portsoken-house",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-salisbury-house",
+      "title": "Workspace — Salisbury House",
+      "url": "https://www.workspace.co.uk/workspaces/salisbury-house",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-screenworks",
+      "title": "Workspace — ScreenWorks",
+      "url": "https://www.workspace.co.uk/workspaces/screenworks",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-swan-court",
+      "title": "Workspace — Swan Court",
+      "url": "https://www.workspace.co.uk/workspaces/swan-court",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-the-centro-buildings",
+      "title": "Workspace — The Centro Buildings",
+      "url": "https://www.workspace.co.uk/workspaces/the-centro-buildings",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-the-light-bulb",
+      "title": "Workspace — The Light Bulb",
+      "url": "https://www.workspace.co.uk/workspaces/the-light-bulb",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    }
+  ],
+  "properties": [
+    {
+      "id": "place-gb-london-workspace-pill-box",
+      "name": "Pill Box",
+      "address": {
+        "line1": "115 Coventry Road, Bethnal Green",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "E2 6GG"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-pill-box"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-pill-box"
+          ],
+          "address": [
+            "src-workspace-pill-box"
+          ],
+          "categories": [
+            "src-workspace-pill-box"
+          ],
+          "spaceUses": [
+            "src-workspace-pill-box"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-the-chocolate-factory",
+      "name": "The Chocolate Factory",
+      "address": {
+        "line1": "Clarendon Road, Wood Green",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "N22 6XJ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-the-chocolate-factory"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-the-chocolate-factory"
+          ],
+          "address": [
+            "src-workspace-the-chocolate-factory"
+          ],
+          "categories": [
+            "src-workspace-the-chocolate-factory"
+          ],
+          "spaceUses": [
+            "src-workspace-the-chocolate-factory"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-metal-box-factory",
+      "name": "Metal Box Factory",
+      "address": {
+        "line1": "30 Great Guildford Street, Borough",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SE1 0HS"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-metal-box-factory"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-metal-box-factory"
+          ],
+          "address": [
+            "src-workspace-metal-box-factory"
+          ],
+          "categories": [
+            "src-workspace-metal-box-factory"
+          ],
+          "spaceUses": [
+            "src-workspace-metal-box-factory"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-the-biscuit-factory",
+      "name": "The Biscuit Factory",
+      "address": {
+        "line1": "Drummond Road, Southwark",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SE16 4DG"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-the-biscuit-factory"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-the-biscuit-factory"
+          ],
+          "address": [
+            "src-workspace-the-biscuit-factory"
+          ],
+          "categories": [
+            "src-workspace-the-biscuit-factory"
+          ],
+          "spaceUses": [
+            "src-workspace-the-biscuit-factory"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-portsoken-house",
+      "name": "Portsoken House",
+      "address": {
+        "line1": "155–157 Minories",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "EC3N 1LJ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-portsoken-house"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-portsoken-house"
+          ],
+          "address": [
+            "src-workspace-portsoken-house"
+          ],
+          "categories": [
+            "src-workspace-portsoken-house"
+          ],
+          "spaceUses": [
+            "src-workspace-portsoken-house"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-salisbury-house",
+      "name": "Salisbury House",
+      "address": {
+        "line1": "29 Finsbury Circus",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "EC2M 5SQ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-salisbury-house"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-salisbury-house"
+          ],
+          "address": [
+            "src-workspace-salisbury-house"
+          ],
+          "categories": [
+            "src-workspace-salisbury-house"
+          ],
+          "spaceUses": [
+            "src-workspace-salisbury-house"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-screenworks",
+      "name": "ScreenWorks",
+      "address": {
+        "line1": "22 Highbury Grove, Islington",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "N5 2EF"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-screenworks"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-screenworks"
+          ],
+          "address": [
+            "src-workspace-screenworks"
+          ],
+          "categories": [
+            "src-workspace-screenworks"
+          ],
+          "spaceUses": [
+            "src-workspace-screenworks"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-swan-court",
+      "name": "Swan Court",
+      "address": {
+        "line1": "11 Worple Road",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SW19 4JS"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-swan-court"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-swan-court"
+          ],
+          "address": [
+            "src-workspace-swan-court"
+          ],
+          "categories": [
+            "src-workspace-swan-court"
+          ],
+          "spaceUses": [
+            "src-workspace-swan-court"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-the-centro-buildings",
+      "name": "The Centro Buildings",
+      "address": {
+        "line1": "20–23 Mandela Street, Camden",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "NW1 0DU"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-the-centro-buildings"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-the-centro-buildings"
+          ],
+          "address": [
+            "src-workspace-the-centro-buildings"
+          ],
+          "categories": [
+            "src-workspace-the-centro-buildings"
+          ],
+          "spaceUses": [
+            "src-workspace-the-centro-buildings"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-the-light-bulb",
+      "name": "The Light Bulb",
+      "address": {
+        "line1": "1 Filament Walk, Wandsworth",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SW18 4GQ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-the-light-bulb"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-the-light-bulb"
+          ],
+          "address": [
+            "src-workspace-the-light-bulb"
+          ],
+          "categories": [
+            "src-workspace-the-light-bulb"
+          ],
+          "spaceUses": [
+            "src-workspace-the-light-bulb"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    }
+  ]
+}
