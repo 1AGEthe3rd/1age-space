@@ -1,0 +1,1 @@
+Pinned shared renderer dependency: Three.js 0.180.0 (MIT). Reused from the existing 1AGE commerce prototype. Original three.module.js / three.core.js, local imports; no CDN request. License in THREE-LICENSE.txt. All Space model geometry is original procedural template content, not a representation of an indexed building.

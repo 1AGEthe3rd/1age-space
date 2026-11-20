@@ -1,0 +1,349 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-11-20",
+  "coverage": {
+    "scope": "starter_catalog",
+    "complete": false,
+    "notes": "Worldwide indexing is a long-term objective. Six starter records; not a complete city, country or global inventory."
+  },
+  "sources": [
+    {
+      "id": "src-founder",
+      "title": "Founder Space handoff",
+      "url": null,
+      "kind": "founder_report",
+      "checkedAt": "2026-11-20",
+      "publishedAt": "2026-11-15",
+      "scope": [
+        "research_candidates"
+      ],
+      "rights": "Founder-provided addresses only. No photographs, floor plans or building models licensed."
+    },
+    {
+      "id": "src-openhaus",
+      "title": "openHAUS — official contact",
+      "url": "https://www.openhauspdx.com/contact",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "address",
+        "use"
+      ],
+      "rights": "Factual name/address and short original summary only; no media copied."
+    },
+    {
+      "id": "src-everett",
+      "title": "Artspace — Everett Lofts",
+      "url": "https://www.artspace.org/everett",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "use"
+      ],
+      "rights": "Factual identification and short original summary only; no media copied."
+    },
+    {
+      "id": "src-everett-address",
+      "title": "Artspace Everett Lofts — official property site",
+      "url": "https://www.liveartspaceeverettlofts.com/index",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "address"
+      ],
+      "rights": "Factual name/address only; no media or floor plans copied."
+    },
+    {
+      "id": "src-acme",
+      "title": "Acme — Warton House open studios 2025",
+      "url": "https://acme.org.uk/news/warton-house-open-studios/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": "2025-05-21",
+      "scope": [
+        "address",
+        "use"
+      ],
+      "rights": "Factual name/address and original summary only; historical event is not current availability."
+    }
+  ],
+  "properties": [
+    {
+      "id": "property-hq1-5601-ne-mlk",
+      "name": "5601 NE MLK Jr Boulevard",
+      "address": {
+        "line1": "5601 NE Martin Luther King Jr Boulevard",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "district": "Soul District · HQ1",
+      "description": "A founder-selected research candidate for an in-house NorthLeftChef virtual café concept. The concept does not establish a business address, occupancy, vacancy, or rights to this building.",
+      "verification": {
+        "status": "research_candidate",
+        "sourceIds": [
+          "src-founder"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": []
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "demo",
+        "spaceIds": [
+          "vs-nlc-template"
+        ]
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-portland-openhaus-5020",
+      "name": "openHAUS · Dream Street",
+      "address": {
+        "line1": "5020 NE Martin Luther King Dr.",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "district": "Soul District · HQ1",
+      "description": "A coworking place identified on the operator’s website. Desk, room and property availability have not been checked.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-openhaus"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "address",
+          "use"
+        ]
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-everett-artspace-2917",
+      "name": "Artspace Everett Lofts",
+      "address": {
+        "line1": "2917 Hoyt Avenue",
+        "city": "Everett",
+        "region": "Washington",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "An artist live/work development documented by Artspace and the property’s official site. No available unit, rent or eligibility determination is represented here.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-everett",
+          "src-everett-address"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "address",
+          "use"
+        ]
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-warton-150",
+      "name": "Warton House · Acme studios",
+      "address": {
+        "line1": "150 Stratford High Street",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "art"
+      ],
+      "district": null,
+      "description": "An artist studio location documented in Acme’s 2025 open-studios publication. That historical event is not a current vacancy or open-access invitation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-acme"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "address",
+          "use"
+        ]
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "property-hq1-5775-ne-mlk",
+      "name": "5775 NE MLK Jr Boulevard",
+      "address": {
+        "line1": "5775 NE Martin Luther King Jr Boulevard",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "district": "Soul District · HQ1",
+      "description": "Founder-reported corridor research candidate. Current use, parcel identity and leasing status await independent verification.",
+      "verification": {
+        "status": "research_candidate",
+        "sourceIds": [
+          "src-founder"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": []
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "property-hq1-3735-ne-mlk",
+      "name": "3735 NE MLK Jr Boulevard",
+      "address": {
+        "line1": "3735 NE Martin Luther King Jr Boulevard",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "district": "Soul District · HQ1",
+      "description": "Founder-reported corridor research candidate. Current use, parcel identity and leasing status await independent verification.",
+      "verification": {
+        "status": "research_candidate",
+        "sourceIds": [
+          "src-founder"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": []
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    }
+  ],
+  "virtualSpaces": [
+    {
+      "id": "vs-nlc-template",
+      "propertyId": "property-hq1-5601-ne-mlk",
+      "title": "NorthLeftChef café template",
+      "status": "demo",
+      "representation": "original_template",
+      "assetRights": "Original procedural geometry by 1AGEthe3rd. Not a surveyed exterior, real floor plan or actual interior.",
+      "creatorRetainsAssets": true,
+      "worldDestination": null
+    }
+  ],
+  "buildings": [],
+  "units": [],
+  "ownerClaims": [],
+  "physicalListings": [],
+  "virtualOccupancies": [],
+  "leaseApplications": [],
+  "creatorAssets": [],
+  "workRequests": [],
+  "businessProfiles": []
+}
