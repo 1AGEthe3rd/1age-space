@@ -57,6 +57,8 @@ def build(data,path):
  with sqlite3.connect(path) as db:
   db.execute('CREATE TABLE metadata(key TEXT PRIMARY KEY,value TEXT NOT NULL)')
   db.execute('INSERT INTO metadata VALUES (?,?)',('catalog',json.dumps(data,ensure_ascii=False)))
+  db.execute('CREATE TABLE sources(id TEXT PRIMARY KEY,record TEXT NOT NULL)')
+  db.executemany('INSERT INTO sources VALUES (?,?)',[(s['id'],json.dumps(s,ensure_ascii=False)) for s in data['sources']])
   db.execute('CREATE TABLE properties(id TEXT PRIMARY KEY,name TEXT,country TEXT,city TEXT,categories TEXT,record TEXT)')
   db.execute("CREATE VIRTUAL TABLE search USING fts5(id UNINDEXED,content,tokenize='unicode61 remove_diacritics 2')")
   for p in data['properties']:

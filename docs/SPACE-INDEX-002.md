@@ -39,6 +39,7 @@ Categories overlap: 16 commercial, 26 art-space and 11 live/work classifications
 | --- | --- |
 | `/api/space/properties` | Paginated query; `q`, `country`, `city`, `category`, `limit`, `offset` |
 | `/api/space/properties/{id}` | Retrieve one stable public record |
+| `/api/space/sources/{id}` | Resolve cited evidence/rights information |
 | `/api/space/world-manifest` | The same paginated query as data-only World bindings |
 
 Limits: 1–100 records per request, default 20; no write, claim, payment or lease endpoints. No credential or production identity system. The service binds to loopback and is for local integration testing. It is not publicly hosted. The existing browser adapter still loads the JSON catalog; it is not switched to the API in this iteration.
@@ -51,7 +52,7 @@ The future 1age.space platform in 1AGE World can use these IDs to request proper
 
 ## Verification
 
-19 Python tests passed, including real local HTTP API requests, pagination, ID lookup, read-only enforcement, field evidence, append-only import, duplicate handling and data-only World bindings. JavaScript search tests also passed against the expanded catalog. No frontend redesign or browser layout test was undertaken in this index-focused iteration; the previous Build 001 browser tests remain historical evidence for that build.
+20 Python tests passed, including real local HTTP API requests, pagination, ID lookup, read-only enforcement, field evidence, append-only import, duplicate handling and data-only World bindings. JavaScript search tests also passed against the expanded catalog. No frontend redesign or browser layout test was undertaken in this index-focused iteration; the previous Build 001 browser tests remain historical evidence for that build.
 
 ## Run
 

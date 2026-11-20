@@ -20,6 +20,11 @@ class Handler(BaseHTTPRequestHandler):
    if url.path in ['/api/space/properties','/api/space/world-manifest']:
     result=query(self.server.index,get('q',''),get('country'),get('category'),int(get('limit','20')),int(get('offset','0')),city=get('city'))
     return self.reply(200,manifest(result['properties'],result['total'],result['limit'],result['offset']) if url.path.endswith('world-manifest') else result)
+   if url.path.startswith('/api/space/sources/'):
+    key=unquote(url.path[len('/api/space/sources/'):])
+    if not key or '/' in key:raise CatalogError('Invalid source ID')
+    with sqlite3.connect(Path(self.server.index).resolve().as_uri()+'?mode=ro',uri=True) as db:row=db.execute('SELECT record FROM sources WHERE id=?',(key,)).fetchone()
+    return self.reply(200,json.loads(row[0])) if row else self.reply(404,{'error':'Source not found'})
    if url.path.startswith('/api/space/properties/'):
     key=unquote(url.path[len('/api/space/properties/'):]);
     if not key or '/' in key:raise CatalogError('Invalid property ID')

@@ -41,6 +41,8 @@ class APItests(unittest.TestCase):
   for path,status in [('/api/space/properties?limit=1000',400),('/api/space/properties?q=a&q=b',400),('/api/space/properties?sql=DELETE',400),('/scripts/space_api.py',404),('/api/space/properties/missing',404)]:
    with self.assertRaises(urllib.error.HTTPError) as error:self.get(path)
    self.assertEqual(error.exception.code,status)
+ def test_source_attribution_lookup(self):
+  source=self.get('/api/space/sources/src-aac-contact');self.assertEqual(source['url'],'https://anacostiaartscenter.com/contact/');self.assertIn('operatingNotice',source['scope'])
  def test_writes_disabled(self):
   req=urllib.request.Request(self.url+'/api/space/properties',data=b'{}',method='POST')
   with self.assertRaises(urllib.error.HTTPError) as error:urllib.request.urlopen(req)
