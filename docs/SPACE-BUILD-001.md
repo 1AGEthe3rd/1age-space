@@ -88,3 +88,7 @@ The database builder refuses an existing destination. Use a fresh output path fo
 5. Attach the separately approved HQ building assets and arrival destinations using stable property IDs. No model is currently a replica of those places.
 
 Publishing, real inquiries, listing intake, occupancy agreements and payments remain disabled pending the separate reviews and authorization defined in the founder handoff. No fee or revenue assumptions were introduced.
+
+## Later index revision
+
+The initial six-record and eight-test results above describe Build 001. Index expansion 002 now has 30 records and a separate development report at `SPACE-INDEX-002.md`. The browser still uses the static catalog; the new local API and World manifest are tested integration preparations.

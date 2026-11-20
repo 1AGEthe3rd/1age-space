@@ -4,11 +4,11 @@ const data=JSON.parse(readFileSync(new URL('../space/data/catalog.json',import.m
 assert.equal(searchProperties(ps,{q:'5601 Portland'}).length,1);
 assert.equal(searchProperties(ps,{q:'NorthLeftChef'})[0].id,'property-hq1-5601-ne-mlk');
 assert.equal(searchProperties(ps,{category:'live_work'})[0].address.city,'Everett');
-assert.equal(searchProperties(ps,{country:'GB',category:'art'}).length,1);
+assert.ok(searchProperties(ps,{country:'GB',category:'art'}).some(p=>p.id==='place-gb-london-warton-150'));
 assert.equal(searchProperties(ps,{availability:'physical'}).length,0);
 assert.equal(searchProperties(ps,{availability:'virtual'}).length,1);
 assert.equal(searchProperties(ps,{savedOnly:true,saved:[ps[0].id]}).length,1);
-assert.equal(searchProperties(ps,{city:'Washington, D.C.'}).length,0);
+assert.ok(searchProperties(ps,{city:'Washington, D.C.'}).some(p=>p.id==='place-us-washington-anacostia-arts-1231'));
 assert.equal(normalize('École — Studio'),'ecole studio');
 assert.equal(safeExternal('javascript:alert(1)'),null);assert.equal(safeExternal('https://user:password@example.com'),null);
 const p=structuredClone(ps[0]);p.physical={status:'available',listingId:'listing',sourceIds:['src'],verifiedAt:'2026-11-01',expiresAt:'2026-11-15'};assert.equal(isAvailable(p,new Date('2026-11-20')),false);p.physical.expiresAt='2026-12-01';assert.equal(isAvailable(p,new Date('2026-11-20')),true);

@@ -1,5 +1,5 @@
 export const categoryNames={commercial:'Commercial',art:'Art space',live_work:'Live/work'};
-export const countryNames={US:'United States',GB:'United Kingdom'};
+export const countryNames={US:'United States',GB:'United Kingdom',CA:'Canada',FR:'France',DE:'Germany',AU:'Australia'};
 export function normalize(value){return String(value??'').normalize('NFKD').replace(/\p{M}/gu,'').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();}
 export function isAvailable(p,now=new Date()){const x=p.physical;return x.status==='available'&&!!x.listingId&&x.sourceIds.length>0&&!!x.verifiedAt&&!!x.expiresAt&&new Date(x.verifiedAt)<=now&&new Date(x.expiresAt)>now;}
 export function searchProperties(properties,{q='',category='all',country='all',city='all',availability='all',savedOnly=false,saved=[]}={}){

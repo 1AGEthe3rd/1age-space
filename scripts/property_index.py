@@ -29,6 +29,14 @@ def validate(data,today=None):
   require(bool(p.get('categories')) and set(p['categories'])<={'commercial','art','live_work'},'Unknown category')
   v=p.get('verification',{});require(v.get('status') in ['source_checked','research_candidate'],'Invalid verification');refs(v.get('sourceIds'),'sources');require(bool(v['sourceIds']),'Evidence required');require(date(v.get('checkedAt'))<=today,'Verification in future');require(date(p.get('updatedAt'))<=today,'Update in future')
   if v['status']=='source_checked':require(all(sources[k]['kind']!='founder_report' for k in v['sourceIds']),'Founder report alone is not source checked')
+  field_sources=v.get('fieldSources',{})
+  require(isinstance(field_sources,dict),'fieldSources must be an object')
+  for field,source_ids in field_sources.items():
+   refs(source_ids,'sources');require(bool(source_ids) and all(x in v['sourceIds'] for x in source_ids),'Field evidence must be included in verification sources')
+   require(all(field in sources[x]['scope'] for x in source_ids),f'Source does not support field: {field}')
+  notice=p.get('operatingNotice')
+  if notice is not None:
+   require(isinstance(notice,dict) and bool(notice.get('text')),'Operating notice text required');refs(notice.get('sourceIds'),'sources');require(bool(notice['sourceIds']) and date(notice.get('checkedAt'))<=today,'Operating notice evidence/date required')
   coords=p.get('coordinates')
   if coords is not None:
    require(isinstance(coords,dict) and type(coords.get('latitude')) in (int,float) and type(coords.get('longitude')) in (int,float) and -90<=coords['latitude']<=90 and -180<=coords['longitude']<=180,'Coordinates out of range');refs(coords.get('sourceIds'),'sources');require(bool(coords['sourceIds']),'Coordinate source required')
@@ -55,11 +63,12 @@ def build(data,path):
    db.execute('INSERT INTO properties VALUES (?,?,?,?,?,?)',(p['id'],p['name'],p['address']['countryCode'],p['address']['city'],json.dumps(p['categories']),json.dumps(p,ensure_ascii=False)))
    text=' '.join([p['name'],p['id'],*filter(None,p['address'].values()),p['description'],*p['categories']]);db.execute('INSERT INTO search VALUES (?,?)',(p['id'],text))
  return path
-def query(path,text='',country=None,category=None,limit=20,offset=0):
+def query(path,text='',country=None,category=None,limit=20,offset=0,city=None):
  require(type(limit) is int and 1<=limit<=100 and type(offset) is int and offset>=0,'Invalid pagination')
  tokens=re.findall(r'[^\W_]+',text,flags=re.UNICODE);args=[];where=[]
  if tokens:where.append('p.id IN (SELECT id FROM search WHERE search MATCH ?)');args.append(' AND '.join('"'+t+'"*' for t in tokens))
  if country:where.append('p.country=?');args.append(country)
+ if city:where.append('p.city=?');args.append(city)
  if category:where.append('EXISTS (SELECT 1 FROM json_each(p.categories) WHERE value=?)');args.append(category)
  clause=' WHERE '+' AND '.join(where) if where else ''
  with sqlite3.connect(Path(path).resolve().as_uri()+'?mode=ro',uri=True) as db:

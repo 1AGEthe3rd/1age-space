@@ -45,3 +45,9 @@ The current browser adapter loads a small JSON seed. SQLite FTS snapshots provid
 `unknown` is the default physical status. `available` requires a linked authorized PhysicalListing, cited evidence, a check date and an unexpired review deadline. UI filters re-evaluate expiry at read time. Source-checked property identity and physical availability are separate assertions. Virtual demos never qualify a place as physically available.
 
 No built-in payment or shared occupancy contract is active. Reuse the separately developed Virtual Checkout foundation only after authorized offers, identity, provider eligibility and agreement handling exist. Keep Cash credits, USD/USDC and the proposed $1AGE token distinct.
+
+## Index expansion 002
+
+The catalog now has 30 records. Stable IDs for HQ2-related discovery include `place-us-washington-anacostia-arts-1231` and `place-us-washington-playhouse-2020`. `place-us-washington-brookland-3305` is a separate D.C. record outside the Anacostia corridor. None has an attached HQ scene or approved property-specific arrival.
+
+Use `scripts/world_export.py` for data-only bindings, or query the local `scripts/space_api.py` service. The manifest intentionally leaves positions/assets unconnected. It prepares a record interface for the future Space platform in World; it does not modify that platform.
