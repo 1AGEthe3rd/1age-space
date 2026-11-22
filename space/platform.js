@@ -1,3 +1,4 @@
+import {subscribeInput} from './shared/gamepad.mjs';
 // Virtual entrance for the independent Space app; not an imported World scene.
 if(new URLSearchParams(location.search).has('property'))location.replace('explore.html?'+new URLSearchParams({place:new URLSearchParams(location.search).get('property')}));
 async function start(){
@@ -20,6 +21,7 @@ async function start(){
  function action(k){if(k==='left')angle-=.18;if(k==='right')angle+=.18;if(k==='in')distance=Math.max(12,distance-1);if(k==='out')distance=Math.min(30,distance+1);if(k==='reset'){angle=.5;distance=20;}dirty=true;}
  document.querySelectorAll('[data-camera]').forEach(b=>b.addEventListener('click',()=>action(b.dataset.camera)));host.addEventListener('keydown',e=>{const a={ArrowLeft:'left',ArrowRight:'right','+':'in','-':'out',Home:'reset'}[e.key];if(a){e.preventDefault();action(a);}});
  host.addEventListener('pointerdown',e=>{if(e.button>0)return;down={x:e.clientX,y:e.clientY,last:e.clientX,active:false};});host.addEventListener('pointermove',e=>{if(!down)return;if(!down.active){if(Math.abs(e.clientY-down.y)>Math.abs(e.clientX-down.x)+8){down=null;return;}if(Math.abs(e.clientX-down.x)<8)return;down.active=true;host.setPointerCapture(e.pointerId);}angle+=(e.clientX-down.last)*.006;down.last=e.clientX;dirty=true;});for(const type of ['pointerup','pointercancel'])host.addEventListener(type,()=>down=null);
+ const unpad=subscribeInput((input,dt)=>{angle+=(input.move.x+input.look.x)*dt*1.8;distance=Math.max(12,Math.min(30,distance+(input.move.y+input.look.y)*dt*8));dirty=true;});addEventListener('pagehide',unpad,{once:true});
  function render(t){requestAnimationFrame(render);if(document.hidden||!dirty||t-last<33)return;last=t;dirty=false;camera.position.set(Math.sin(angle)*distance,9,Math.cos(angle)*distance);camera.lookAt(-1.8,0,0);renderer.render(scene,camera);}requestAnimationFrame(render);document.querySelector('#fallback').hidden=true;
 }
 start().catch(()=>{document.querySelector('#hint').textContent='3D is unavailable on this device. Property discovery remains available.';});

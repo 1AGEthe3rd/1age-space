@@ -1,3 +1,4 @@
+import {subscribeInput} from './shared/gamepad.mjs';
 import * as THREE from './shared/three.module.js';
 export function createSpaceViewer(host){
  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));host.append(renderer.domElement);
@@ -11,6 +12,7 @@ export function createSpaceViewer(host){
  for(const x of [-2.5,2.5]){box(1.3,.08,1.2,x,.8,0,white);box(.12,.8,.12,x,.4,0);}
  box(1.8,1,.5,2.7,.55,-1.5,green);box(1.3,.08,1.2,-2.5,.8,-1.5,white);
  let angle=.55,zoom=12,interior=false,active=true,last=0,disposed=false,dirty=true;group.rotation.y=angle;
+ const unpad=subscribeInput((input,dt)=>{angle+=(input.move.x+input.look.x)*dt*1.8;zoom=Math.max(7,Math.min(20,zoom+(input.move.y+input.look.y)*dt*8));group.rotation.y=angle;dirty=true;});
  function resize(){const r=host.getBoundingClientRect();if(r.width&&r.height){renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();dirty=true;}}
  const observer=new ResizeObserver(resize);observer.observe(host);resize();
  function render(time){if(disposed)return;requestAnimationFrame(render);if(!dirty||!active||document.hidden||time-last<33)return;last=time;dirty=false;camera.position.set(0,interior?6:5,zoom);camera.lookAt(0,1,0);renderer.render(scene,camera);}requestAnimationFrame(render);
@@ -21,5 +23,5 @@ export function createSpaceViewer(host){
  function end(){drag=null;}function key(e){const actions={ArrowLeft:'left',ArrowRight:'right','+':'in','=':'in','-':'out',Home:'reset'};if(actions[e.key]){e.preventDefault();action(actions[e.key]);}}
  host.addEventListener('pointerdown',down);host.addEventListener('pointermove',move);host.addEventListener('pointerup',end);host.addEventListener('pointercancel',end);host.addEventListener('keydown',key);
  const io=new IntersectionObserver(entries=>{active=entries[0].isIntersecting;});io.observe(host);
- return {action,setInterior(value){interior=value;roof.visible=!value;fronts.forEach(x=>x.visible=!value);dirty=true;},setAccent(value){if(/^#[\da-f]{6}$/i.test(value)){green.color.set(value);green.emissive.set(value);dirty=true;}},dispose(){disposed=true;observer.disconnect();io.disconnect();host.removeEventListener('pointerdown',down);host.removeEventListener('pointermove',move);host.removeEventListener('pointerup',end);host.removeEventListener('pointercancel',end);host.removeEventListener('keydown',key);group.traverse(x=>x.geometry?.dispose());[green,dark,white].forEach(x=>x.dispose());renderer.dispose();renderer.domElement.remove();}};
+ return {action,setInterior(value){interior=value;roof.visible=!value;fronts.forEach(x=>x.visible=!value);dirty=true;},setAccent(value){if(/^#[\da-f]{6}$/i.test(value)){green.color.set(value);green.emissive.set(value);dirty=true;}},dispose(){unpad();disposed=true;observer.disconnect();io.disconnect();host.removeEventListener('pointerdown',down);host.removeEventListener('pointermove',move);host.removeEventListener('pointerup',end);host.removeEventListener('pointercancel',end);host.removeEventListener('keydown',key);group.traverse(x=>x.geometry?.dispose());[green,dark,white].forEach(x=>x.dispose());renderer.dispose();renderer.domElement.remove();}};
 }
