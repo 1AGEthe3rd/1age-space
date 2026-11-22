@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {geographicIndex,catalogDestination} from '../space/geography.mjs';
+const catalog=JSON.parse(readFileSync(new URL('../space/data/catalog.json',import.meta.url))),before=JSON.stringify(catalog),index=geographicIndex(catalog);
+assert.equal(index.properties,408);assert.equal(index.cities.length,18);assert.equal(index.countries.length,6);assert.equal(index.coordinates,347);
+assert.equal(JSON.stringify(catalog),before,'Grouping must not change the preserved source catalog');
+const propertyIds=index.cities.flatMap(c=>c.properties);assert.equal(new Set(propertyIds).size,408);assert.deepEqual(propertyIds.sort(),catalog.properties.map(p=>p.id).sort());
+const dc=index.cities.find(c=>c.city==='Washington, D.C.'),target=catalogDestination(dc,dc.properties[0]);
+const params=new URL(target,'https://1age.space/').searchParams;assert.equal(params.get('city'),dc.city);assert.equal(params.get('property'),dc.properties[0]);
+assert.throws(()=>catalogDestination(dc,'unrelated-property'));
+const sourceIds=new Set(catalog.sources.map(s=>s.id));assert(index.cities.every(c=>c.sourceIds.every(id=>sourceIds.has(id))));
+const sample={schemaVersion:1,sources:[],properties:[{id:'a',address:{city:'Springfield',region:'Oregon',countryCode:'US'}},{id:'b',address:{city:'Springfield',region:'Illinois',countryCode:'US'}}]};
+assert.equal(geographicIndex(sample).cities.length,2,'Same city name in different regions remains distinct');
+sample.properties.push(structuredClone(sample.properties[0]));assert.throws(()=>geographicIndex(sample),/duplicate/);
+console.log(JSON.stringify({properties:index.properties,countries:index.countries,cities:index.cities.length,regions:index.regions,sources:index.sources,coordinates:index.coordinates,preserved:true},null,2));

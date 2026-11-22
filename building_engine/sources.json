@@ -1,0 +1,58 @@
+[
+  {
+    "id": "microsoft-us-oregon-v2",
+    "title": "Microsoft US Building Footprints \u2014 Oregon legacy v2",
+    "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/Oregon.geojson.zip",
+    "country": "US",
+    "region": "Oregon",
+    "license": "ODbL-1.0",
+    "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "attribution": "Contains Microsoft US Building Footprints, licensed under ODbL 1.0. Modified by coordinate validation, canonicalization, deduplication and indexing. No Microsoft endorsement.",
+    "permitted": true,
+    "vintage": "Mixed imagery capture dates; not verified current. Upstream USBuildingFootprints repository is archived; capture dates retained when supplied.",
+    "reviewedOn": "2026-11-21",
+    "metadataUrl": "https://github.com/microsoft/USBuildingFootprints"
+  },
+  {
+    "id": "microsoft-us-washington-v2",
+    "title": "Microsoft US Building Footprints \u2014 Washington legacy v2",
+    "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/Washington.geojson.zip",
+    "country": "US",
+    "region": "Washington",
+    "license": "ODbL-1.0",
+    "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "attribution": "Contains Microsoft US Building Footprints, licensed under ODbL 1.0. Modified by coordinate validation, canonicalization, deduplication and indexing. No Microsoft endorsement.",
+    "permitted": true,
+    "vintage": "Mixed imagery capture dates; not verified current. Upstream USBuildingFootprints repository is archived; capture dates retained when supplied.",
+    "reviewedOn": "2026-11-21",
+    "metadataUrl": "https://github.com/microsoft/USBuildingFootprints"
+  },
+  {
+    "id": "microsoft-us-idaho-v2",
+    "title": "Microsoft US Building Footprints \u2014 Idaho legacy v2",
+    "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/Idaho.geojson.zip",
+    "country": "US",
+    "region": "Idaho",
+    "license": "ODbL-1.0",
+    "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "attribution": "Contains Microsoft US Building Footprints, licensed under ODbL 1.0. Modified by coordinate validation, canonicalization, deduplication and indexing. No Microsoft endorsement.",
+    "permitted": true,
+    "vintage": "Mixed imagery capture dates; not verified current. Upstream USBuildingFootprints repository is archived; capture dates retained when supplied.",
+    "reviewedOn": "2026-11-21",
+    "metadataUrl": "https://github.com/microsoft/USBuildingFootprints"
+  },
+  {
+    "id": "microsoft-us-dc-v2",
+    "title": "Microsoft US Building Footprints \u2014 District of Columbia legacy v2",
+    "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/DistrictofColumbia.geojson.zip",
+    "country": "US",
+    "region": "District of Columbia",
+    "license": "ODbL-1.0",
+    "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "attribution": "Contains Microsoft US Building Footprints, licensed under ODbL 1.0. Modified by coordinate validation, canonicalization, deduplication and indexing. No Microsoft endorsement.",
+    "permitted": true,
+    "vintage": "Mixed imagery capture dates; not verified current. Upstream USBuildingFootprints repository is archived; capture dates retained when supplied.",
+    "reviewedOn": "2026-11-21",
+    "metadataUrl": "https://github.com/microsoft/USBuildingFootprints"
+  }
+]

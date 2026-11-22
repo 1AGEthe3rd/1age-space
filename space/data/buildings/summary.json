@@ -1,0 +1,351 @@
+{
+  "asOf": 1795345177,
+  "kind": "building-footprint-index",
+  "uniqueFootprints": 6011627,
+  "regions": [
+    {
+      "country": "US",
+      "region": "District of Columbia",
+      "buildings": 77851
+    },
+    {
+      "country": "US",
+      "region": "Idaho",
+      "buildings": 935298
+    },
+    {
+      "country": "US",
+      "region": "Oregon",
+      "buildings": 1873786
+    },
+    {
+      "country": "US",
+      "region": "Washington",
+      "buildings": 3124692
+    }
+  ],
+  "countries": [
+    {
+      "country": "US",
+      "buildings": 6011627
+    }
+  ],
+  "jobs": [
+    {
+      "id": 1,
+      "source_id": "microsoft-us-oregon-v2",
+      "fingerprint": "6751b6e17d50b9f9e83246cdf7f53341f354818006953886ad68b3936357a351",
+      "checkpoint": 1873786,
+      "status": "complete",
+      "added": 1873786,
+      "duplicates": 0,
+      "rejected": 0,
+      "started": 1795324717,
+      "updated": 1795324829,
+      "error": null
+    },
+    {
+      "id": 2,
+      "source_id": "microsoft-us-washington-v2",
+      "fingerprint": "b603f237028fdb2d620d389ec0a0c46180ea1547b964da31e5605576b4266cd8",
+      "checkpoint": 3128258,
+      "status": "complete",
+      "added": 3124692,
+      "duplicates": 3566,
+      "rejected": 0,
+      "started": 1795324830,
+      "updated": 1795325038,
+      "error": null
+    },
+    {
+      "id": 3,
+      "source_id": "microsoft-us-idaho-v2",
+      "fingerprint": "4439460b56879ac59c702ce6571d75180d81681f16bbaae7edc6e27d6c44a993",
+      "checkpoint": 942132,
+      "status": "complete",
+      "added": 935298,
+      "duplicates": 6834,
+      "rejected": 0,
+      "started": 1795325159,
+      "updated": 1795325225,
+      "error": null
+    },
+    {
+      "id": 4,
+      "source_id": "microsoft-us-dc-v2",
+      "fingerprint": "b51813392ed6b75f64867af1eeae1eda1f1c0e69ebe8b002807b83e9299c3535",
+      "checkpoint": 77851,
+      "status": "complete",
+      "added": 77851,
+      "duplicates": 0,
+      "rejected": 0,
+      "started": 1795325230,
+      "updated": 1795325235,
+      "error": null
+    }
+  ],
+  "sources": [
+    {
+      "attribution": "Contains Microsoft US Building Footprints, licensed under ODbL 1.0. Modified by coordinate validation, canonicalization, deduplication and indexing. No Microsoft endorsement.",
+      "country": "US",
+      "id": "microsoft-us-dc-v2",
+      "license": "ODbL-1.0",
+      "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "metadataUrl": "https://github.com/microsoft/USBuildingFootprints",
+      "permitted": true,
+      "region": "District of Columbia",
+      "reviewedOn": "2026-11-21",
+      "title": "Microsoft US Building Footprints \u2014 District of Columbia legacy v2",
+      "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/DistrictofColumbia.geojson.zip",
+      "vintage": "Mixed imagery capture dates; not verified current. Upstream USBuildingFootprints repository is archived; capture dates retained when supplied."
+    },
+    {
+      "attribution": "Contains Microsoft US Building Footprints, licensed under ODbL 1.0. Modified by coordinate validation, canonicalization, deduplication and indexing. No Microsoft endorsement.",
+      "country": "US",
+      "id": "microsoft-us-idaho-v2",
+      "license": "ODbL-1.0",
+      "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "metadataUrl": "https://github.com/microsoft/USBuildingFootprints",
+      "permitted": true,
+      "region": "Idaho",
+      "reviewedOn": "2026-11-21",
+      "title": "Microsoft US Building Footprints \u2014 Idaho legacy v2",
+      "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/Idaho.geojson.zip",
+      "vintage": "Mixed imagery capture dates; not verified current. Upstream USBuildingFootprints repository is archived; capture dates retained when supplied."
+    },
+    {
+      "attribution": "Contains Microsoft US Building Footprints, licensed under ODbL 1.0. Modified by coordinate validation, canonicalization, deduplication and indexing. No Microsoft endorsement.",
+      "country": "US",
+      "id": "microsoft-us-oregon-v2",
+      "license": "ODbL-1.0",
+      "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "metadataUrl": "https://github.com/microsoft/USBuildingFootprints",
+      "permitted": true,
+      "region": "Oregon",
+      "reviewedOn": "2026-11-21",
+      "title": "Microsoft US Building Footprints \u2014 Oregon legacy v2",
+      "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/Oregon.geojson.zip",
+      "vintage": "Mixed imagery capture dates; not verified current. Upstream USBuildingFootprints repository is archived; capture dates retained when supplied."
+    },
+    {
+      "attribution": "Contains Microsoft US Building Footprints, licensed under ODbL 1.0. Modified by coordinate validation, canonicalization, deduplication and indexing. No Microsoft endorsement.",
+      "country": "US",
+      "id": "microsoft-us-washington-v2",
+      "license": "ODbL-1.0",
+      "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "metadataUrl": "https://github.com/microsoft/USBuildingFootprints",
+      "permitted": true,
+      "region": "Washington",
+      "reviewedOn": "2026-11-21",
+      "title": "Microsoft US Building Footprints \u2014 Washington legacy v2",
+      "url": "https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2/Washington.geojson.zip",
+      "vintage": "Mixed imagery capture dates; not verified current. Upstream USBuildingFootprints repository is archived; capture dates retained when supplied."
+    }
+  ],
+  "sourceProvidedAddresses": 0,
+  "independentlyVerifiedAddresses": 0,
+  "commercialUseKnown": 0,
+  "creativeUseKnown": 0,
+  "verifiedAvailableListings": 0,
+  "footprintsEligibleFor3D": 6011627,
+  "duplicatesPrevented": 10400,
+  "rejectedRecords": 0,
+  "latestImportAdded": 77851,
+  "failedJobs": 0,
+  "unassignedCityRecords": 6011627,
+  "completeGlobalCoverage": false,
+  "notes": "Computer-generated footprint records, not independently surveyed buildings. City/county assignments, ownership, occupancy and property use are unknown unless separately evidenced.",
+  "previewAreas": [
+    {
+      "title": "Portland area window",
+      "region": "Oregon",
+      "bbox": [
+        -122.84,
+        45.43,
+        -122.45,
+        45.66
+      ],
+      "tile": [
+        -122.655,
+        45.525,
+        -122.65,
+        45.53
+      ],
+      "id": "portland-area",
+      "windowFootprints": 299842,
+      "tileFootprints": 23,
+      "renderedPreviewCount": 23,
+      "coverageNote": "Bounding-box intersection window, not an official city boundary or complete city inventory."
+    },
+    {
+      "title": "Vancouver, Washington area window",
+      "region": "Washington",
+      "bbox": [
+        -122.75,
+        45.58,
+        -122.45,
+        45.75
+      ],
+      "tile": [
+        -122.675,
+        45.63,
+        -122.67,
+        45.635
+      ],
+      "id": "vancouver-wa-area",
+      "windowFootprints": 118586,
+      "tileFootprints": 95,
+      "renderedPreviewCount": 95,
+      "coverageNote": "Bounding-box intersection window, not an official city boundary or complete city inventory."
+    }
+  ],
+  "addressEnrichment": {
+    "asOf": 1795345177,
+    "sources": [
+      {
+        "id": "portland-active-addresses-47",
+        "title": "City of Portland Corporate GIS active address points",
+        "url": "https://www.portlandmaps.com/od/rest/services/COP_OpenData_Property/MapServer/47",
+        "metadataUrl": "https://www.portlandmaps.com/metadata/index.cfm?LayerID=52064&action=DisplayLayer",
+        "termsUrl": "https://www.portlandmaps.com/bps/arpa/tos.pdf",
+        "license": "PDDL-1.0",
+        "licenseUrl": "https://opendatacommons.org/licenses/pddl/1-0/",
+        "attribution": "City of Portland Corporate GIS; address locations and associated source data supplied as-is. Not independently verified by 1AGE.",
+        "permitted": true,
+        "reviewedOn": "2026-11-21",
+        "scope": "Portland metropolitan region address points; city names are source-reported, not boundary assignments. Does not cover Vancouver WA."
+      }
+    ],
+    "addresses": 53500,
+    "linkedBuildings": 45818,
+    "matches": [
+      {
+        "match_status": "single-footprint-containment",
+        "records": 49721
+      },
+      {
+        "match_status": "unmatched",
+        "records": 3779
+      }
+    ],
+    "cities": [
+      {
+        "city": "PORTLAND",
+        "records": 16896
+      },
+      {
+        "city": "BEAVERTON",
+        "records": 12646
+      },
+      {
+        "city": "TIGARD",
+        "records": 8653
+      },
+      {
+        "city": "HILLSBORO",
+        "records": 6478
+      },
+      {
+        "city": "TUALATIN",
+        "records": 3090
+      },
+      {
+        "city": "CORNELIUS",
+        "records": 1535
+      },
+      {
+        "city": "CANBY",
+        "records": 1181
+      },
+      {
+        "city": "KING CITY",
+        "records": 644
+      },
+      {
+        "city": "SHERWOOD",
+        "records": 599
+      },
+      {
+        "city": "GRESHAM",
+        "records": 548
+      },
+      {
+        "city": "NORTH PLAINS",
+        "records": 422
+      },
+      {
+        "city": "DURHAM",
+        "records": 231
+      },
+      {
+        "city": "TROUTDALE",
+        "records": 143
+      },
+      {
+        "city": "HAPPY VALLEY",
+        "records": 127
+      },
+      {
+        "city": "BANKS",
+        "records": 95
+      },
+      {
+        "city": "MILWAUKIE",
+        "records": 87
+      },
+      {
+        "city": "ESTACADA",
+        "records": 46
+      },
+      {
+        "city": "GASTON",
+        "records": 15
+      },
+      {
+        "city": "WILSONVILLE",
+        "records": 13
+      },
+      {
+        "city": "OREGON CITY",
+        "records": 13
+      },
+      {
+        "city": "MOLALLA",
+        "records": 10
+      },
+      {
+        "city": "FOREST GROVE",
+        "records": 8
+      },
+      {
+        "city": "LAKE OSWEGO",
+        "records": 7
+      },
+      {
+        "city": "GLADSTONE",
+        "records": 7
+      },
+      {
+        "city": "SANDY",
+        "records": 5
+      },
+      {
+        "city": "FAIRVIEW",
+        "records": 1
+      }
+    ],
+    "jobs": [
+      {
+        "source": "portland-active-addresses-47",
+        "cursor": 53500,
+        "status": "paused",
+        "reported_total": 900773,
+        "started": 1795327331,
+        "updated": 1795345162,
+        "error": null
+      }
+    ],
+    "rejected": 0,
+    "independentlyVerified": false
+  }
+}

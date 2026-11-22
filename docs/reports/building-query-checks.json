@@ -1,0 +1,26 @@
+[
+  {
+    "case": "Portland preview",
+    "matching": 23,
+    "returned": 23,
+    "milliseconds": 3.73
+  },
+  {
+    "case": "Vancouver WA preview",
+    "matching": 95,
+    "returned": 95,
+    "milliseconds": 6.98
+  },
+  {
+    "case": "Washington source region",
+    "matching": 3124692,
+    "returned": 1,
+    "milliseconds": 163.42
+  },
+  {
+    "case": "D.C. source region",
+    "matching": 77851,
+    "returned": 1,
+    "milliseconds": 4.31
+  }
+]

@@ -1,0 +1,2917 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-11-20",
+  "coverage": {
+    "scope": "starter_catalog",
+    "complete": false,
+    "notes": "Curated starter expansion; not a complete inventory of any city, country or the world."
+  },
+  "sources": [
+    {
+      "id": "src-founder",
+      "title": "Founder Space handoff",
+      "url": null,
+      "kind": "founder_report",
+      "checkedAt": "2026-11-20",
+      "publishedAt": "2026-11-15",
+      "scope": [
+        "research_candidates"
+      ],
+      "rights": "Founder-provided addresses only. No photographs, floor plans or building models licensed."
+    },
+    {
+      "id": "src-openhaus",
+      "title": "openHAUS — official contact",
+      "url": "https://www.openhauspdx.com/contact",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "address",
+        "use"
+      ],
+      "rights": "Factual name/address and short original summary only; no media copied."
+    },
+    {
+      "id": "src-everett",
+      "title": "Artspace — Everett Lofts",
+      "url": "https://www.artspace.org/everett",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "use"
+      ],
+      "rights": "Factual identification and short original summary only; no media copied."
+    },
+    {
+      "id": "src-everett-address",
+      "title": "Artspace Everett Lofts — official property site",
+      "url": "https://www.liveartspaceeverettlofts.com/index",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "address"
+      ],
+      "rights": "Factual name/address only; no media or floor plans copied."
+    },
+    {
+      "id": "src-acme",
+      "title": "Acme — Warton House open studios 2025",
+      "url": "https://acme.org.uk/news/warton-house-open-studios/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": "2025-05-21",
+      "scope": [
+        "address",
+        "use"
+      ],
+      "rights": "Factual name/address and original summary only; historical event is not current availability."
+    },
+    {
+      "id": "src-tashiro-site",
+      "title": "Tashiro Kaplan — official property site",
+      "url": "https://www.artspacekaplanlofts.com/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-hiawatha-profile",
+      "title": "Artspace — Hiawatha Lofts",
+      "url": "https://www.artspace.org/hiawatha",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-hiawatha-address",
+      "title": "Artspace — Hiawatha project sheet",
+      "url": "https://www.artspace.org/sites/default/files/downloads/2019_Hiawatha_v1_17Dec19.pdf",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. Project sheet is archival; not current vacancy evidence."
+    },
+    {
+      "id": "src-brookland-profile",
+      "title": "Artspace — Brookland Lofts",
+      "url": "https://www.artspace.org/brookland",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-brookland-contact",
+      "title": "Brookland Artspace Lofts — contact",
+      "url": "https://www.brooklandartspacelofts.com/apartments/dc/washington/contact-us",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-jackson-operator",
+      "title": "MetroPlains — Jackson Flats",
+      "url": "https://www.metroplains.com/jackson-flats.html",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-northern-operator",
+      "title": "MetroPlains — Northern Warehouse",
+      "url": "https://www.metroplains.com/northern-warehouse.html",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-aac-contact",
+      "title": "Anacostia Arts Center — contact",
+      "url": "https://anacostiaartscenter.com/contact/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "operatingNotice"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-aac-about",
+      "title": "Anacostia Arts Center — about",
+      "url": "https://anacostiaartscenter.com/about/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-youngplace",
+      "title": "Artscape — Youngplace portfolio",
+      "url": "https://www.artscape.ca/portfolio-item/artscapeyoungplace/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-richmond-about",
+      "title": "401 Richmond — about",
+      "url": "https://401richmond.com/about/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-richmond-address",
+      "title": "401 Richmond — visit",
+      "url": "https://401richmond.com/visit/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-friche",
+      "title": "Friche la Belle de Mai — official English guide",
+      "url": "https://www.lafriche.org/la-friche-in-english/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-bethanien",
+      "title": "Künstlerhaus Bethanien — visit",
+      "url": "https://bethanien.de/en/visit/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-carriageworks",
+      "title": "Carriageworks — visit",
+      "url": "https://carriageworks.com.au/visit/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-abbotsford-studios",
+      "title": "Abbotsford Convent — tenant community",
+      "url": "https://abbotsfordconvent.com.au/about/opportunities/join-our-tenant-community/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-hayward",
+      "title": "Southbank Centre — Hayward Gallery",
+      "url": "https://www.southbankcentre.co.uk/venues/hayward-gallery/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "operatingNotice"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-cockpit",
+      "title": "Cockpit — studio locations",
+      "url": "https://cockpitstudios.org/apply/studios/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-adx",
+      "title": "Art Design Xchange — official site",
+      "url": "https://artdesignxchange.com/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-anacostia-playhouse",
+      "title": "Anacostia Playhouse — 2024 brochure",
+      "url": "https://anacostiaplayhouse.com/wp-content/uploads/2024/09/ANACOSTIA-2024-TAD-Brochure.pdf",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. Historical 2024 document; not proof of current operations."
+    },
+    {
+      "id": "src-southmain-profile",
+      "title": "Artspace — South Main opening report",
+      "url": "https://www.artspace.org/south-main-artspace-lofts-grand-opening",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. Historical opening report; not current tenancy evidence."
+    },
+    {
+      "id": "src-southmain-address",
+      "title": "South Main Artspace Lofts — official contact",
+      "url": "https://www.southmainartspacelofts.com/contactus",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-elpaso-contact",
+      "title": "Artspace El Paso Lofts — official contact",
+      "url": "https://www.artspaceelpasoapts.com/contact_us/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-elpaso-profile",
+      "title": "Artspace — El Paso studio report",
+      "url": "https://www.artspace.org/last-thursdays-art-walk-offers-chance-discover-downtown-artists",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. Historical studio report, not current occupancy evidence."
+    },
+    {
+      "id": "src-mtbaker-profile",
+      "title": "Artspace — Mt. Baker Lofts",
+      "url": "https://www.artspace.org/mt-baker",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-mtbaker-address",
+      "title": "Artspace — Mt. Baker project sheet",
+      "url": "https://www.artspace.org/sites/default/files/downloads/2019_MtBaker_v1_17Dec19.pdf",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. Archival project sheet; not current listing evidence."
+    },
+    {
+      "id": "src-everettstation-profile",
+      "title": "Artspace — Everett Station Lofts",
+      "url": "https://www.artspace.org/portland",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-everettstation-address",
+      "title": "Artspace — Everett Station project sheet",
+      "url": "https://www.artspace.org/sites/default/files/downloads/everettstation.pdf",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. Archival project document; not current vacancy evidence."
+    },
+    {
+      "id": "src-pullman-developer",
+      "title": "Chicago Neighborhood Initiatives — Pullman Artspace",
+      "url": "https://www.cnigroup.org/project/pullman-artspace-lofts/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-bell-developer",
+      "title": "Providence Community Housing — Bell Artspace Campus",
+      "url": "https://providencecommunityhousing.org/homes/bell-artspace-campus/",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual identification and short original summary only. No copied media, floor plans, building geometry or bulk reuse license. "
+    },
+    {
+      "id": "src-workspace-pill-box",
+      "title": "Workspace — Pill Box",
+      "url": "https://www.workspace.co.uk/workspaces/pill-box",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-the-chocolate-factory",
+      "title": "Workspace — The Chocolate Factory",
+      "url": "https://www.workspace.co.uk/workspaces/the-chocolate-factory",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-metal-box-factory",
+      "title": "Workspace — Metal Box Factory",
+      "url": "https://www.workspace.co.uk/workspaces/metal-box-factory",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-the-biscuit-factory",
+      "title": "Workspace — The Biscuit Factory",
+      "url": "https://www.workspace.co.uk/workspaces/the-biscuit-factory",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-portsoken-house",
+      "title": "Workspace — Portsoken House",
+      "url": "https://www.workspace.co.uk/workspaces/portsoken-house",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-salisbury-house",
+      "title": "Workspace — Salisbury House",
+      "url": "https://www.workspace.co.uk/workspaces/salisbury-house",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-screenworks",
+      "title": "Workspace — ScreenWorks",
+      "url": "https://www.workspace.co.uk/workspaces/screenworks",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-swan-court",
+      "title": "Workspace — Swan Court",
+      "url": "https://www.workspace.co.uk/workspaces/swan-court",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-the-centro-buildings",
+      "title": "Workspace — The Centro Buildings",
+      "url": "https://www.workspace.co.uk/workspaces/the-centro-buildings",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    },
+    {
+      "id": "src-workspace-the-light-bulb",
+      "title": "Workspace — The Light Bulb",
+      "url": "https://www.workspace.co.uk/workspaces/the-light-bulb",
+      "kind": "operator",
+      "checkedAt": "2026-11-20",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "spaceUses"
+      ],
+      "rights": "Factual name, address and workspace use only; no copied photographs, floor plans, prices or bulk feed license. Curated source review, not a provider partnership."
+    }
+  ],
+  "properties": [
+    {
+      "id": "property-hq1-5601-ne-mlk",
+      "name": "5601 NE MLK Jr Boulevard",
+      "address": {
+        "line1": "5601 NE Martin Luther King Jr Boulevard",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "district": "Soul District · HQ1",
+      "description": "A founder-selected research candidate for an in-house NorthLeftChef virtual café concept. The concept does not establish a business address, occupancy, vacancy, or rights to this building.",
+      "verification": {
+        "status": "research_candidate",
+        "sourceIds": [
+          "src-founder"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": []
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "demo",
+        "spaceIds": [
+          "vs-nlc-template"
+        ]
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-portland-openhaus-5020",
+      "name": "openHAUS · Dream Street",
+      "address": {
+        "line1": "5020 NE Martin Luther King Dr.",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "district": "Soul District · HQ1",
+      "description": "A coworking place identified on the operator’s website. Desk, room and property availability have not been checked.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-openhaus"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "address",
+          "use"
+        ]
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-everett-artspace-2917",
+      "name": "Artspace Everett Lofts",
+      "address": {
+        "line1": "2917 Hoyt Avenue",
+        "city": "Everett",
+        "region": "Washington",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "An artist live/work development documented by Artspace and the property’s official site. No available unit, rent or eligibility determination is represented here.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-everett",
+          "src-everett-address"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "address",
+          "use"
+        ]
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-warton-150",
+      "name": "Warton House · Acme studios",
+      "address": {
+        "line1": "150 Stratford High Street",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "art"
+      ],
+      "district": null,
+      "description": "An artist studio location documented in Acme’s 2025 open-studios publication. That historical event is not a current vacancy or open-access invitation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-acme"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "address",
+          "use"
+        ]
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "property-hq1-5775-ne-mlk",
+      "name": "5775 NE MLK Jr Boulevard",
+      "address": {
+        "line1": "5775 NE Martin Luther King Jr Boulevard",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "district": "Soul District · HQ1",
+      "description": "Founder-reported corridor research candidate. Current use, parcel identity and leasing status await independent verification.",
+      "verification": {
+        "status": "research_candidate",
+        "sourceIds": [
+          "src-founder"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": []
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "property-hq1-3735-ne-mlk",
+      "name": "3735 NE MLK Jr Boulevard",
+      "address": {
+        "line1": "3735 NE Martin Luther King Jr Boulevard",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "district": "Soul District · HQ1",
+      "description": "Founder-reported corridor research candidate. Current use, parcel identity and leasing status await independent verification.",
+      "verification": {
+        "status": "research_candidate",
+        "sourceIds": [
+          "src-founder"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": []
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-seattle-tashiro-kaplan-115",
+      "name": "Tashiro Kaplan Lofts",
+      "address": {
+        "line1": "115 Prefontaine Place S",
+        "city": "Seattle",
+        "region": "Washington",
+        "countryCode": "US",
+        "postalCode": "98104"
+      },
+      "coordinates": null,
+      "categories": [
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Artist-oriented loft property identified by its official website. Individual unit occupancy and availability are not verified.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-tashiro-site"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-tashiro-site"
+          ],
+          "address": [
+            "src-tashiro-site"
+          ],
+          "categories": [
+            "src-tashiro-site"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-seattle-hiawatha-843",
+      "name": "Artspace Hiawatha Lofts",
+      "address": {
+        "line1": "843 Hiawatha Place S",
+        "city": "Seattle",
+        "region": "Washington",
+        "countryCode": "US",
+        "postalCode": "98144"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Live/work and creative commercial property documented by Artspace. Archival address evidence does not establish a current vacant unit.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hiawatha-profile",
+          "src-hiawatha-address"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-hiawatha-profile",
+            "src-hiawatha-address"
+          ],
+          "address": [
+            "src-hiawatha-address"
+          ],
+          "categories": [
+            "src-hiawatha-profile",
+            "src-hiawatha-address"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-washington-brookland-3305",
+      "name": "Brookland Artspace Lofts",
+      "address": {
+        "line1": "3305 8th Street NE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20017"
+      },
+      "coordinates": null,
+      "categories": [
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Artist live/work property in Brookland. This is a D.C. index record outside the HQ2 Anacostia corridor, not an HQ2 building claim.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-brookland-profile",
+          "src-brookland-contact"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-brookland-profile",
+            "src-brookland-contact"
+          ],
+          "address": [
+            "src-brookland-contact"
+          ],
+          "categories": [
+            "src-brookland-profile"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-minneapolis-jackson-flats-901",
+      "name": "Artspace Jackson Flats",
+      "address": {
+        "line1": "901 18½ Avenue NE",
+        "city": "Minneapolis",
+        "region": "Minnesota",
+        "countryCode": "US",
+        "postalCode": "55418"
+      },
+      "coordinates": null,
+      "categories": [
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Artist loft community described by its property manager. The address includes a half-numbered avenue; no rent or eligibility result is copied.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-jackson-operator"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-jackson-operator"
+          ],
+          "address": [
+            "src-jackson-operator"
+          ],
+          "categories": [
+            "src-jackson-operator"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-st-paul-northern-308",
+      "name": "Northern Warehouse Artist Lofts",
+      "address": {
+        "line1": "308 E Prince Street",
+        "city": "St. Paul",
+        "region": "Minnesota",
+        "countryCode": "US",
+        "postalCode": "55101"
+      },
+      "coordinates": null,
+      "categories": [
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Artist live/work lofts identified by the property manager. The record is discovery metadata, not an application or vacancy confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-northern-operator"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-northern-operator"
+          ],
+          "address": [
+            "src-northern-operator"
+          ],
+          "categories": [
+            "src-northern-operator"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-washington-anacostia-arts-1231",
+      "name": "Anacostia Arts Center",
+      "address": {
+        "line1": "1231 Marion Barry Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art"
+      ],
+      "district": "Historic Anacostia · HQ2 research",
+      "description": "Arts and small-business venue documented by the center. Its contact page reports a renovation closure; a public closure is not evidence of physical vacancy.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-aac-contact",
+          "src-aac-about"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-aac-contact",
+            "src-aac-about"
+          ],
+          "address": [
+            "src-aac-contact"
+          ],
+          "categories": [
+            "src-aac-about"
+          ],
+          "operatingNotice": [
+            "src-aac-contact"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20",
+      "operatingNotice": {
+        "text": "Operator contact page reports temporary closure for renovation. Confirm with the operator before visiting.",
+        "sourceIds": [
+          "src-aac-contact"
+        ],
+        "checkedAt": "2026-11-20"
+      }
+    },
+    {
+      "id": "place-ca-toronto-youngplace-180",
+      "name": "Artscape Youngplace",
+      "address": {
+        "line1": "180 Shaw Street",
+        "city": "Toronto",
+        "region": "Ontario",
+        "countryCode": "CA",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art"
+      ],
+      "district": null,
+      "description": "Creative studio and cultural property documented in Artscape’s portfolio. Operator history and source age require review before any transaction or tenancy representation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-youngplace"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-youngplace"
+          ],
+          "address": [
+            "src-youngplace"
+          ],
+          "categories": [
+            "src-youngplace"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-ca-toronto-richmond-401",
+      "name": "401 Richmond",
+      "address": {
+        "line1": "401 Richmond Street West",
+        "city": "Toronto",
+        "region": "Ontario",
+        "countryCode": "CA",
+        "postalCode": "M5V 3A8"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art"
+      ],
+      "district": null,
+      "description": "Creative commercial building with galleries and workspaces, identified by its own website. No individual tenancy or leasing offer is indexed.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-richmond-about",
+          "src-richmond-address"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-richmond-about",
+            "src-richmond-address"
+          ],
+          "address": [
+            "src-richmond-address"
+          ],
+          "categories": [
+            "src-richmond-about",
+            "src-richmond-address"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-fr-marseille-friche-jobin-41",
+      "name": "Friche la Belle de Mai",
+      "address": {
+        "line1": "41 rue Jobin",
+        "city": "Marseille",
+        "region": "Provence-Alpes-Côte d’Azur",
+        "countryCode": "FR",
+        "postalCode": "13003"
+      },
+      "coordinates": null,
+      "categories": [
+        "art"
+      ],
+      "district": null,
+      "description": "Multi-organisation creative and cultural site. This record uses the documented Jobin pedestrian entrance; the Simon entrance belongs to the same site and is not a second property record.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-friche"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-friche"
+          ],
+          "address": [
+            "src-friche"
+          ],
+          "categories": [
+            "src-friche"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-de-berlin-bethanien-showroom-10",
+      "name": "Künstlerhaus Bethanien · showrooms",
+      "address": {
+        "line1": "Kottbusser Straße 10",
+        "city": "Berlin",
+        "region": "Berlin",
+        "countryCode": "DE",
+        "postalCode": "10999"
+      },
+      "coordinates": null,
+      "categories": [
+        "art"
+      ],
+      "district": null,
+      "description": "Exhibition location listed by Künstlerhaus Bethanien. Its studio/office entrance has a separate address and is represented as a related place.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-bethanien"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-bethanien"
+          ],
+          "address": [
+            "src-bethanien"
+          ],
+          "categories": [
+            "src-bethanien"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20",
+      "complexId": "complex-bethanien-lichtfabrik"
+    },
+    {
+      "id": "place-de-berlin-bethanien-studios-41",
+      "name": "Künstlerhaus Bethanien · studios and office",
+      "address": {
+        "line1": "Kohlfurter Straße 41–43",
+        "city": "Berlin",
+        "region": "Berlin",
+        "countryCode": "DE",
+        "postalCode": "10999"
+      },
+      "coordinates": null,
+      "categories": [
+        "art"
+      ],
+      "district": null,
+      "description": "Studio and office location listed by Künstlerhaus Bethanien, distinct from the showroom entrance. No public entry or studio vacancy is implied.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-bethanien"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-bethanien"
+          ],
+          "address": [
+            "src-bethanien"
+          ],
+          "categories": [
+            "src-bethanien"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20",
+      "complexId": "complex-bethanien-lichtfabrik"
+    },
+    {
+      "id": "place-au-sydney-carriageworks-245",
+      "name": "Carriageworks",
+      "address": {
+        "line1": "245 Wilson Street, Eveleigh",
+        "city": "Sydney",
+        "region": "New South Wales",
+        "countryCode": "AU",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "art"
+      ],
+      "district": null,
+      "description": "Arts venue location documented by Carriageworks. Event opening times and any venue rental require separate operator confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-carriageworks"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-carriageworks"
+          ],
+          "address": [
+            "src-carriageworks"
+          ],
+          "categories": [
+            "src-carriageworks"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-au-melbourne-abbotsford-1",
+      "name": "Abbotsford Convent",
+      "address": {
+        "line1": "1 St Heliers Street, Abbotsford",
+        "city": "Melbourne",
+        "region": "Victoria",
+        "countryCode": "AU",
+        "postalCode": "3067"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art"
+      ],
+      "district": null,
+      "description": "Arts precinct with studio and office spaces documented by the operator. No individual studio or current vacancy is asserted.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-abbotsford-studios"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-abbotsford-studios"
+          ],
+          "address": [
+            "src-abbotsford-studios"
+          ],
+          "categories": [
+            "src-abbotsford-studios"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-hayward-belvedere",
+      "name": "Hayward Gallery",
+      "address": {
+        "line1": "Southbank Centre, Belvedere Road",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SE1 8XX"
+      },
+      "coordinates": null,
+      "categories": [
+        "art"
+      ],
+      "district": null,
+      "description": "Contemporary art venue documented by Southbank Centre. The source reports an exhibition-change closure; that does not indicate leasing availability.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hayward"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-hayward"
+          ],
+          "address": [
+            "src-hayward"
+          ],
+          "categories": [
+            "src-hayward"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20",
+      "operatingNotice": {
+        "text": "Source reports closure before planned reopening on 24 November 2026. Recheck the operator before visiting.",
+        "sourceIds": [
+          "src-hayward"
+        ],
+        "checkedAt": "2026-11-20"
+      }
+    },
+    {
+      "id": "place-gb-london-cockpit-bloomsbury",
+      "name": "Cockpit Bloomsbury",
+      "address": {
+        "line1": "Cockpit Yard, Northington Street",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "WC1N 2NP"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art"
+      ],
+      "district": null,
+      "description": "Maker studio location published by Cockpit. Studio applications, selection and actual available space remain with the operator.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-cockpit"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-cockpit"
+          ],
+          "address": [
+            "src-cockpit"
+          ],
+          "categories": [
+            "src-cockpit"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-cockpit-deptford-18",
+      "name": "Cockpit Deptford",
+      "address": {
+        "line1": "18–22 Creekside, Deptford",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SE8 3DZ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art"
+      ],
+      "district": null,
+      "description": "Maker studio location published by Cockpit. This record does not create a listing, application or rental agreement.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-cockpit"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-cockpit"
+          ],
+          "address": [
+            "src-cockpit"
+          ],
+          "categories": [
+            "src-cockpit"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-portland-adx-417",
+      "name": "Art Design Xchange · ADX",
+      "address": {
+        "line1": "417 SE 11th Avenue",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": "97214"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art"
+      ],
+      "district": null,
+      "description": "Creative workspace and maker facilities identified by the operator. Membership and private studio availability are not verified here.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-adx"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-adx"
+          ],
+          "address": [
+            "src-adx"
+          ],
+          "categories": [
+            "src-adx"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-washington-playhouse-2020",
+      "name": "Anacostia Playhouse",
+      "address": {
+        "line1": "2020 Shannon Place SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "art"
+      ],
+      "district": "Historic Anacostia · HQ2 research",
+      "description": "Theater location documented in the Playhouse’s 2024 brochure. Current operations and facility availability have not been independently confirmed.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-anacostia-playhouse"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-anacostia-playhouse"
+          ],
+          "address": [
+            "src-anacostia-playhouse"
+          ],
+          "categories": [
+            "src-anacostia-playhouse"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-memphis-southmain-138",
+      "name": "South Main Artspace Lofts",
+      "address": {
+        "line1": "138 St Paul Avenue",
+        "city": "Memphis",
+        "region": "Tennessee",
+        "countryCode": "US",
+        "postalCode": "38126"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Artist live/work and creative commercial development. The property contact address is recorded without implying a vacant unit.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-southmain-profile",
+          "src-southmain-address"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-southmain-profile",
+            "src-southmain-address"
+          ],
+          "address": [
+            "src-southmain-address"
+          ],
+          "categories": [
+            "src-southmain-profile"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-elpaso-artspace-601",
+      "name": "Artspace El Paso Lofts",
+      "address": {
+        "line1": "601 N Oregon Street",
+        "city": "El Paso",
+        "region": "Texas",
+        "countryCode": "US",
+        "postalCode": "79901"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art"
+      ],
+      "district": null,
+      "description": "Loft property and artist workspace location identified by the property site and Artspace. Current permitted use and available units require operator confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-elpaso-contact",
+          "src-elpaso-profile"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-elpaso-contact",
+            "src-elpaso-profile"
+          ],
+          "address": [
+            "src-elpaso-contact"
+          ],
+          "categories": [
+            "src-elpaso-profile"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-seattle-mtbaker-2915",
+      "name": "Artspace Mt. Baker Lofts",
+      "address": {
+        "line1": "2915 Rainier Avenue South",
+        "city": "Seattle",
+        "region": "Washington",
+        "countryCode": "US",
+        "postalCode": "98144"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Mixed-use artist live/work and commercial development documented by Artspace. No unit, price or current occupancy is verified.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-mtbaker-profile",
+          "src-mtbaker-address"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-mtbaker-profile",
+            "src-mtbaker-address"
+          ],
+          "address": [
+            "src-mtbaker-address"
+          ],
+          "categories": [
+            "src-mtbaker-profile",
+            "src-mtbaker-address"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-portland-everettstation-625",
+      "name": "Everett Station Lofts",
+      "address": {
+        "line1": "625 NW Everett Street",
+        "city": "Portland",
+        "region": "Oregon",
+        "countryCode": "US",
+        "postalCode": "97209"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial",
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Artist live/work and storefront property documented by Artspace. This Portland place is distinct from Artspace Everett Lofts in Everett, Washington.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-everettstation-profile",
+          "src-everettstation-address"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-everettstation-profile",
+            "src-everettstation-address"
+          ],
+          "address": [
+            "src-everettstation-address"
+          ],
+          "categories": [
+            "src-everettstation-profile",
+            "src-everettstation-address"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-chicago-pullman-11137",
+      "name": "Pullman Artspace Lofts",
+      "address": {
+        "line1": "11137–49 South Langley Avenue",
+        "city": "Chicago",
+        "region": "Illinois",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Artist live/work development documented by its development partner. Historical leasing claims on the source are not treated as a current occupancy check.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-pullman-developer"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-pullman-developer"
+          ],
+          "address": [
+            "src-pullman-developer"
+          ],
+          "categories": [
+            "src-pullman-developer"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-us-neworleans-bell-2100",
+      "name": "Bell Artspace Campus",
+      "address": {
+        "line1": "2100 Ursulines Avenue",
+        "city": "New Orleans",
+        "region": "Louisiana",
+        "countryCode": "US",
+        "postalCode": null
+      },
+      "coordinates": null,
+      "categories": [
+        "art",
+        "live_work"
+      ],
+      "district": null,
+      "description": "Live/work campus documented by its housing development partner. The campus address does not identify or offer a specific dwelling or studio.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-bell-developer"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-bell-developer"
+          ],
+          "address": [
+            "src-bell-developer"
+          ],
+          "categories": [
+            "src-bell-developer"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-pill-box",
+      "name": "Pill Box",
+      "address": {
+        "line1": "115 Coventry Road, Bethnal Green",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "E2 6GG"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-pill-box"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-pill-box"
+          ],
+          "address": [
+            "src-workspace-pill-box"
+          ],
+          "categories": [
+            "src-workspace-pill-box"
+          ],
+          "spaceUses": [
+            "src-workspace-pill-box"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-the-chocolate-factory",
+      "name": "The Chocolate Factory",
+      "address": {
+        "line1": "Clarendon Road, Wood Green",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "N22 6XJ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-the-chocolate-factory"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-the-chocolate-factory"
+          ],
+          "address": [
+            "src-workspace-the-chocolate-factory"
+          ],
+          "categories": [
+            "src-workspace-the-chocolate-factory"
+          ],
+          "spaceUses": [
+            "src-workspace-the-chocolate-factory"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-metal-box-factory",
+      "name": "Metal Box Factory",
+      "address": {
+        "line1": "30 Great Guildford Street, Borough",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SE1 0HS"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-metal-box-factory"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-metal-box-factory"
+          ],
+          "address": [
+            "src-workspace-metal-box-factory"
+          ],
+          "categories": [
+            "src-workspace-metal-box-factory"
+          ],
+          "spaceUses": [
+            "src-workspace-metal-box-factory"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-the-biscuit-factory",
+      "name": "The Biscuit Factory",
+      "address": {
+        "line1": "Drummond Road, Southwark",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SE16 4DG"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-the-biscuit-factory"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-the-biscuit-factory"
+          ],
+          "address": [
+            "src-workspace-the-biscuit-factory"
+          ],
+          "categories": [
+            "src-workspace-the-biscuit-factory"
+          ],
+          "spaceUses": [
+            "src-workspace-the-biscuit-factory"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-portsoken-house",
+      "name": "Portsoken House",
+      "address": {
+        "line1": "155–157 Minories",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "EC3N 1LJ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-portsoken-house"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-portsoken-house"
+          ],
+          "address": [
+            "src-workspace-portsoken-house"
+          ],
+          "categories": [
+            "src-workspace-portsoken-house"
+          ],
+          "spaceUses": [
+            "src-workspace-portsoken-house"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-salisbury-house",
+      "name": "Salisbury House",
+      "address": {
+        "line1": "29 Finsbury Circus",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "EC2M 5SQ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-salisbury-house"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-salisbury-house"
+          ],
+          "address": [
+            "src-workspace-salisbury-house"
+          ],
+          "categories": [
+            "src-workspace-salisbury-house"
+          ],
+          "spaceUses": [
+            "src-workspace-salisbury-house"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-screenworks",
+      "name": "ScreenWorks",
+      "address": {
+        "line1": "22 Highbury Grove, Islington",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "N5 2EF"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-screenworks"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-screenworks"
+          ],
+          "address": [
+            "src-workspace-screenworks"
+          ],
+          "categories": [
+            "src-workspace-screenworks"
+          ],
+          "spaceUses": [
+            "src-workspace-screenworks"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-swan-court",
+      "name": "Swan Court",
+      "address": {
+        "line1": "11 Worple Road",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SW19 4JS"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-swan-court"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-swan-court"
+          ],
+          "address": [
+            "src-workspace-swan-court"
+          ],
+          "categories": [
+            "src-workspace-swan-court"
+          ],
+          "spaceUses": [
+            "src-workspace-swan-court"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-the-centro-buildings",
+      "name": "The Centro Buildings",
+      "address": {
+        "line1": "20–23 Mandela Street, Camden",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "NW1 0DU"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-the-centro-buildings"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-the-centro-buildings"
+          ],
+          "address": [
+            "src-workspace-the-centro-buildings"
+          ],
+          "categories": [
+            "src-workspace-the-centro-buildings"
+          ],
+          "spaceUses": [
+            "src-workspace-the-centro-buildings"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    },
+    {
+      "id": "place-gb-london-workspace-the-light-bulb",
+      "name": "The Light Bulb",
+      "address": {
+        "line1": "1 Filament Walk, Wandsworth",
+        "city": "London",
+        "region": "England",
+        "countryCode": "GB",
+        "postalCode": "SW18 4GQ"
+      },
+      "coordinates": null,
+      "categories": [
+        "commercial"
+      ],
+      "spaceUses": [
+        "office",
+        "studio"
+      ],
+      "district": null,
+      "description": "Commercial workspace identified in operator-published material. Unit availability, pricing and permitted activities require separate confirmation.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-workspace-the-light-bulb"
+        ],
+        "checkedAt": "2026-11-20",
+        "fields": [
+          "name",
+          "address",
+          "categories",
+          "spaceUses"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-workspace-the-light-bulb"
+          ],
+          "address": [
+            "src-workspace-the-light-bulb"
+          ],
+          "categories": [
+            "src-workspace-the-light-bulb"
+          ],
+          "spaceUses": [
+            "src-workspace-the-light-bulb"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-20"
+    }
+  ],
+  "virtualSpaces": [
+    {
+      "id": "vs-nlc-template",
+      "propertyId": "property-hq1-5601-ne-mlk",
+      "title": "NorthLeftChef café template",
+      "status": "demo",
+      "representation": "original_template",
+      "assetRights": "Original procedural geometry by 1AGEthe3rd. Not a surveyed exterior, real floor plan or actual interior.",
+      "creatorRetainsAssets": true,
+      "worldDestination": null
+    }
+  ],
+  "buildings": [],
+  "units": [],
+  "ownerClaims": [],
+  "physicalListings": [],
+  "virtualOccupancies": [],
+  "leaseApplications": [],
+  "creatorAssets": [],
+  "workRequests": [],
+  "businessProfiles": []
+}

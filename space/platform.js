@@ -1,5 +1,5 @@
 // Virtual entrance for the independent Space app; not an imported World scene.
-if(new URLSearchParams(location.search).has('property'))location.replace('catalog.html'+location.search);
+if(new URLSearchParams(location.search).has('property'))location.replace('explore.html?'+new URLSearchParams({place:new URLSearchParams(location.search).get('property')}));
 async function start(){
  const THREE=await import('./shared/three.module.js'),host=document.querySelector('#platform');
  const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setClearColor(0x000000);renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));host.append(renderer.domElement);

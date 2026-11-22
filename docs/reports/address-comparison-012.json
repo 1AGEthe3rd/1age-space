@@ -1,0 +1,108 @@
+{
+  "previousRows": 30000,
+  "currentRows": 53500,
+  "added": {
+    "count": 23500,
+    "sample": [
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30001
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30002
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30003
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30004
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30005
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30006
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30007
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30008
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30009
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30010
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30011
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30012
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30013
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30014
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30015
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30016
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30017
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30018
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30019
+      },
+      {
+        "source": "portland-active-addresses-47",
+        "object_id": 30020
+      }
+    ]
+  },
+  "changed": {
+    "count": 0,
+    "sample": []
+  },
+  "absentFromCurrent": {
+    "count": 0,
+    "sample": []
+  },
+  "currentJobs": [
+    {
+      "source": "portland-active-addresses-47",
+      "status": "paused",
+      "cursor": 53500,
+      "reported_total": 900773
+    }
+  ],
+  "currentEnumerationComplete": false,
+  "automaticRetirements": 0,
+  "note": "Absent records are review candidates only. Incomplete enumeration, upstream edits, source ID reuse and geometry changes require review. No database writes or property verification occur."
+}

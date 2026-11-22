@@ -1,0 +1,120 @@
+{
+  "asOf": 1795327597,
+  "sources": [
+    {
+      "id": "portland-active-addresses-47",
+      "title": "City of Portland Corporate GIS active address points",
+      "url": "https://www.portlandmaps.com/od/rest/services/COP_OpenData_Property/MapServer/47",
+      "metadataUrl": "https://www.portlandmaps.com/metadata/index.cfm?LayerID=52064&action=DisplayLayer",
+      "termsUrl": "https://www.portlandmaps.com/bps/arpa/tos.pdf",
+      "license": "PDDL-1.0",
+      "licenseUrl": "https://opendatacommons.org/licenses/pddl/1-0/",
+      "attribution": "City of Portland Corporate GIS; address locations and associated source data supplied as-is. Not independently verified by 1AGE.",
+      "permitted": true,
+      "reviewedOn": "2026-11-21",
+      "scope": "Portland metropolitan region address points; city names are source-reported, not boundary assignments. Does not cover Vancouver WA."
+    }
+  ],
+  "addresses": 30000,
+  "linkedBuildings": 25989,
+  "matches": [
+    {
+      "match_status": "single-footprint-containment",
+      "records": 27991
+    },
+    {
+      "match_status": "unmatched",
+      "records": 2009
+    }
+  ],
+  "cities": [
+    {
+      "city": "PORTLAND",
+      "records": 14269
+    },
+    {
+      "city": "HILLSBORO",
+      "records": 5522
+    },
+    {
+      "city": "BEAVERTON",
+      "records": 4411
+    },
+    {
+      "city": "TIGARD",
+      "records": 3090
+    },
+    {
+      "city": "TUALATIN",
+      "records": 1432
+    },
+    {
+      "city": "CORNELIUS",
+      "records": 944
+    },
+    {
+      "city": "DURHAM",
+      "records": 82
+    },
+    {
+      "city": "HAPPY VALLEY",
+      "records": 73
+    },
+    {
+      "city": "GRESHAM",
+      "records": 66
+    },
+    {
+      "city": "NORTH PLAINS",
+      "records": 59
+    },
+    {
+      "city": "MILWAUKIE",
+      "records": 14
+    },
+    {
+      "city": "TROUTDALE",
+      "records": 13
+    },
+    {
+      "city": "OREGON CITY",
+      "records": 8
+    },
+    {
+      "city": "WILSONVILLE",
+      "records": 7
+    },
+    {
+      "city": "GLADSTONE",
+      "records": 7
+    },
+    {
+      "city": "CANBY",
+      "records": 3
+    }
+  ],
+  "jobs": [
+    {
+      "source": "portland-active-addresses-47",
+      "cursor": 30000,
+      "status": "paused",
+      "reported_total": 900773,
+      "started": 1795327331,
+      "updated": 1795327573,
+      "error": null
+    }
+  ],
+  "rejected": 0,
+  "independentlyVerified": false,
+  "verification": {
+    "quickCheck": "ok",
+    "foreignKeyViolations": 0,
+    "ftsIntegrity": "ok",
+    "knownAddressLookup": {
+      "returned": 1,
+      "milliseconds": 2.57,
+      "expectedBuildingFound": true
+    },
+    "linkedBuildingResolvable": true
+  }
+}
