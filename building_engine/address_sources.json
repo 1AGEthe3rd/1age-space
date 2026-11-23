@@ -1,0 +1,15 @@
+[
+  {
+    "id": "portland-active-addresses-47",
+    "title": "City of Portland Corporate GIS active address points",
+    "url": "https://www.portlandmaps.com/od/rest/services/COP_OpenData_Property/MapServer/47",
+    "metadataUrl": "https://www.portlandmaps.com/metadata/index.cfm?LayerID=52064&action=DisplayLayer",
+    "termsUrl": "https://www.portlandmaps.com/bps/arpa/tos.pdf",
+    "license": "PDDL-1.0",
+    "licenseUrl": "https://opendatacommons.org/licenses/pddl/1-0/",
+    "attribution": "City of Portland Corporate GIS; address locations and associated source data supplied as-is. Not independently verified by 1AGE.",
+    "permitted": true,
+    "reviewedOn": "2026-11-21",
+    "scope": "Portland metropolitan region address points; city names are source-reported, not boundary assignments. Does not cover Vancouver WA."
+  }
+]

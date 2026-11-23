@@ -26,7 +26,7 @@ class BatchTests(unittest.TestCase):
  def test_operating_notice_not_vacancy(self):
   p=next(p for p in self.catalog['properties'] if p['id']=='place-us-washington-anacostia-arts-1231');self.assertIn('renovation',p['operatingNotice']['text']);self.assertEqual(p['physical']['status'],'unknown');self.assertIsNone(p['physical']['listingId'])
  def test_quality_and_manifest(self):
-  q=quality(self.catalog);self.assertEqual(q['properties'],len(self.catalog['properties']));self.assertGreaterEqual(len(q['countries']),6);self.assertEqual(q['physicalAvailable'],0);m=manifest(self.catalog['properties']);self.assertFalse(m['activationAllowed']);self.assertTrue(all(p['worldPosition'] is None and p['coordinates'] is None and p['bindingStatus']=='unconnected' for p in m['places']))
+  q=quality(self.catalog);self.assertEqual(q['properties'],len(self.catalog['properties']));self.assertGreaterEqual(len(q['countries']),6);self.assertEqual(q['physicalAvailable'],0);m=manifest(self.catalog['properties']);self.assertFalse(m['activationAllowed']);self.assertTrue(all(p['worldPosition'] is None and p['bindingStatus']=='unconnected' and p['coordinates']==next(x['coordinates'] for x in self.catalog['properties'] if x['id']==p['propertyId']) for p in m['places']))
 class APItests(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.db=Path(self.tmp.name)/'catalog.sqlite3';build(json.loads((ROOT/'space/data/catalog.json').read_text()),self.db);self.server=ThreadingHTTPServer(('127.0.0.1',0),Handler);self.server.index=self.db;self.url=f'http://127.0.0.1:{self.server.server_port}';self.thread=threading.Thread(target=self.server.serve_forever,daemon=True);self.thread.start()

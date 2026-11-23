@@ -1,0 +1,10 @@
+{
+  "query": "source city Portland, linked footprints only",
+  "recordsTraversed": 15199,
+  "pages": 152,
+  "pageLimit": 100,
+  "noDuplicateRecords": true,
+  "seconds": 0.136,
+  "indexChanged": false,
+  "visualBrowserTest": "not performed"
+}

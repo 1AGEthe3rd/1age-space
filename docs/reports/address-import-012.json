@@ -1,0 +1,151 @@
+{
+  "asOf": 1795345162,
+  "sources": [
+    {
+      "id": "portland-active-addresses-47",
+      "title": "City of Portland Corporate GIS active address points",
+      "url": "https://www.portlandmaps.com/od/rest/services/COP_OpenData_Property/MapServer/47",
+      "metadataUrl": "https://www.portlandmaps.com/metadata/index.cfm?LayerID=52064&action=DisplayLayer",
+      "termsUrl": "https://www.portlandmaps.com/bps/arpa/tos.pdf",
+      "license": "PDDL-1.0",
+      "licenseUrl": "https://opendatacommons.org/licenses/pddl/1-0/",
+      "attribution": "City of Portland Corporate GIS; address locations and associated source data supplied as-is. Not independently verified by 1AGE.",
+      "permitted": true,
+      "reviewedOn": "2026-11-21",
+      "scope": "Portland metropolitan region address points; city names are source-reported, not boundary assignments. Does not cover Vancouver WA."
+    }
+  ],
+  "addresses": 53500,
+  "linkedBuildings": 45818,
+  "matches": [
+    {
+      "match_status": "single-footprint-containment",
+      "records": 49721
+    },
+    {
+      "match_status": "unmatched",
+      "records": 3779
+    }
+  ],
+  "cities": [
+    {
+      "city": "PORTLAND",
+      "records": 16896
+    },
+    {
+      "city": "BEAVERTON",
+      "records": 12646
+    },
+    {
+      "city": "TIGARD",
+      "records": 8653
+    },
+    {
+      "city": "HILLSBORO",
+      "records": 6478
+    },
+    {
+      "city": "TUALATIN",
+      "records": 3090
+    },
+    {
+      "city": "CORNELIUS",
+      "records": 1535
+    },
+    {
+      "city": "CANBY",
+      "records": 1181
+    },
+    {
+      "city": "KING CITY",
+      "records": 644
+    },
+    {
+      "city": "SHERWOOD",
+      "records": 599
+    },
+    {
+      "city": "GRESHAM",
+      "records": 548
+    },
+    {
+      "city": "NORTH PLAINS",
+      "records": 422
+    },
+    {
+      "city": "DURHAM",
+      "records": 231
+    },
+    {
+      "city": "TROUTDALE",
+      "records": 143
+    },
+    {
+      "city": "HAPPY VALLEY",
+      "records": 127
+    },
+    {
+      "city": "BANKS",
+      "records": 95
+    },
+    {
+      "city": "MILWAUKIE",
+      "records": 87
+    },
+    {
+      "city": "ESTACADA",
+      "records": 46
+    },
+    {
+      "city": "GASTON",
+      "records": 15
+    },
+    {
+      "city": "WILSONVILLE",
+      "records": 13
+    },
+    {
+      "city": "OREGON CITY",
+      "records": 13
+    },
+    {
+      "city": "MOLALLA",
+      "records": 10
+    },
+    {
+      "city": "FOREST GROVE",
+      "records": 8
+    },
+    {
+      "city": "LAKE OSWEGO",
+      "records": 7
+    },
+    {
+      "city": "GLADSTONE",
+      "records": 7
+    },
+    {
+      "city": "SANDY",
+      "records": 5
+    },
+    {
+      "city": "FAIRVIEW",
+      "records": 1
+    }
+  ],
+  "jobs": [
+    {
+      "source": "portland-active-addresses-47",
+      "cursor": 53500,
+      "status": "paused",
+      "reported_total": 900773,
+      "started": 1795327331,
+      "updated": 1795345162,
+      "error": null
+    }
+  ],
+  "rejected": 0,
+  "independentlyVerified": false,
+  "integrity": "ok",
+  "addedThisBuild": 23500
+}

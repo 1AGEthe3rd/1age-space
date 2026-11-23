@@ -1,0 +1,21 @@
+import * as THREE from './shared/three.module.js';
+export function createBuildingViewer(host,onSelect){
+ const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.25));renderer.setClearColor(0x000000);host.append(renderer.domElement);
+ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(45,1,1,5000),group=new THREE.Group();scene.add(group);scene.add(new THREE.HemisphereLight(0xe2ffdc,0x0b2319,3));const light=new THREE.DirectionalLight(0xffffff,3);light.position.set(200,400,150);scene.add(light);
+ const floor=new THREE.Mesh(new THREE.PlaneGeometry(1600,1600),new THREE.MeshStandardMaterial({color:0x06190f,roughness:.7}));floor.rotation.x=-Math.PI/2;floor.position.y=-.5;scene.add(floor);scene.add(new THREE.GridHelper(1600,64,0x23573d,0x0b2d1d));
+ const material=new THREE.MeshStandardMaterial({color:0x6ba487,metalness:.3,roughness:.45}),active=new THREE.MeshStandardMaterial({color:0x1bfd9c,emissive:0x0c6c40,roughness:.35});let meshes=[],angle=.5,distance=560,frame=0,down=null;const touches=new Set(),ray=new THREE.Raycaster();
+ function draw(){if(!frame)frame=requestAnimationFrame(()=>{frame=0;if(document.hidden)return;camera.position.set(Math.sin(angle)*distance,distance*.7,Math.cos(angle)*distance);camera.lookAt(0,0,0);renderer.render(scene,camera);});}
+ function resize(){const r=host.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();draw();}const observer=new ResizeObserver(resize);observer.observe(host);
+ function clear(){for(const mesh of meshes){group.remove(mesh);mesh.geometry.dispose();}meshes=[];}
+ function setTile(tile){clear();const [w,s,e,n]=tile.bbox,lon=(w+e)/2,lat=(s+n)/2,scaleX=111320*Math.cos(lat*Math.PI/180);const project=p=>new THREE.Vector2((p[0]-lon)*scaleX,(p[1]-lat)*111320);
+  for(const feature of tile.features.slice(0,200)){const polygons=feature.geometry.type==='Polygon'?[feature.geometry.coordinates]:feature.geometry.coordinates;
+   for(const polygon of polygons){const shape=new THREE.Shape(polygon[0].map(project));for(const ring of polygon.slice(1))shape.holes.push(new THREE.Path(ring.map(project)));const geometry=new THREE.ExtrudeGeometry(shape,{depth:3,bevelEnabled:false,steps:1});geometry.rotateX(-Math.PI/2);const mesh=new THREE.Mesh(geometry,material);mesh.userData.feature=feature;group.add(mesh);meshes.push(mesh);}}
+  draw();
+ }
+ function highlight(id){for(const mesh of meshes)mesh.material=mesh.userData.feature.id===id?active:material;draw();}function turn(delta){angle+=delta;draw();}function reset(){angle=.5;distance=560;draw();}function zoom(delta){distance=Math.max(180,Math.min(1100,distance+delta));draw();}
+ host.addEventListener('pointerdown',e=>{if(e.button>0)return;touches.add(e.pointerId);if(touches.size>1){down=null;return;}down={id:e.pointerId,x:e.clientX,y:e.clientY,last:e.clientX,drag:false};});
+ host.addEventListener('pointermove',e=>{if(!down||down.id!==e.pointerId)return;if(!down.drag){if(Math.abs(e.clientY-down.y)>Math.abs(e.clientX-down.x)+8){down=null;return;}if(Math.abs(e.clientX-down.x)<8)return;down.drag=true;host.setPointerCapture(e.pointerId);}turn((e.clientX-down.last)*.006);down.last=e.clientX;});
+ function end(e){touches.delete(e.pointerId);if(down&&down.id===e.pointerId&&!down.drag&&e.type==='pointerup'){const r=host.getBoundingClientRect();ray.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),camera);const hit=ray.intersectObjects(meshes)[0];if(hit)onSelect(hit.object.userData.feature);}down=null;}
+ host.addEventListener('pointerup',end);host.addEventListener('pointercancel',end);host.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','+','-'].includes(e.key)){e.preventDefault();if(e.key==='Home')reset();else if(e.key==='+'||e.key==='-')zoom(e.key==='+'?-60:60);else turn(e.key==='ArrowLeft'?-.2:.2);}});
+ document.addEventListener('visibilitychange',resize);addEventListener('pageshow',resize);addEventListener('pagehide',e=>{if(e.persisted)return;cancelAnimationFrame(frame);observer.disconnect();clear();scene.traverse(n=>{n.geometry?.dispose();});material.dispose();active.dispose();floor.material.dispose();renderer.dispose();});resize();return {setTile,highlight,turn,reset,zoom};
+}
