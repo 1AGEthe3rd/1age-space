@@ -1,0 +1,84 @@
+name: Render HQ1 draft preview
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - name: Serve draft (not production)
+        run: |
+          nohup python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/hq1-server.log 2>&1 &
+          sleep 2
+      - name: Capture actual 3D scene on three viewports
+        run: |
+          mkdir -p review
+          node <<'NODE'
+          const {chromium} = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({
+              executablePath: '/usr/bin/google-chrome', headless: true,
+              args: ['--no-sandbox','--enable-webgl','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']
+            });
+            let failed = false;
+            for (const [name, width, height, mobile] of [
+              ['desktop',1366,768,false],['iphone-portrait',390,844,true],['iphone-landscape',844,390,true]
+            ]) {
+              const context = await browser.newContext({viewport:{width,height},isMobile:mobile,hasTouch:mobile,deviceScaleFactor:1});
+              const page = await context.newPage();
+              const errors = [];
+              page.on('pageerror', error => errors.push(error.message));
+              try {
+                await page.goto('http://127.0.0.1:4173/hq1/?preview=1',{waitUntil:'domcontentloaded',timeout:30000});
+                await page.waitForTimeout(4500);
+                const state = await page.evaluate(() => {
+                  const canvas = document.querySelector('#district canvas');
+                  return {canvas:!!canvas,gl:!!(canvas?.getContext('webgl2')||canvas?.getContext('webgl')),
+                    fallback:document.body.classList.contains('unavailable')};
+                });
+                await page.screenshot({path:'review/hq1-'+name+'.png',timeout:15000});
+                console.log(name, state, errors);
+                if (!state.canvas || !state.gl || state.fallback || errors.length) failed = true;
+              } catch (error) {failed = true;console.error(name,error);}
+              await context.close();
+            }
+            // Start at the actual HQ1 arrival, walk to NNB's original entry, and inspect the public link.
+            const context = await browser.newContext({viewport:{width:1366,height:768},deviceScaleFactor:1});
+            const page = await context.newPage();
+            try {
+              await page.goto('http://127.0.0.1:4173/hq1/',{waitUntil:'domcontentloaded',timeout:30000});
+              await page.waitForTimeout(1800);
+              await page.keyboard.down('w');
+              let near = false;
+              for (let step=0; step<100 && !near; step++) {
+                await page.waitForTimeout(120);
+                near = await page.locator('#venue-entry').isVisible();
+              }
+              await page.keyboard.up('w');
+              const href = near ? await page.locator('#venue-entry').getAttribute('href') : null;
+              console.log('walk-to-NNB', {near,href});
+              await page.screenshot({path:'review/hq1-walked-to-nnb-entrance.png',timeout:15000});
+              if (!near || !href?.startsWith('https://nonamebesuto.com/') ||
+                  !href.includes('from=hq1') || !href.includes('venue=hq1-nnb-gym')) failed=true;
+            } catch (error) {failed=true;console.error('walk-to-NNB',error);}
+            await context.close();
+            await browser.close();
+            if (failed) process.exitCode = 1;
+          })().catch(error=>{console.error(error);process.exitCode=1;});
+          NODE
+      - name: Upload draft screenshot artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hq1-draft-webgl-preview
+          path: review/
+          if-no-files-found: warn
+          retention-days: 14
