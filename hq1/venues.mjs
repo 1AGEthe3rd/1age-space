@@ -10,11 +10,25 @@ export const neighborhood = {
       category: 'Training gym',
       position: { x: -17.2, z: -31 },
       orientation: Math.PI / 2,
-      appearance: { width: 15, depth: 10, height: 6.5, color: '#242b34', accent: '#d9aa61' },
+      appearance: { width: 15, depth: 10, height: 6.5, color: '#a25c46', accent: '#323d37', style: 'gym' },
       entrance: { x: -12, z: -31, range: 2.6 },
       arrival: { x: -9.6, z: -31, heading: Math.PI / 2 },
       destination: { url: 'https://nonamebesuto.com/', mode: 'link' },
       status: 'Virtual concept',
+    },
+    {
+      id: 'hq1-alberta-workroom',
+      neighborhoodId: 'hq1-portland-sol-road',
+      name: 'Alberta Workroom',
+      operator: '1AGE Space demonstration',
+      category: 'Commercial shell',
+      position: { x: -17.3, z: -14.1 },
+      orientation: Math.PI / 2,
+      appearance: { width: 11.4, depth: 9, height: 5.8, color: '#c0a081', accent: '#33504b', style: 'workshop' },
+      entrance: { x: -12.1, z: -14.1, range: 2.6 },
+      arrival: { x: -9.7, z: -14.1, heading: Math.PI / 2 },
+      destination: { url: 'https://1age.space/hq1/?inside=hq1-alberta-workroom', mode: 'link', interior: 'workroom' },
+      status: 'Fictional demonstration space',
     },
   ],
 };
@@ -37,4 +51,13 @@ export function venueUrl(venue) {
 export function arrivalFor(search) {
   const key = new URLSearchParams(search).get('return');
   return neighborhood.venues.find(venue => venue.id === key)?.arrival ?? neighborhood.arrival;
+}
+
+export function interiorFor(search) {
+  const key = new URLSearchParams(search).get('inside');
+  return neighborhood.venues.find(venue => venue.id === key && venue.destination.interior) ?? null;
+}
+
+export function returnToVenue(venue) {
+  return '?return=' + encodeURIComponent(venue.id);
 }

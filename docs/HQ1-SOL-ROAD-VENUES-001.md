@@ -23,3 +23,13 @@ HQ1 adds `from=hq1&venue=<venue-id>` to participating venue links. An independen
 NNB uses the conceptual ID `hq1-nnb-gym`. Its building position asserts no address, real-world occupancy, ownership, or lease. A second destination can use the same contract by supplying its own record and HTTPS URL. Later embed or API integrations can be added separately.
 
 Preview mode `?preview=1` supplies an input-free scene for the studio globe. Default visit paths remain the full walkable experiences. Review the NNB, Space, and studio drafts together before deploying their cross-domain links.
+
+## Build 003 · Realistic Soul District
+
+The short street layout, NNB footprint, venue ID and return position carry forward. The realistic facades use modeled wall openings, sills, transoms, recessed doors, glazed display bays and visible interior shells. Procedural materials provide brick, concrete and asphalt without extra network requests. Shared static geometry is instanced by material. Street details draw on the existing Sol Road source and the [Portland Bureau of Transportation corridor strategy](https://www.portland.gov/transportation/planning/documents/ne-mlk-jr-blvd-corridor-investment-strategy-110923/download). Locations and storefront designs are illustrative.
+
+The NNB sign uses the published gym's NO NAME BESUTO wordmark lettering. The street uses the existing 1AGE logo asset. The source audit did not locate a separate official NNB logo asset, and the streetscape uses generic storefronts away from the NNB gym and fictional second venue. This build makes no occupancy or availability claims.
+
+Alberta Workroom (`hq1-alberta-workroom`) is a fictional commercial shell. Its door opens the walkable interior within HQ1 at `?inside=hq1-alberta-workroom`. Exit lands at that venue's return position through the shared registry. Run `node --test tests/hq1-venues.test.mjs` to verify the routing contract.
+
+Preview camera URLs use `?preview=1`. Append `&view=street`, `&view=nnb`, or `&view=workroom` for alternate exterior views. Append `&inside=hq1-alberta-workroom` to preview the room.
