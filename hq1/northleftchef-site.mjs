@@ -73,7 +73,8 @@ export function buildNorthLeftChefSite({ box, sign, scene, material }) {
       box(xx,1.59,z+f,width,2.76,.04,glazing,{unbatched:true});
       const mullions=index===1?1:3;
       for (let side=0;side<=mullions;side++) box(x+left+width*side/mullions,1.59,z+f+.044,.055,2.81,.07,frame);
-      for (const y of [.19,.88,2.98]) box(xx,y,z+f+.04,width,.066,.073,frame);
+      for (const y of [.19,2.98]) box(xx,y,z+f+.04,width,.066,.073,frame);
+      box(xx,.88,z+f+.045,width,.104,.08,red);
     }
     box(door.x+.45,1.08,z+f+.11,.05,.25,.05,'#beb199');
     box(door.x,2.64,z+f-1.1,3.85,.044,.10,'#f7e2bb',{glow:true});
