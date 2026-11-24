@@ -250,7 +250,7 @@ try {
 } catch (error) {
   if (!(error instanceof Error) || !error.message.includes('WebGL')) throw error;
   document.body.classList.add('unavailable');
-  hint.textContent = '3D graphics are unavailable on this device.';
+  hint.style.display = ''; hint.textContent = '3D graphics are unavailable on this device.';
   entry.href = interior ? returnToVenue(interior) : neighborhood.venues[0].destination.url;
   entry.textContent = interior ? 'Return to HQ1' : 'Open NNB directly';
   entry.hidden = false;
