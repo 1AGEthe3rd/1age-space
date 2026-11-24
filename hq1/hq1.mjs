@@ -2,7 +2,7 @@ import * as THREE from '../space/shared/three.module.js';
 import { subscribeInput } from '../space/shared/gamepad.mjs';
 import { PadReader } from '../space/shared/gamepad-model.mjs';
 import { arrivalFor, entranceAt, interiorFor, neighborhood, returnToVenue, venueUrl } from './venues.mjs';
-import { buildFacade, buildStreet, buildWorkroom, neighboringBuildings, streetscapeMaterials } from './streetscape.mjs';
+import { buildFacade, buildStreet, buildWorkroom, buildingFootprint, districtBounds, neighboringBuildings, streetscapeMaterials } from './streetscape.mjs';
 
 const host = document.querySelector('#district');
 const hint = document.querySelector('#guidance');
@@ -11,6 +11,7 @@ const defaultHint = hint.textContent;
 const search = new URLSearchParams(location.search);
 const preview = search.get('preview') === '1';
 const interior = interiorFor(search);
+const roomBounds = { minX:-4.76, maxX:4.76, minZ:-6.77, maxZ:6.68 };
 if (preview) document.body.classList.add('project-preview');
 
 function renderDistrict() {
@@ -30,6 +31,7 @@ function renderDistrict() {
     neighborhood: { position:[-8.5,3.2,-23], target:[-15,2.73,-32] },
     street: { position:[-4.6,2.14,6.35], target:[-1.4,2.05,-30] },
     nnb: { position:[-.8,2.65,-30.3], target:[-12.1,2.48,-31] },
+    alberta: { position:[10.7,2.20,15.3], target:[25.5,2.12,13.0] },
     workroom: { position:[-.8,2.61,-9.8], target:[-12.9,2.45,-14.1] },
   };
   const blockers = [];
@@ -103,8 +105,7 @@ function renderDistrict() {
     for (const building of [...neighboringBuildings, ...neighborhood.venues]) {
       const door = buildFacade(builder, building);
       if (building.id) doorTargets.set(building.id, door);
-      const { width, depth } = building.appearance;
-      blockers.push({ x:building.position.x-depth/2, z:building.position.z-width/2, w:depth, d:width });
+      blockers.push(buildingFootprint(building));
     }
     const loader = new THREE.TextureLoader();
     const logo = loader.load('../assets/1age-logo.svg', () => {
@@ -206,9 +207,9 @@ function renderDistrict() {
     const x = Number(keys.has('KeyD') || keys.has('ArrowRight')) - Number(keys.has('KeyA') || keys.has('ArrowLeft')) + controls.move.x;
     const z = Number(keys.has('KeyS') || keys.has('ArrowDown')) - Number(keys.has('KeyW') || keys.has('ArrowUp')) + controls.move.y;
     const d = 5.8 * dt / Math.max(1, Math.hypot(x,z));
-    const limitX = interior ? 4.76 : 25;
-    const nextX = THREE.MathUtils.clamp(camera.position.x+(Math.cos(yaw)*x + Math.sin(yaw)*z)*d,-limitX,limitX);
-    const nextZ = THREE.MathUtils.clamp(camera.position.z+(-Math.sin(yaw)*x + Math.cos(yaw)*z)*d,interior ? -6.77 : -68,interior ? 6.68 : 23);
+    const bounds = interior ? roomBounds : districtBounds;
+    const nextX = THREE.MathUtils.clamp(camera.position.x+(Math.cos(yaw)*x + Math.sin(yaw)*z)*d,bounds.minX,bounds.maxX);
+    const nextZ = THREE.MathUtils.clamp(camera.position.z+(-Math.sin(yaw)*x + Math.cos(yaw)*z)*d,bounds.minZ,bounds.maxZ);
     if (clear(nextX,camera.position.z)) camera.position.x = nextX;
     if (clear(camera.position.x,nextZ)) camera.position.z = nextZ;
     yaw -= controls.look.x * dt * 1.65;

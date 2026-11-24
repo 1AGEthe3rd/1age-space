@@ -52,6 +52,14 @@ export function streetscapeMaterials() {
   };
 }
 
+export const districtBounds = { minX:-33, maxX:33, minZ:-68, maxZ:27 };
+
+export function buildingFootprint({ position, orientation, appearance }) {
+  const width = Math.abs(Math.cos(orientation)) * appearance.width + Math.abs(Math.sin(orientation)) * appearance.depth;
+  const depth = Math.abs(Math.sin(orientation)) * appearance.width + Math.abs(Math.cos(orientation)) * appearance.depth;
+  return { x:position.x-width/2, z:position.z-depth/2, w:width, d:depth };
+}
+
 export const neighboringBuildings = [
   { x:-17.3, z:1.3, width:13, depth:9, height:6.2, color:'#9e7557', accent:'#343d35', style:'workshop' },
   { x:18, z:.6, width:11.7, depth:9, height:8.2, color:'#b1866f', accent:'#414744', style:'brick' },
@@ -61,7 +69,11 @@ export const neighboringBuildings = [
   { x:18, z:-51, width:12.6, depth:9, height:5.8, color:'#978873', accent:'#464943', style:'workshop' },
 ].map(({ x,z,...appearance }) => ({
   position:{ x,z }, orientation:x < 0 ? Math.PI/2 : -Math.PI/2, appearance,
-}));
+})).concat([
+  { position:{ x:26.4,z:26.4 }, orientation:Math.PI, appearance:{ width:15.6,depth:8.2,height:6.2,color:'#b7846c',accent:'#3e4a45',style:'brick' } },
+  { position:{ x:28.2,z:1.3 }, orientation:0, appearance:{ width:12.6,depth:8.5,height:7.8,color:'#ccc2a0',accent:'#4e554d',style:'stucco' } },
+  { position:{ x:-28.2,z:1.3 }, orientation:0, appearance:{ width:10.4,depth:8.4,height:5.8,color:'#a08161',accent:'#474d44',style:'workshop' } },
+]);
 
 export function buildFacade({ box, sign, scene, material }, building) {
   const { position, orientation, appearance, name } = building;
@@ -152,15 +164,38 @@ export function buildStreet({ box, sign, scene, material }) {
     for (let z=-72; z<7; z+=2.3) box(side*8.9,.082,z,5.68,.006,.018,'#9f998a');
     for (const z of [6.5,19.5]) box(side*6.8,.084,z,1.36,.025,.82,'#bb8e60');
   }
-  box(0,.084,13,58,.035,11,material('asphalt','#494b48',18,4));
+  box(0,.012,13,72,.043,10.88,material('asphalt','#494b48',20,4));
+  for (const side of [-1,1]) {
+    const x = side * 22;
+    for (const z of [6.4,19.6]) {
+      box(x,.040,z,31.7,.08,2.0,concrete);
+      const curbEdge = z + (z < 13 ? .92 : -.92);
+      box(x,.066,curbEdge,31.6,.12,.15,'#b0a89b');
+      for (let offset=9; offset<36; offset+=2.35) {
+        box(side*offset,.082,z,.016,.006,1.87,'#9f998a');
+      }
+    }
+    for (let offset=10.3; offset<35; offset+=5.7) {
+      box(side*offset,.043,13,3.7,.012,.085,'#b59460');
+    }
+    for (const offset of [11.8,25.7]) {
+      box(side*offset,.074,20.16,1.8,.019,.72,'#937d62');
+    }
+    const xEnd = side * 31.8;
+    const trafficGrey = '#4f5753';
+    box(xEnd,1.75,19.6,.105,3.5,.105,trafficGrey);
+    box(xEnd-side*.37,3.42,19.6,.82,.072,.072,trafficGrey);
+    box(xEnd-side*.78,3.37,19.6,.28,.16,.22,trafficGrey);
+    box(xEnd-side*.78,3.285,19.6,.22,.012,.15,'#fff2c9',{glow:true});
+  }
   for (let z=-67; z<2; z+=6) {
     for (const x of [-.11,.11]) box(x,.040,z,.074,.008,4.6,'#cfa651');
   }
   for (const z of [6.4,19.6]) {
-    for (let x=-5; x<=5; x+=1.25) box(x,.114,z,.62,.012,2.50,'#e4dece');
+    for (let x=-5; x<=5; x+=1.25) box(x,.058,z,.62,.012,2.50,'#e4dece');
   }
   for (const x of [-6.55,6.55]) {
-    for (let z=8.8; z<=17.3; z+=1.2) box(x,.111,z,1.28,.012,.54,'#d8d2c3');
+    for (let z=8.8; z<=17.3; z+=1.2) box(x,.058,z,1.28,.012,.54,'#d8d2c3');
   }
   const foliage = new THREE.IcosahedronGeometry(1,1);
   const crowns = [[0,3.63,0,1.17],[-.48,3.30,.12,.9],[.44,3.32,-.24,.86],[.02,4.18,.03,.78]];
@@ -178,7 +213,7 @@ export function buildStreet({ box, sign, scene, material }) {
       box(x-side*1.13,5.40,z,.45,.16,.22,'#404744');
       box(x-side*1.13,5.31,z,.32,.02,.15,'#fff2c9',{glow:true});
     }
-    for (const z of [-59,-41,-14,-5,22]) {
+    for (const z of [-59,-41,-17.8,-5,22]) {
       const x=side*7.6;
       box(x,.092,z,1.45,.024,1.65,'#6d5b4c');
       box(x,1.54,z,.17,3,.19,'#665044');
@@ -192,7 +227,13 @@ export function buildStreet({ box, sign, scene, material }) {
     }
   }
   scene.add(...trees);
-  box(-20,.078,19,15,.08,10,material('paving','#ae8971',7,5));
+  box(-21.5,.042,23.1,17,.09,5.8,material('paving','#ae8971',7,4));
+  for (const x of [-26.8,-18.5]) {
+    box(x,.105,23.9,2.35,.12,1.42,'#b7a898');
+    box(x,.23,23.9,2.16,.18,1.24,'#6e6047');
+    for (const support of [-.59,.59]) box(x+support,.31,22.55,.08,.57,.51,'#4a4c44');
+    for (const slat of [-.15,0,.15]) box(x,.62,22.55+slat,1.71,.08,.115,'#76614e');
+  }
   for (const x of [-8.55,8.55]) {
     box(x,1.85,7,.10,3.70,.10,'#747e78');
     const alberta=sign('NE ALBERTA ST',scene,x,3.57,7,1.74,{background:'#326249'});

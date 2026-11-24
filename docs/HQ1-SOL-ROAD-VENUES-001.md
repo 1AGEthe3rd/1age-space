@@ -33,3 +33,9 @@ The NNB sign uses the published gym's NO NAME BESUTO wordmark lettering. The str
 Alberta Workroom (`hq1-alberta-workroom`) is a fictional commercial shell. Its door opens the walkable interior within HQ1 at `?inside=hq1-alberta-workroom`. Exit lands at that venue's return position through the shared registry. Run `node --test tests/hq1-venues.test.mjs` to verify the routing contract.
 
 Preview camera URLs use `?preview=1`. Append `&view=street`, `&view=nnb`, or `&view=workroom` for alternate exterior views. Append `&inside=hq1-alberta-workroom` to preview the room.
+
+## Build 004 · Alberta street continuation
+
+The intersection now has a longer walkable Alberta corridor, sidewalks on both sides, commercial corner shells, and a small conceptual seating area. The cross street retains its original crossing. A dedicated `?preview=1&view=alberta` camera shows the eastbound view. NNB and Alberta Workroom keep their existing entrances and return coordinates from Build 003.
+
+Building collision uses the facade orientation and its registered dimensions. Turning a corner shell to face Alberta also turns its collision footprint. The new corner shells represent fictional geometry with no claim of a tenant, surveyed address, or vacancy.
