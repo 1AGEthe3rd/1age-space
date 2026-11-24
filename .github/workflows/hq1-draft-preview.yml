@@ -50,6 +50,26 @@ jobs:
               } catch (error) {failed = true;console.error(name,error);}
               await context.close();
             }
+            // Start at the actual HQ1 arrival, walk to NNB's original entry, and inspect the public link.
+            const context = await browser.newContext({viewport:{width:1366,height:768},deviceScaleFactor:1});
+            const page = await context.newPage();
+            try {
+              await page.goto('http://127.0.0.1:4173/hq1/',{waitUntil:'domcontentloaded',timeout:30000});
+              await page.waitForTimeout(1800);
+              await page.keyboard.down('w');
+              let near = false;
+              for (let step=0; step<100 && !near; step++) {
+                await page.waitForTimeout(120);
+                near = await page.locator('#venue-entry').isVisible();
+              }
+              await page.keyboard.up('w');
+              const href = near ? await page.locator('#venue-entry').getAttribute('href') : null;
+              console.log('walk-to-NNB', {near,href});
+              await page.screenshot({path:'review/hq1-walked-to-nnb-entrance.png',timeout:15000});
+              if (!near || !href?.startsWith('https://nonamebesuto.com/') ||
+                  !href.includes('from=hq1') || !href.includes('venue=hq1-nnb-gym')) failed=true;
+            } catch (error) {failed=true;console.error('walk-to-NNB',error);}
+            await context.close();
             await browser.close();
             if (failed) process.exitCode = 1;
           })().catch(error=>{console.error(error);process.exitCode=1;});
