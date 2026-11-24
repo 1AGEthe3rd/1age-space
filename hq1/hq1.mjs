@@ -30,7 +30,7 @@ function renderDistrict() {
     neighborhood: { position:[-8.5,3.2,-23], target:[-15,2.73,-32] },
     street: { position:[-4.6,2.14,6.35], target:[-1.4,2.05,-30] },
     nnb: { position:[-.8,2.65,-30.3], target:[-12.1,2.48,-31] },
-    workroom: { position:[-.8,2.61,-12.9], target:[-12.9,2.45,-14.1] },
+    workroom: { position:[-.8,2.61,-9.8], target:[-12.9,2.45,-14.1] },
   };
   const blockers = [];
   const doorTargets = new Map();
