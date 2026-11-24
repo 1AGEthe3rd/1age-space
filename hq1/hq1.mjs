@@ -1,12 +1,16 @@
 import * as THREE from '../space/shared/three.module.js';
 import { subscribeInput } from '../space/shared/gamepad.mjs';
-import { arrivalFor, entranceAt, neighborhood, venueUrl } from './venues.mjs';
+import { PadReader } from '../space/shared/gamepad-model.mjs';
+import { arrivalFor, entranceAt, interiorFor, neighborhood, returnToVenue, venueUrl } from './venues.mjs';
+import { buildFacade, buildStreet, buildWorkroom, neighboringBuildings, streetscapeMaterials } from './streetscape.mjs';
 
 const host = document.querySelector('#district');
 const hint = document.querySelector('#guidance');
 const entry = document.querySelector('#venue-entry');
 const defaultHint = hint.textContent;
-const preview = new URLSearchParams(location.search).get('preview') === '1';
+const search = new URLSearchParams(location.search);
+const preview = search.get('preview') === '1';
+const interior = interiorFor(search);
 if (preview) document.body.classList.add('project-preview');
 
 function renderDistrict() {
@@ -15,112 +19,109 @@ function renderDistrict() {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   host.append(renderer.domElement);
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#273c4a');
-  scene.fog = new THREE.Fog('#273c4a', 43, 115);
-  const camera = new THREE.PerspectiveCamera(68, 1, .1, 130);
-  const start = arrivalFor(location.search);
+  scene.background = new THREE.Color('#b6c4ca');
+  scene.fog = new THREE.Fog('#b6c4ca', 51, 117);
+  const camera = new THREE.PerspectiveCamera(64, 1, .1, 130);
+  const start = interior ? { x:0, z:4.9, heading:0 } : arrivalFor(search);
   camera.position.set(start.x, 1.75, start.z);
   let yaw = start.heading, pitch = 0;
-  if (preview) {
-    camera.position.set(-8.5, 3.2, -23);
-    yaw = .84;
-    pitch = -.085;
-  }
+  const view = search.get('view');
+  const previewCameras = {
+    neighborhood: { position:[-8.5,3.2,-23], target:[-15,2.73,-32] },
+    street: { position:[-4.6,2.14,6.35], target:[-1.4,2.05,-30] },
+    nnb: { position:[-.8,2.65,-30.3], target:[-12.1,2.48,-31] },
+    workroom: { position:[-.8,2.61,-9.8], target:[-12.9,2.45,-14.1] },
+  };
   const blockers = [];
   const doorTargets = new Map();
   const materials = new Map();
+  const boxBatches = new Map();
   const unit = new THREE.BoxGeometry(1, 1, 1);
+  const material = streetscapeMaterials();
+  let interiorDoor;
 
-  function box(x, y, z, w, h, d, color, solid = false, glow = false, parent = scene) {
-    const key = color + glow;
-    if (!materials.has(key)) materials.set(key, glow ? new THREE.MeshBasicMaterial({ color }) : new THREE.MeshStandardMaterial({ color, roughness: .91 }));
-    const mesh = new THREE.Mesh(unit, materials.get(key));
+  function box(x, y, z, w, h, d, color, { glow = false, parent = scene, unbatched = false } = {}) {
+    const key = color + ':' + glow;
+    if (typeof color === 'string' && !materials.has(key)) {
+      materials.set(key, glow ? new THREE.MeshBasicMaterial({ color }) : new THREE.MeshStandardMaterial({ color, roughness:.87 }));
+    }
+    const paint = typeof color === 'string' ? materials.get(key) : color;
+    const mesh = new THREE.Mesh(unit, paint);
     mesh.position.set(x, y, z);
     mesh.scale.set(w, h, d);
     parent.add(mesh);
-    if (solid) blockers.push({ x: x - w / 2, z: z - d / 2, w, d });
+    if (!unbatched) {
+      if (!boxBatches.has(paint)) boxBatches.set(paint, []);
+      boxBatches.get(paint).push(mesh);
+    }
     return mesh;
   }
 
-  function sign(label, parent, x, y, z, width, color = '#e2ffdc') {
-    const canvas = Object.assign(document.createElement('canvas'), { width: 768, height: 128 });
+  function flushBoxes() {
+    scene.updateMatrixWorld(true);
+    for (const [paint, meshes] of boxBatches) {
+      const batch = new THREE.InstancedMesh(unit, paint, meshes.length);
+      for (const [i, mesh] of meshes.entries()) {
+        batch.setMatrixAt(i, mesh.matrixWorld);
+        mesh.removeFromParent();
+      }
+      scene.add(batch);
+    }
+  }
+
+  function sign(label, parent, x, y, z, width, { color='#f4f0e5', background='#24362d', weight='700' } = {}) {
+    const canvas = Object.assign(document.createElement('canvas'), { width:1024, height:128 });
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#101b23';
-    ctx.fillRect(0, 0, 768, 128);
+    if (background) {
+      ctx.fillStyle = background;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(8, 8, canvas.width-16, canvas.height-16);
+    }
     ctx.fillStyle = color;
-    ctx.font = '700 54px system-ui';
+    ctx.font = weight + ' 67px system-ui';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
-    ctx.fillText(label, 384, 64, 700);
+    ctx.fillText(label, canvas.width/2, 63, canvas.width-80);
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
-    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, width / 6), new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }));
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, width/8), new THREE.MeshBasicMaterial({ map:texture, transparent:!background }));
     mesh.position.set(x, y, z);
     parent.add(mesh);
     return mesh;
   }
 
-  // Adapted from the widths, sidewalks and Alberta cross street in Sol Road.
-  box(0, -.36, -24, 94, .56, 100, '#243039');
-  box(0, .018, -24, 12, .035, 100, '#303840');
-  for (const side of [-1, 1]) {
-    box(side * 8.9, .04, -24, 5.8, .08, 100, '#8d9088');
-    box(side * 6.0, .08, -24, .18, .13, 100, '#b5b7a9');
-  }
-  box(0, .084, 13, 58, .035, 11, '#303840');
-  for (let z = -67; z < 10; z += 6) box(0, .05, z, .15, .016, 3, '#c4a65b');
-  for (const z of [7, 19]) for (let x = -5; x <= 5; x += 1.25) box(x, .115, z, .68, .017, 2.65, '#dbddd2');
-  for (const side of [-1, 1]) for (const z of [-45, -23, -7, 10]) {
-    box(side * 6.85, 2.8, z, .15, 5.6, .15, '#23353b');
-    box(side * 7.15, 5.55, z, .84, .12, .36, '#fae3a1', false, true);
-  }
-  box(-20, .078, 19, 15, .08, 10, '#9d6a59');
-  sign('NE Alberta St / NE MLK Jr Blvd', scene, -8.9, 4.25, 12.5, 5.7);
-  sign('Harry Jackson Plaza · concept', scene, -13.4, 2.3, 19.4, 4.6).rotation.y = Math.PI / 2;
-
-  function facade({ position, orientation, appearance, name }, withEntrance) {
-    const { width, depth, height, color, accent } = appearance;
-    const { x, z } = position;
-    const group = new THREE.Group();
-    group.position.set(x, 0, z);
-    group.rotation.y = orientation;
-    scene.add(group);
-    box(0, height / 2, 0, width, height, depth, color, false, false, group);
-    const face = depth / 2 + .04;
-    box(0, height-.53, face, width+.1, .24, .16, accent, false, true, group);
-    box(0, 3.0, face, width-.48, .13, .12, accent, false, false, group);
-    for (const dx of [-width * .36, -width * .18, width * .18, width * .36]) {
-      box(dx, 1.8, face, width*.15, 2.4, .15, '#142c37', false, false, group);
-      box(dx, 1.62, face+.09, width*.11, .09, .09, '#86b2ba', false, true, group);
+  const builder = { box, sign, scene, material };
+  if (interior) {
+    interiorDoor = buildWorkroom(builder);
+    document.querySelector('h1').textContent = interior.name;
+    document.querySelector('header a').href = returnToVenue(interior);
+    document.querySelector('header a').textContent = 'Return to HQ1';
+  } else {
+    buildStreet(builder);
+    for (const building of [...neighboringBuildings, ...neighborhood.venues]) {
+      const door = buildFacade(builder, building);
+      if (building.id) doorTargets.set(building.id, door);
+      const { width, depth } = building.appearance;
+      blockers.push({ x:building.position.x-depth/2, z:building.position.z-width/2, w:depth, d:width });
     }
-    const doorColor = withEntrance ? accent : '#697b83';
-    const door = box(0, 1.53, face, 2.1, 3.02, .26, '#0b171f', false, false, group);
-    if (withEntrance) doorTargets.set(withEntrance.id, door);
-    box(0, 2.83, face+.17, 2.6, .16, .30, doorColor, false, withEntrance, group);
-    sign(name, group, 0, height-.99, face+.1, width*.84, accent);
-    if (withEntrance) {
-      const marker = new THREE.Mesh(new THREE.RingGeometry(.69, .79, 28), new THREE.MeshBasicMaterial({ color: accent, side: THREE.DoubleSide }));
-      marker.rotation.x = -Math.PI / 2;
-      marker.position.set(0, .13, face+1.1);
-      group.add(marker);
-    }
-    const worldWidth = Math.abs(Math.sin(orientation)) > .5 ? depth : width;
-    const worldDepth = Math.abs(Math.sin(orientation)) > .5 ? width : depth;
-    blockers.push({x:x-worldWidth/2,z:z-worldDepth/2,w:worldWidth,d:worldDepth});
+    const loader = new THREE.TextureLoader();
+    const logo = loader.load('../assets/1age-logo.svg', () => {
+      if (preview) renderer.render(scene, camera);
+    });
+    logo.colorSpace = THREE.SRGBColorSpace;
+    const plaque = new THREE.Mesh(new THREE.PlaneGeometry(.76,.76),
+      new THREE.MeshBasicMaterial({map:logo,transparent:true}));
+    plaque.position.set(-14.65,1.45,19.24);
+    plaque.rotation.y = Math.PI/2;
+    box(-14.83,1.45,19.24,.32,1.17,1.14,'#27332c');
+    scene.add(plaque);
   }
-  for (const [x, z, name, color, accent] of [
-    [-17.3, 1.3, 'OpenHAUS · concept', '#39434d', '#84badf'],
-    [18, .6, 'NE MLK storefront', '#39404a', '#d6af83'],
-    [18, -14, 'Cason’s · concept', '#603a32', '#efc496'],
-    [-17.3, -48, 'Sol Road storefront', '#3b484a', '#84bea7'],
-    [18, -34, 'Soul District storefront', '#49424e', '#b9a6b5'],
-    [18, -51, 'NE MLK storefront', '#57514a', '#ded4a5'],
-  ]) facade({position:{x,z},orientation:x<0?Math.PI/2:-Math.PI/2,appearance:{width:13,depth:9,height:5.6,color,accent},name}, false);
-  for (const venue of neighborhood.venues) facade(venue, venue);
-
-  scene.add(new THREE.HemisphereLight('#c0d9ec','#453629',2.65));
-  const sun = new THREE.DirectionalLight('#ffe0ad',1.85);
-  sun.position.set(-6, 8, 10);
+  flushBoxes();
+  scene.add(new THREE.HemisphereLight('#e4efff','#82715c',interior ? 2.6 : 2.05));
+  const sun = new THREE.DirectionalLight('#fff0d9',2.35);
+  sun.position.set(18,14,11);
   scene.add(sun);
 
   const keys = new Set();
@@ -128,15 +129,29 @@ function renderDistrict() {
   let touch = null;
   let controls = { move:{x:0,y:0},look:{x:0,y:0} };
   let current, last = 0;
+  const gamepad = new PadReader();
+  function readGamepads() {
+    try {
+      return navigator.getGamepads?.() ?? [];
+    } catch {
+      return [];
+    }
+  }
+  function destination(venue) {
+    if (interior) return returnToVenue(interior);
+    const url = new URL(venueUrl(venue));
+    return venue.destination.interior ? url.search : url.href;
+  }
   subscribeInput(input => { controls = input; });
-  function useEntrance() { if (current) location.href = venueUrl(current); }
+  function useEntrance() { if (current) location.assign(destination(current)); }
   addEventListener('keydown', event => {
     if (event.target.closest?.('#oneage-controller')) return;
     keys.add(event.code);
     if (event.code === 'KeyE' && !event.repeat) useEntrance();
   });
   addEventListener('keyup', event => keys.delete(event.code));
-  addEventListener('blur', () => { keys.clear(); touch = null; controls = { move:{x:0,y:0},look:{x:0,y:0} }; });
+  addEventListener('gamepaddisconnected', () => gamepad.reset());
+  addEventListener('blur', () => { keys.clear(); gamepad.reset(); touch = null; controls = { move:{x:0,y:0},look:{x:0,y:0} }; });
   const ray = new THREE.Raycaster();
   canvas.addEventListener('pointerdown', event => {
     if (preview || touch || event.button !== 0) return;
@@ -155,7 +170,7 @@ function renderDistrict() {
     if (touch?.id !== event.pointerId) return;
     const click = type === 'pointerup' && touch.distance < 6;
     touch = null;
-    const target = current && doorTargets.get(current.id);
+    const target = current && (interior ? interiorDoor : doorTargets.get(current.id));
     if (!click || !target) return;
     const rect = canvas.getBoundingClientRect();
     ray.setFromCamera(new THREE.Vector2(2*(event.clientX-rect.left)/rect.width-1, 1-2*(event.clientY-rect.top)/rect.height),camera);
@@ -173,9 +188,16 @@ function renderDistrict() {
     return !blockers.some(b => x > b.x-padding && x < b.x+b.w+padding && z > b.z-padding && z < b.z+b.d+padding);
   }
   if (preview) {
-    camera.rotation.set(pitch,yaw,0,'YXZ');
-    renderer.render(scene,camera);
-    addEventListener('resize', () => renderer.render(scene,camera));
+    function renderPreview() {
+      const framing = Object.hasOwn(previewCameras, view) ? previewCameras[view] : previewCameras.neighborhood;
+      camera.position.fromArray(interior ? [0,2.14,5.48] : framing.position);
+      camera.lookAt(...(interior ? [0,1.67,-3] : framing.target));
+      camera.fov = camera.aspect < 1 ? 78 : 64;
+      camera.updateProjectionMatrix();
+      renderer.render(scene,camera);
+    }
+    renderPreview();
+    addEventListener('resize', renderPreview);
     return;
   }
   renderer.setAnimationLoop(now => {
@@ -184,23 +206,30 @@ function renderDistrict() {
     const x = Number(keys.has('KeyD') || keys.has('ArrowRight')) - Number(keys.has('KeyA') || keys.has('ArrowLeft')) + controls.move.x;
     const z = Number(keys.has('KeyS') || keys.has('ArrowDown')) - Number(keys.has('KeyW') || keys.has('ArrowUp')) + controls.move.y;
     const d = 5.8 * dt / Math.max(1, Math.hypot(x,z));
-    const nextX = THREE.MathUtils.clamp(camera.position.x+(Math.cos(yaw)*x + Math.sin(yaw)*z)*d,-25,25);
-    const nextZ = THREE.MathUtils.clamp(camera.position.z+(-Math.sin(yaw)*x + Math.cos(yaw)*z)*d,-68,23);
+    const limitX = interior ? 4.76 : 25;
+    const nextX = THREE.MathUtils.clamp(camera.position.x+(Math.cos(yaw)*x + Math.sin(yaw)*z)*d,-limitX,limitX);
+    const nextZ = THREE.MathUtils.clamp(camera.position.z+(-Math.sin(yaw)*x + Math.cos(yaw)*z)*d,interior ? -6.77 : -68,interior ? 6.68 : 23);
     if (clear(nextX,camera.position.z)) camera.position.x = nextX;
     if (clear(camera.position.x,nextZ)) camera.position.z = nextZ;
     yaw -= controls.look.x * dt * 1.65;
     pitch = THREE.MathUtils.clamp(pitch - controls.look.y * dt * 1.3, -.75,.75);
     camera.rotation.set(pitch,yaw,0,'YXZ');
-    const near = entranceAt(camera.position.x,camera.position.z);
+    const near = interior
+      ? (Math.hypot(camera.position.x,camera.position.z-6.45) < 2.2 ? interior : null)
+      : entranceAt(camera.position.x,camera.position.z);
     if (near !== current) {
       current = near;
       entry.hidden = !near;
       if (near) {
-        entry.href = venueUrl(near);
-        entry.textContent = 'Enter ' + near.name;
+        entry.href = destination(near);
+        entry.textContent = interior ? 'Return to HQ1' : 'Enter ' + near.name;
       }
-      hint.textContent = near ? near.status + ' · E or select the entrance' : defaultHint;
+      hint.textContent = near
+        ? near.status + ' · E, A, or select the door'
+        : interior?.status ?? defaultHint;
     }
+    const pad = gamepad.sample(readGamepads(), document.hasFocus() && !document.hidden);
+    if (pad.edges.includes(0) && !document.activeElement?.matches('a,button')) useEntrance();
     renderer.render(scene,camera);
   });
 }
@@ -211,7 +240,7 @@ try {
   if (!(error instanceof Error) || !error.message.includes('WebGL')) throw error;
   document.body.classList.add('unavailable');
   hint.textContent = '3D graphics are unavailable on this device.';
-  entry.href = neighborhood.venues[0].destination.url;
-  entry.textContent = 'Open NNB directly';
+  entry.href = interior ? returnToVenue(interior) : neighborhood.venues[0].destination.url;
+  entry.textContent = interior ? 'Return to HQ1' : 'Open NNB directly';
   entry.hidden = false;
 }
