@@ -39,3 +39,13 @@ Preview camera URLs use `?preview=1`. Append `&view=street`, `&view=nnb`, or `&v
 The intersection now has a longer walkable Alberta corridor, sidewalks on both sides, commercial corner shells, and a small conceptual seating area. The cross street retains its original crossing. A dedicated `?preview=1&view=alberta` camera shows the eastbound view. NNB and Alberta Workroom keep their existing entrances and return coordinates from Build 003.
 
 Building collision uses the facade orientation and its registered dimensions. Turning a corner shell to face Alberta also turns its collision footprint. The new corner shells represent fictional geometry with no claim of a tenant, surveyed address, or vacancy.
+
+## NorthLeftChef · Jessup extension
+
+The walkable north-end extension represents the Geneva Knauls Building at 5601 NE Martin Luther King Jr. Boulevard. The [leasing brochure](https://images1.showcase.com/d2/5pMviNilG1O8KvEXrw2K1xxlJ_xSnc2-BGZT9SkcK4I/document.pdf) provides reference images of the glazed suites, red facade accents, and surface lot. The [property listing](https://www.cityfeet.com/cont/listing/5601-ne-martin-luther-king-jr-blvd-portland-or-97211/cs36159504) reports two suites totaling 2,163 square feet. The virtual footprint is approximately 20.7 × 9.65 m, an area-based fit to the existing NorthLeftChef proportions. Scene placement and dimensions are approximate and do not imply a tenancy or a surveyed reconstruction.
+
+The café and studio doors use separate fixed return positions in one venue record. NorthLeftChef's exit links return just outside those doors, facing the parking area. The lot has a pedestrian path to the NE MLK sidewalk. The neighborhood compresses the real distance between Alberta and Jessup.
+
+### Measured reference and remaining geometry work
+
+The leasing brochure (page 3, measured June 9, 2025) shows rear widths of 46.5 ft and 47 ft, a 22.9 ft main depth, and a projecting central utility/kitchen section with a chamfered storefront. The sketch totals 2,165 sq ft; the listing reports 2,163 sq ft. The current rectangular playable footprint is still an area-based approximation, not a measured reconstruction. The exterior photos show rust-red horizontal glazing rails, dark frames, a light fascia and a parking apron. Keep existing controls and furniture until the measured proportions and storefront offsets can be reconciled in both scenes and tested together. No claim of actual tenancy or ownership.
