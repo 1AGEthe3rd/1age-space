@@ -1,8 +1,10 @@
 import * as THREE from '../space/shared/three.module.js';
 import { subscribeInput } from '../space/shared/gamepad.mjs';
 import { PadReader } from '../space/shared/gamepad-model.mjs';
-import { arrivalFor, entranceAt, interiorFor, neighborhood, returnToVenue, venueUrl } from './venues.mjs';
+import { approachAt, arrivalFor, interiorFor, neighborhood, returnToVenue, venueUrl } from './venues.mjs';
 import { buildFacade, buildStreet, buildWorkroom, buildingFootprint, districtBounds, neighboringBuildings, streetscapeMaterials } from './streetscape.mjs';
+
+import { buildNorthLeftChefSite } from './northleftchef-site.mjs';
 
 const host = document.querySelector('#district');
 const hint = document.querySelector('#guidance');
@@ -31,6 +33,7 @@ function renderDistrict() {
     neighborhood: { position:[-8.5,3.2,-23], target:[-15,2.73,-32] },
     street: { position:[-4.6,2.14,6.35], target:[-1.4,2.05,-30] },
     nnb: { position:[-.8,2.65,-30.3], target:[-12.1,2.48,-31] },
+    northleftchef: { position:[-6.8,2.8,-84.5], target:[-16.5,2.0,-95.2] },
     alberta: { position:[10.7,2.20,15.3], target:[25.5,2.12,13.0] },
     workroom: { position:[-.8,2.61,-9.8], target:[-12.9,2.45,-14.1] },
   };
@@ -103,8 +106,12 @@ function renderDistrict() {
   } else {
     buildStreet(builder);
     for (const building of [...neighboringBuildings, ...neighborhood.venues]) {
-      const door = buildFacade(builder, building);
-      if (building.id) doorTargets.set(building.id, door);
+      if (building.appearance.style === 'nlc') {
+        doorTargets.set(building.id, buildNorthLeftChefSite(builder));
+      } else {
+        const door = buildFacade(builder, building);
+        if (building.id) doorTargets.set(building.id, [door]);
+      }
       blockers.push(buildingFootprint(building));
     }
     const loader = new THREE.TextureLoader();
@@ -129,7 +136,7 @@ function renderDistrict() {
   const canvas = renderer.domElement;
   let touch = null;
   let controls = { move:{x:0,y:0},look:{x:0,y:0} };
-  let current, last = 0;
+  let current, currentDoor, last = 0;
   const gamepad = new PadReader();
   function readGamepads() {
     try {
@@ -140,7 +147,7 @@ function renderDistrict() {
   }
   function destination(venue) {
     if (interior) return returnToVenue(interior);
-    const url = new URL(venueUrl(venue));
+    const url = new URL(venueUrl(venue,currentDoor?.id));
     return venue.destination.interior ? url.search : url.href;
   }
   subscribeInput(input => { controls = input; });
@@ -171,11 +178,11 @@ function renderDistrict() {
     if (touch?.id !== event.pointerId) return;
     const click = type === 'pointerup' && touch.distance < 6;
     touch = null;
-    const target = current && (interior ? interiorDoor : doorTargets.get(current.id));
-    if (!click || !target) return;
+    const targets = current && (interior ? [interiorDoor] : doorTargets.get(current.id));
+    if (!click || !targets) return;
     const rect = canvas.getBoundingClientRect();
     ray.setFromCamera(new THREE.Vector2(2*(event.clientX-rect.left)/rect.width-1, 1-2*(event.clientY-rect.top)/rect.height),camera);
-    if (ray.intersectObject(target).length) useEntrance();
+    if (ray.intersectObjects(targets).length) useEntrance();
   });
   function resize() {
     camera.aspect = innerWidth / innerHeight;
@@ -215,11 +222,14 @@ function renderDistrict() {
     yaw -= controls.look.x * dt * 1.65;
     pitch = THREE.MathUtils.clamp(pitch - controls.look.y * dt * 1.3, -.75,.75);
     camera.rotation.set(pitch,yaw,0,'YXZ');
-    const near = interior
-      ? (Math.hypot(camera.position.x,camera.position.z-6.45) < 2.2 ? interior : null)
-      : entranceAt(camera.position.x,camera.position.z);
-    if (near !== current) {
+    const nearby = interior
+      ? (Math.hypot(camera.position.x,camera.position.z-6.45) < 2.2 ? { venue:interior } : null)
+      : approachAt(camera.position.x,camera.position.z);
+    const near = nearby?.venue;
+    const door = nearby?.door;
+    if (near !== current || door !== currentDoor) {
       current = near;
+      currentDoor = door;
       entry.hidden = !near;
       if (near) {
         entry.href = destination(near);

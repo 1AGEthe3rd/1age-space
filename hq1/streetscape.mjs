@@ -52,7 +52,7 @@ export function streetscapeMaterials() {
   };
 }
 
-export const districtBounds = { minX:-33, maxX:33, minZ:-68, maxZ:27 };
+export const districtBounds = { minX:-33, maxX:33, minZ:-111, maxZ:27 };
 
 export function buildingFootprint({ position, orientation, appearance }) {
   const width = Math.abs(Math.cos(orientation)) * appearance.width + Math.abs(Math.sin(orientation)) * appearance.depth;
