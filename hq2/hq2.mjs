@@ -171,7 +171,35 @@ function populateList() {
 }
 let indoor=null, streetPose;
 const rooms=new Map();
+let adultConfirmed=false;
+function requestDispensaryEntry(suite) {
+  if(adultConfirmed) return enterSuite(suite);
+  $('#place-title').textContent='Are you 21 or older?';
+  const body=$('#place-details');
+  body.replaceChildren();
+  label('p','Confirm your age to enter the HQ2 virtual dispensary.',body);
+  const leave=label('button','Leave',body);
+  leave.onclick=()=>details.close();
+  const confirm=label('button','Yes, I am 21 or older',body);
+  confirm.onclick=()=>{adultConfirmed=true;enterSuite(suite);};
+  leave.focus();
+}
+function pickupPreview() {
+  if(!adultConfirmed||!indoor) return;
+  $('#place-title').textContent='Pickup preview';
+  const body=$('#place-details');
+  body.replaceChildren();
+  label('p','Try a sample pickup request. This demo stays on your device.',body);
+  const button=label('button','Prepare sample request',body);
+  button.onclick=()=>{
+    body.replaceChildren();
+    label('p','Sample pickup request prepared. Retailer verification pending. Nothing has been submitted or reserved.',body);
+    link('DC patient registration information','https://abca.dc.gov/page/medical-cannabis-reciprocity',body);
+  };
+  details.showModal();
+}
 function enterSuite(suite) {
+  if(suite.type==='dispensary'&&!adultConfirmed) return requestDispensaryEntry(suite);
   details.close();
   streetPose={position:camera.position.clone(),yaw,pitch,moving};
   if(!rooms.has(suite)) rooms.set(suite,createInterior(suite));
@@ -200,6 +228,7 @@ function activate(target) {
   if(!target) return;
   if(target==='showroom-entry') return enterSuite(suites.find(suite=>suite.type==='apps'));
   if(!indoor) return showPlace(record(target));
+  if(target.userData.pickup) return pickupPreview();
   const app=target.userData.application;
   $('#place-title').textContent='1AGE '+app.name;
   const body=$('#place-details');
@@ -257,6 +286,12 @@ function showPlace(row) {
     link('Shared catalog record','../catalog.html?property='+encodeURIComponent(property.id),body);
   } else {
     label('p',row.address ? row.kind+' · '+row.address : row.district + (row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
+    const dispensary=suites.find(suite=>suite.type==='dispensary'&&suite.parent===row.id);
+    if(dispensary) {
+      const entry=label('button','Enter virtual dispensary',body);
+      entry.className='detail-button';
+      entry.onclick=()=>requestDispensaryEntry(dispensary);
+    }
     if(row.statusNote) label('p',row.statusNote,body);
     if(row.protectionZoneId) label('p','Public exploration in designated areas. Reserved from acquisition in 1AGE Space.',body);
     if(row.kind==='education') {
@@ -389,7 +424,7 @@ function frame(now) {
       current=indoor.stations.filter(screen=>screen.position.distanceTo(camera.position)<3.4)
         .sort((a,b)=>a.position.distanceTo(camera.position)-b.position.distanceTo(camera.position))[0];
       nearby.hidden=!current;
-      if(current) nearby.textContent='Explore 1AGE '+current.userData.application.name;
+      if(current) nearby.textContent=current.userData.pickup?'Preview pickup':'Explore 1AGE '+current.userData.application.name;
     }
     if(!indoor&&now-lastNearby>150) {
       current=markers.map(marker=>{const p=marker.userData.streetPosition||marker.position;return {id:marker.userData.id,distance:Math.hypot(p.x-camera.position.x,p.z-camera.position.z)};})

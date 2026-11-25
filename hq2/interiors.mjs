@@ -11,6 +11,7 @@ export const applications=[
 
 const gateway='place-us-washington-mlk-gateway-phase-2';
 export const suites=[
+  {parent:'anacostia-organics',title:'Dispensary reception study',address:'2022 Martin Luther King Jr. Avenue SE',type:'dispensary'},
   {parent:gateway,title:'HQ2 application showroom',address:'1911 Martin Luther King Jr. Avenue SE',area:1519,type:'apps'},
   {parent:gateway,title:'Creator market hall',address:'1111 Marion Barry Avenue SE',area:2205,type:'market'},
   {parent:'place-us-washington-grounded-1913',title:'Plant shop & café study',address:'1913 Martin Luther King Jr. Avenue SE',type:'plants'},
@@ -54,7 +55,14 @@ export function createInterior(suite) {
     box(0,3.74,z,width*.65,.035,.08,'#fff5d1');
   }
   panel(suite.title,0,2.85,back+.12,width*.69);
-  if(suite.type==='plants') {
+  if(suite.type==='dispensary') {
+    box(0,.53,back+2.3,4,1.06,1.15,'#726955',true);
+    box(0,1.10,back+2.3,4.18,.1,1.26,'#d9cbb2');
+    const counter=panel('PICKUP PREVIEW',0,1.45,back+2.73,1.75);
+    counter.userData.pickup=true;
+    stations.push(counter);
+    for(const x of [-3.1,3.1]) box(x,.26,.3,1.7,.52,.75,'#648078',true);
+  } else if(suite.type==='plants') {
     function plant(x,z,h) {
       box(x,.36,z,.62,.72,.62,'#af7554',true);
       box(x,.72+h/2,z,.07,h,.07,'#79694f');
