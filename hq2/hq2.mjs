@@ -286,11 +286,12 @@ function showPlace(row) {
     link('Shared catalog record','../catalog.html?property='+encodeURIComponent(property.id),body);
   } else {
     label('p',row.address ? row.kind+' · '+row.address : row.district + (row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
-    const dispensary=suites.find(suite=>suite.type==='dispensary'&&suite.parent===row.id);
-    if(dispensary) {
-      const entry=label('button','Enter virtual dispensary',body);
+    const suite=suites.find(item=>item.parent===row.id);
+    if(suite) {
+      if(suite.type==='grocery') label('p','Original virtual interior. Layout, dimensions and stock are illustrative.',body);
+      const entry=label('button',suite.type==='dispensary'?'Enter virtual dispensary':'Enter virtual corner store',body);
       entry.className='detail-button';
-      entry.onclick=()=>requestDispensaryEntry(dispensary);
+      entry.onclick=()=>enterSuite(suite);
     }
     if(row.statusNote) label('p',row.statusNote,body);
     if(row.protectionZoneId) label('p','Public exploration in designated areas. Reserved from acquisition in 1AGE Space.',body);

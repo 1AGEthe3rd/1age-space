@@ -11,6 +11,8 @@ export const applications=[
 
 const gateway='place-us-washington-mlk-gateway-phase-2';
 export const suites=[
+  {parent:'second-chance-market',title:'2nd Chance · corner store study',address:'2026 Martin Luther King Jr. Avenue SE',type:'grocery',accent:'#804838'},
+  {parent:'nams-market',title:'Nam’s Market · neighborhood market study',address:'1327 W Street SE',type:'grocery',accent:'#376251'},
   {parent:'anacostia-organics',title:'Dispensary reception study',address:'2022 Martin Luther King Jr. Avenue SE',type:'dispensary'},
   {parent:gateway,title:'HQ2 application showroom',address:'1911 Martin Luther King Jr. Avenue SE',area:1519,type:'apps'},
   {parent:gateway,title:'Creator market hall',address:'1111 Marion Barry Avenue SE',area:2205,type:'market'},
@@ -62,6 +64,31 @@ export function createInterior(suite) {
     counter.userData.pickup=true;
     stations.push(counter);
     for(const x of [-3.1,3.1]) box(x,.26,.3,1.7,.52,.75,'#648078',true);
+  } else if(suite.type==='grocery') {
+    // Concept layouts share fixtures. Keep a clear aisle from the entry to the coolers.
+    const aisleSide=suite.parent==='nams-market'?-1:1;
+    const shelfX=aisleSide*2.35;
+    box(shelfX,.82,-.65,.85,1.64,3.5,suite.accent,true);
+    const packaging=['#dfb660','#8e4c35','#e6d9bc','#647957'];
+    for(let level=0;level<3;level++) {
+      const y=.38+level*.53;
+      box(shelfX,y,-.65,1.15,.08,3.55,'#c5b9a5');
+      for(let i=0;i<8;i++) {
+        box(shelfX-aisleSide*.46,y+.18,-2.1+i*.41,.18,.28,.29,packaging[(i+level)%4]);
+      }
+    }
+    for(let i=-1;i<=1;i++) {
+      const x=i*1.5;
+      box(x,1.12,back+.65,1.48,2.24,1,'#393f41',true);
+      box(x,1.15,back+1.17,1.32,1.86,.05,'#769697');
+      box(x+.52,1.18,back+1.23,.045,.46,.06,'#e0d6bd');
+    }
+    panel('COLD DRINKS',0,2.45,back+1.18,2.5);
+    const tillX=-aisleSide*2.9;
+    box(tillX,.51,1.1,2.45,1.02,1.05,suite.accent,true);
+    box(tillX,1.07,1.1,2.55,.1,1.14,'#d4c4a9');
+    box(tillX,1.34,1.13,.52,.43,.2,'#343b38');
+    panel('CHECKOUT',tillX,.78,1.64,1.3);
   } else if(suite.type==='plants') {
     function plant(x,z,h) {
       box(x,.36,z,.62,.72,.62,'#af7554',true);
