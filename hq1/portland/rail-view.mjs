@@ -4,7 +4,7 @@ import {createYellowLine} from './yellow-line.mjs';
 import {portlandSky} from './weather.mjs';
 
 export function enterRail(){
-  const rail=createYellowLine(),camera=new T.PerspectiveCamera(66,1,.1,220);
+  const rail=createYellowLine(new URLSearchParams(location.search).get('station')),camera=new T.PerspectiveCamera(66,1,.1,220);
   const r=new T.WebGLRenderer({antialias:true});r.setPixelRatio(Math.min(1.5,devicePixelRatio));
   document.querySelector('#district').append(r.domElement);
   document.querySelector('h1').textContent='MAX Yellow Line';
@@ -19,7 +19,7 @@ export function enterRail(){
   function toggle(){
     if(rail.riding||(!rail.aboard&&!nearDoor()))return;
     rail.toggle();camera.position.set(rail.aboard?0:-3,1.56,rail.aboard?2:1.8);
-    yaw=rail.aboard?.42:-1.02;
+    yaw=rail.aboard?.42:rail.name==='Expo Center'?1.13:-1.02;
   }
   function depart(dir){rail.depart(dir);}
   function nearDoor(){return Math.abs(camera.position.z)<3.2 && camera.position.x>-4.8;}

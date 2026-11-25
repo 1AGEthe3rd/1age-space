@@ -17,3 +17,9 @@ The shared renderer in `space/shared/weather/city-sky.mjs` takes a scene, lights
 ## Review
 
 Direct development route: `/hq1/?rail=yellow`. Ride controls support touch buttons, keyboard and the existing gamepad navigation. E boards or leaves; N and Shift+S select the adjacent station. Actual Logitech F310 and iPhone hardware testing is pending. The weather screenshot uses a controlled rain observation. Roll back this increment by reverting the Build 006 commit.
+
+## Build 007 north extension
+
+From Rosa Parks the northbound simulation serves N Lombard TC, Kenton/N Denver Ave, Delta Park/Vanport and the Expo Center terminus. Alight at Expo Center to walk the original virtual forecourt, then reboard for a southbound ride. All eight platforms support direct arrivals, for example `/hq1/?rail=yellow&station=expo-center`. Unknown station keys use the HQ1 transfer at N Killingsworth St. Platform and neighborhood scenery are illustrative. Train travel remains compressed and rider-controlled.
+
+[TriMet station order](https://trimet.org/about/pdf/census/2025spring/route_stop_level_passenger_census_report_%28sunday%29.pdf) · [Expo Center capture](images/portland/max-expo-forecourt.jpg)
