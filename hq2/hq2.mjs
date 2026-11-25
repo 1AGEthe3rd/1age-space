@@ -17,6 +17,7 @@ let geography, designs, intersections, signposts, destinations, properties, sour
 let pointer, current, tileCenter, travel=0, last=0, lastNearby=0, moving=false;
 
 const markers=[];
+const doorSuites=new Map();
 const failures = new Map();
 
 async function json(path) {
@@ -226,7 +227,7 @@ function exitSuite() {
 }
 function activate(target) {
   if(!target) return;
-  if(target==='showroom-entry') return enterSuite(suites.find(suite=>suite.type==='apps'));
+  if(doorSuites.has(target)) return enterSuite(doorSuites.get(target));
   if(!indoor) return showPlace(record(target));
   if(target.userData.pickup) return pickupPreview();
   const app=target.userData.application;
@@ -237,8 +238,9 @@ function activate(target) {
   link('Open 1AGE '+app.name,app.url,body);
   details.showModal();
 }
-function showroomDoor() {
-  const sign=Object.values(designs).flatMap(d=>d.signs).find(s=>s.propertyId==='place-us-washington-mlk-gateway-phase-2');
+function storefrontDoor(sign,suite) {
+  const id='entry-'+suite.parent;
+  doorSuites.set(id,suite);
   const normal=new THREE.Vector2(sign.arrival[0]-sign.face[0],sign.arrival[1]-sign.face[1]).normalize();
   const door=new THREE.Group();
   door.rotation.y=Math.atan2(normal.x,normal.y);
@@ -246,7 +248,7 @@ function showroomDoor() {
   function piece(w,h,d,x,y,z,color) {
     const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color}));
     mesh.position.set(x,y,z);door.add(mesh);
-    mesh.userData.id='showroom-entry';
+    mesh.userData.id=id;
     return mesh;
   }
   piece(1.55,2.48,.12,0,1.24,0,'#383c38');
@@ -369,6 +371,9 @@ function makeStorefrontSign(sign) {
   mesh.userData.id=sign.propertyId||sign.destinationId;
   scene.add(mesh);
   if(mesh.userData.id) markers.push(mesh);
+  // The creator hall shares the Gateway registry record and has a separate street address.
+  const suite=suites.find(item=>item.parent===mesh.userData.id&&item.type!=='market');
+  if(suite) storefrontDoor(sign,suite);
 }
 function streetscape() {
   const postGeometry=new THREE.CylinderGeometry(.055,.079,5.3,8);
@@ -429,9 +434,9 @@ function frame(now) {
     }
     if(!indoor&&now-lastNearby>150) {
       current=markers.map(marker=>{const p=marker.userData.streetPosition||marker.position;return {id:marker.userData.id,distance:Math.hypot(p.x-camera.position.x,p.z-camera.position.z)};})
-        .filter(marker=>marker.distance<(marker.id==='showroom-entry'?3:21)).sort((a,b)=>Number(b.id==='showroom-entry')-Number(a.id==='showroom-entry')||a.distance-b.distance)[0]?.id;
+        .filter(marker=>marker.distance<(doorSuites.has(marker.id)?3:21)).sort((a,b)=>Number(doorSuites.has(b.id))-Number(doorSuites.has(a.id))||a.distance-b.distance)[0]?.id;
       nearby.hidden=!current;
-      if(current) nearby.textContent=current==='showroom-entry'?'Enter HQ2 showroom':record(current)?.name||'Place details';
+      if(current) nearby.textContent=doorSuites.has(current)?'Enter '+doorSuites.get(current).title:record(current)?.name||'Place details';
       const corner=nearestIntersection(intersections,camera.position.x,camera.position.z);
       const name=corner?.blades.map(blade=>blade.label).join(' / ')||'';
       const street=$('#current-street');
@@ -531,7 +536,7 @@ async function start() {
   signposts=intersectionSigns(intersections);
   scene.add(signposts);
   Object.values(designs).forEach(design=>design.signs.forEach(makeStorefrontSign));
-  showroomDoor();
+
   ray=new THREE.Raycaster();
   bind(renderer.domElement);
   $('#exit-suite').onclick=exitSuite;
