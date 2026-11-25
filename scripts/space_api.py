@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Local read-only property API for integration testing, not a production service."""
-import argparse,json,sqlite3
+import argparse,json,re,sqlite3
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse,parse_qs,unquote
-from property_index import query,CatalogError
+from property_index import query,CatalogError,protected_property
 from world_export import manifest
 
 class Handler(BaseHTTPRequestHandler):
@@ -33,7 +33,19 @@ class Handler(BaseHTTPRequestHandler):
    return self.reply(404,{'error':'Unknown route'})
   except (CatalogError,ValueError,TypeError):return self.reply(400,{'error':'Invalid query or pagination'})
   except sqlite3.Error:return self.reply(503,{'error':'Index unavailable; rebuild the local snapshot'})
- def do_POST(self):self.reply(405,{'error':'Read-only index. No claims, payments or leases can be submitted.'})
+ def reject_write(self):
+  path=unquote(urlparse(self.path).path)
+  match=re.fullmatch(r'/api/space/properties/([a-z0-9-]+)(?:/.*)?',path)
+  if match:
+   try:
+    with sqlite3.connect(Path(self.server.index).resolve().as_uri()+'?mode=ro',uri=True) as db:
+     row=db.execute('SELECT record FROM properties WHERE id=?',(match[1],)).fetchone()
+    if row and protected_property(json.loads(row[0])):
+     return self.reply(403,{'error':'This virtual property is reserved. Public exploration remains available.'})
+   except sqlite3.Error:
+    return self.reply(503,{'error':'Index unavailable; rebuild the local snapshot'})
+  return self.reply(405,{'error':'Read-only index. No property writes can be submitted.'})
+ do_POST=do_PUT=do_PATCH=do_DELETE=reject_write
 if __name__=='__main__':
  parser=argparse.ArgumentParser();parser.add_argument('--db',required=True);parser.add_argument('--port',type=int,default=4182);a=parser.parse_args();path=Path(a.db).resolve()
  if not path.is_file():parser.error('Build the validated index before starting the API')

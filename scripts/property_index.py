@@ -5,6 +5,20 @@ from pathlib import Path
 SPACE_USES={'office','retail','industrial','warehouse','restaurant','workshop','studio','coworking','mixed_use','live_work'}
 COLLECTIONS=('properties','sources','buildings','units','ownerClaims','physicalListings','virtualSpaces','virtualOccupancies','leaseApplications','creatorAssets','workRequests','businessProfiles')
 class CatalogError(ValueError):pass
+
+PROTECTED_ZONES = {'dc-southeast','historic-anacostia','hq2','dc-federal-landmarks','oneage-treasury'}
+
+def protected_property(record):
+ address = record.get('address', {})
+ line = re.sub(r'[^A-Z0-9]+', ' ', address.get('line1', '').upper()).strip()
+ southeast = line.endswith((' SE', ' S E', ' SOUTHEAST'))
+ district = address.get('region', '').lower()
+ in_dc = district in {'dc', 'd.c.', 'district of columbia'}
+ return (record.get('protection') or {}).get('zoneId') in PROTECTED_ZONES or (
+  address.get('countryCode') == 'US' and in_dc and southeast
+ )
+
+
 def require(ok,message):
  if not ok:raise CatalogError(message)
 def date(value):
@@ -36,6 +50,26 @@ def validate(data,today=None):
   for field,source_ids in field_sources.items():
    refs(source_ids,'sources');require(bool(source_ids) and all(x in v['sourceIds'] for x in source_ids),'Field evidence must be included in verification sources')
    require(all(field in sources[x]['scope'] for x in source_ids),f'Source does not support field: {field}')
+  protection = p.get('protection')
+  if protection is not None:
+   require(isinstance(protection,dict) and protection.get('zoneId') in PROTECTED_ZONES,'Invalid protected zone')
+   require(protection.get('publicExploration') is True and protection.get('claimEligible') is False,'Protected properties must allow public exploration and forbid owner claims')
+  if protected_property(p):
+   require(p.get('virtual', {}).get('status') == 'not_offered','Protected properties cannot offer independent virtual occupancy')
+  destination = p.get('spaceDestination')
+  if destination is not None:
+   require(isinstance(destination,dict) and destination.get('path') == '/hq2/?destination='+p['id'],'Invalid HQ2 Space destination')
+   for field in ('arrival','lookAt'):
+    point=destination.get(field)
+    require(isinstance(point,list) and len(point)==2 and all(type(x) in (int,float) and -10000<x<10000 for x in point),'Invalid HQ2 scene coordinates')
+  if p.get('physical',{}).get('status')=='occupied':
+   require(bool(p['physical'].get('sourceIds')) and date(p['physical'].get('verifiedAt'))<=today,'Occupancy evidence/date required')
+  for kind,field in [('leasingNotice','text'),('vacancyEvidence','status')]:
+   evidence=p.get(kind)
+   if evidence is not None:
+    require(isinstance(evidence,dict) and bool(evidence.get(field)),'Physical property notice requires evidence')
+    refs(evidence.get('sourceIds'),'sources')
+    require(bool(evidence['sourceIds']) and date(evidence.get('checkedAt'))<=today,'Physical property notice needs a source and a date')
   notice=p.get('operatingNotice')
   if notice is not None:
    require(isinstance(notice,dict) and bool(notice.get('text')),'Operating notice text required');refs(notice.get('sourceIds'),'sources');require(bool(notice['sourceIds']) and date(notice.get('checkedAt'))<=today,'Operating notice evidence/date required')
@@ -49,6 +83,9 @@ def validate(data,today=None):
   require(p.get('worldDestination') is None or isinstance(p['worldDestination'],dict),'World destination must be explicit or null')
  for name,field,target in [('virtualSpaces','propertyId','properties'),('buildings','propertyId','properties'),('units','buildingId','buildings'),('ownerClaims','propertyId','properties'),('physicalListings','propertyId','properties'),('virtualOccupancies','virtualSpaceId','virtualSpaces'),('leaseApplications','propertyId','properties'),('workRequests','propertyId','properties')]:
   for row in data[name]:require(row.get(field) is None or row.get(field) in groups[target],f'Broken {name}.{field}')
+ protected_ids={p['id'] for p in data['properties'] if protected_property(p)}
+ for row in data['ownerClaims']:
+  require(row.get('propertyId') not in protected_ids,'Protected property cannot receive an owner claim')
  for p in data['properties']:
   for sid in p['virtual']['spaceIds']:
    space=next(x for x in data['virtualSpaces'] if x['id']==sid);require(space.get('propertyId')==p['id'],'Space/property relationship mismatch')
@@ -63,9 +100,10 @@ def build(data,path):
   db.executemany('INSERT INTO sources VALUES (?,?)',[(s['id'],json.dumps(s,ensure_ascii=False)) for s in data['sources']])
   db.execute('CREATE TABLE properties(id TEXT PRIMARY KEY,name TEXT,country TEXT,city TEXT,categories TEXT,record TEXT)')
   db.execute("CREATE VIRTUAL TABLE search USING fts5(id UNINDEXED,content,tokenize='unicode61 remove_diacritics 2')")
+  names={row['id']:row.get('name','') for row in data['businessProfiles']}
   for p in data['properties']:
    db.execute('INSERT INTO properties VALUES (?,?,?,?,?,?)',(p['id'],p['name'],p['address']['countryCode'],p['address']['city'],json.dumps(p['categories']),json.dumps(p,ensure_ascii=False)))
-   text=' '.join([p['name'],p['id'],*filter(None,p['address'].values()),p['description'],*p['categories'],*p.get('spaceUses',[])]);db.execute('INSERT INTO search VALUES (?,?)',(p['id'],text))
+   text=' '.join([p['name'],p['id'],*filter(None,p['address'].values()),p['description'],*p['categories'],*p.get('spaceUses',[]),*(names.get(key,'') for key in p['businessIds'])]);db.execute('INSERT INTO search VALUES (?,?)',(p['id'],text))
  return path
 def query(path,text='',country=None,category=None,limit=20,offset=0,city=None,space_use=None):
  require(type(limit) is int and 1<=limit<=100 and type(offset) is int and offset>=0,'Invalid pagination')

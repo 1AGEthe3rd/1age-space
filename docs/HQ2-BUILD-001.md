@@ -1,0 +1,54 @@
+# HQ2 Build 001 · Historic Anacostia
+
+November 25, 2026 · 1AGE Space · Review branch feature/hq2-anacostia-build-001
+
+## What you can explore
+
+Open /hq2/ from the Washington, D.C. link in Space. Start at Martin Luther King Jr. Avenue SE and Marion Barry Avenue SE. Walk with the left stick or WASD and look with the right stick or drag. The Places menu searches indexed storefronts and destinations and offers direct arrivals at Anacostia Metro on Howard Road, the Riverwalk and the public 11th Street Bridge approach. All four arrivals share one coordinate system and the same exterior scene. Bridge and ramp profiles approximate elevation.
+
+The geographic bounds are approximately **1.16 × 1.58 km** (1.83 km² bounding box, including river and scenery). They contain **30 tiles**, **1,042 footprint parts**, **1,443 road and path segments**, **747 mapped surface polygons** and **131 source-mapped street fixtures**. These are scene features. Commercial records are counted separately.
+
+Sources are DC OCTO building, sidewalk and water polygons and an attributed OpenStreetMap streets and parks extract. See the [dataset metadata and reproduction notes](../hq2/geography/README.md). The scene uses original façades, text signs, storefront windows, street furniture and moving water. Building heights, entrances, materials, terrain grade and bridge elevations are approximations. HQ1-level exterior fidelity and the accuracy of continuous public walking paths across the entire bounds require further review.
+
+## Property index and protected access
+
+| Measure | Build 001 |
+| --- | ---: |
+| Shared Space catalog | 416 records |
+| HQ2 subset, including 2 preserved records and 8 additions | 10 |
+| Operator-backed occupied properties | 5 |
+| Physical occupancy unknown | 5 |
+| Of the unknown records, DC vacant-or-blighted register leads | 3 |
+| Independently confirmed vacant | 0 |
+| Commercial suites advertised by the operator in the shared index | 3 |
+| Direct exterior property arrivals | 8 |
+| Source-linked business records | 7 |
+
+All 10 records have source-checked identities or addresses. Physical occupancy has separate evidence. A renovation closure and the city's combined vacant-or-blighted layer each require independent follow-up before labeling a property vacant. Lease advertisements are recorded as operator notices, with physical vacancy left unknown. Names and factual links do not imply business participation.
+
+HQ2 records and protected public destination records permit exploration while excluding public virtual acquisition. The shared catalog rejects owner claims and independent virtual offers for protected properties. The read-only Python property API returns HTTP 403 for property-scoped writes on protected records and 405 for other writes. The deployed static site has no transaction backend. When production ownership is added, enforce the same rule at its authenticated mutation boundary, backed by canonical district boundaries and IDs. Any future studio-authorized business participation needs its own permission.
+
+## Transportation, Treasury and DMV
+
+- The walking scene includes the Howard Road Metro exterior, waterfront pathways and local bridge geometry. Four direct arrivals support early travel. Trains, scheduled buses, driving, cycling physics, interiors and door return positions remain future work.
+- The 1AGE Department of Treasury has a protected, searchable planned destination with an official exterior reference and four planned rooms. The original 1AGE institution is independent of the U.S. Treasury. The Digital Mint will default to simulation until the token configuration is verified. $1AGE blockchain token data and 1AGE Cash internal credits use separate systems.
+- The DMV registry covers Washington, D.C., Prince George’s County, Arlington and Alexandria. Downtown, the National Mall, Maryland and Virginia have destination records without scenes. The next scene priority is the Southeast waterfront connection and a public-route audit, followed by downtown Treasury and landmark exteriors, other D.C. districts, Maryland and Virginia.
+- Space has property-specific entry URLs and includes them in the data-only World export. Production World and cross-domain 1AGE Search integration remain future work.
+
+## Verification and review
+
+Shared Three.js and 1AGE joystick controls come from HQ1. Tiles stream around the current location. Mobile uses a shorter draw distance, reduced pixel ratio and fewer visible façade details. Device performance and physical controller compatibility require a real-device playtest.
+
+Verification passed 67 Python tests and 10 Node tests. Chromium walkthrough passed keyboard walking, mouse look, a simulated standard-mapped controller, touch joystick input in an iPhone-sized viewport, direct destinations, browser history, search and protected property controls. On the local Chromium run the first street tile responded at about 235 ms after navigation. That is a local development timing and does not measure mobile frame rate or deployed load time.
+
+Screenshots from the running development scene:
+
+- [MLK Avenue SE and Marion Barry Avenue SE](images/hq2/anacostia-mlk-gateway.jpg)
+- [Anacostia Riverwalk](images/hq2/anacostia-riverwalk.jpg)
+- [11th Street Bridge pedestrian approach](images/hq2/11th-street-bridge.jpg)
+- [Anacostia Metro at Howard Road](images/hq2/anacostia-metro.jpg)
+- [Anacostia Arts Center in an iPhone-sized viewport](images/hq2/anacostia-arts-center-iphone.jpg)
+
+## Rollback
+
+The review baseline is d7028142e1e21667bcd17a800d58504cd39d21fe. This review branch requires no production rollback. If a later release needs reversal, revert the HQ2 integration commit through a reviewed PR and use the normal 1AGE Space release workflow. Keep the review branch for traceability.

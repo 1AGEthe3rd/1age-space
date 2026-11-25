@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#152a30">
+  <meta name="description" content="Walk Historic Anacostia, the first Washington, D.C. district in 1AGE Space.">
+  <title>Historic Anacostia · 1AGE Space</title>
+  <link rel="icon" href="../assets/1age-logo.svg">
+  <link rel="stylesheet" href="./hq2.css">
+  <script type="module" src="./hq2.mjs"></script>
+</head>
+<body>
+  <main id="district" aria-label="Walkable Historic Anacostia"></main>
+  <header class="hud">
+    <div><span>1AGE SPACE / WASHINGTON, D.C.</span><h1>Historic Anacostia</h1></div>
+    <button id="map-button" type="button" aria-haspopup="dialog">Places</button>
+  </header>
+  <p id="scene-status" role="status">Loading Historic Anacostia…</p>
+  <div class="foot">
+    <button id="nearby" type="button" hidden></button>
+    <div class="attribution"><a href="./geography/README.md">DC OCTO</a> · <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a></div>
+  </div>
+  <dialog id="places" aria-labelledby="places-title">
+    <div class="dialog-head"><h2 id="places-title">Places</h2><button class="close" type="button" aria-label="Close places">×</button></div>
+    <p>Walk with the left stick or WASD. Look with the right stick or drag the street view.</p>
+    <label for="place-search">Find a place</label>
+    <input type="search" id="place-search" placeholder="Name, address, or neighborhood" autocomplete="off">
+    <div id="place-list"></div>
+    <div class="dialog-links"><a href="../catalog.html?city=Washington%2C+D.C.">Space catalog</a><a href="../">Return to Space</a></div>
+  </dialog>
+  <dialog id="place" aria-labelledby="place-title">
+    <div class="dialog-head"><h2 id="place-title"></h2><button class="close" type="button" aria-label="Close place details">×</button></div>
+    <div id="place-details"></div>
+  </dialog>
+  <noscript>Enable JavaScript to explore Historic Anacostia. <a href="../catalog.html">Open the Space catalog</a>.</noscript>
+</body>
+</html>

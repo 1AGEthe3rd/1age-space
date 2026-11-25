@@ -1,0 +1,244 @@
+import * as THREE from '../space/shared/three.module.js';
+
+const wallTones = ['#ad735b', '#947365', '#ba8d6d', '#c1ac8b', '#9e6752', '#aa8b74', '#ccbca3'];
+const pavement = ['motorway','trunk','primary','secondary','tertiary','residential','unclassified','living_street','service'];
+const materials = {
+  opaque: new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}),
+  window: new THREE.MeshBasicMaterial({vertexColors:true, side:THREE.DoubleSide}),
+  facade: new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}),
+  water: new THREE.MeshLambertMaterial({color:'#536f76', side:THREE.DoubleSide}),
+};
+// Subtle deterministic masonry and road detail without additional texture requests.
+materials.facade.onBeforeCompile = shader => {
+  shader.vertexShader = 'varying vec3 surfacePosition;\n' + shader.vertexShader
+    .replace('#include <begin_vertex>', '#include <begin_vertex>\nsurfacePosition = position;');
+  shader.fragmentShader = 'varying vec3 surfacePosition;\n' + shader.fragmentShader
+    .replace('#include <color_fragment>', `#include <color_fragment>
+      float along = (surfacePosition.x + surfacePosition.z * .87) * 4.0;
+      float row = surfacePosition.y * 10.0;
+      float horizontal = fract(along + floor(row) * .5);
+      float vertical = fract(row);
+      float mortar = min(smoothstep(.0, .09, horizontal), smoothstep(.0, .14, vertical));
+      float cell = fract(sin(dot(vec2(floor(along), floor(row)), vec2(119.2, 55.1))) * 4376.58);
+      float viewFade = min(1., fwidth(row) * 1.6);
+      diffuseColor.rgb *= mix(.84 + mortar * (.12 + cell * .08), 1., viewFade);`);
+};
+const waterTime = {value:0};
+materials.water.onBeforeCompile = shader => {
+  shader.uniforms.waterTime = waterTime;
+  shader.vertexShader = 'varying vec2 riverPosition;\n' + shader.vertexShader
+    .replace('#include <begin_vertex>', '#include <begin_vertex>\nriverPosition = position.xz;');
+  shader.fragmentShader = 'uniform float waterTime;\nvarying vec2 riverPosition;\n' + shader.fragmentShader
+    .replace('#include <color_fragment>', `#include <color_fragment>
+      float ripple = sin(riverPosition.x * .17 + riverPosition.y * .81 + waterTime * 1.38);
+      float chop = sin(riverPosition.x * .54 - riverPosition.y * .31 - waterTime);
+      float glint = smoothstep(.54, .92, ripple * .65 + chop * .35);
+      diffuseColor.rgb = mix(diffuseColor.rgb * .78, diffuseColor.rgb * 1.63, glint);`);
+};
+
+class Batch {
+  positions = [];
+  colors = [];
+  color = new THREE.Color();
+  triangle(a,b,c,paint) {
+    this.color.set(paint);
+    this.positions.push(...a,...b,...c);
+    for (let i=0;i<3;i++) this.colors.push(this.color.r,this.color.g,this.color.b);
+  }
+  quad(a,b,c,d,paint) {
+    this.triangle(a,b,c,paint);
+    this.triangle(a,c,d,paint);
+  }
+  polygon(rings,y,paint) {
+    const loops = rings.map(ring => ring.slice(0,-1).map(([x,z]) => new THREE.Vector2(x,z)));
+    const indices = THREE.ShapeUtils.triangulateShape(loops[0],loops.slice(1));
+    const vertices = loops.flat().map(p => [p.x,y,p.y]);
+    for (const [a,b,c] of indices) this.triangle(vertices[c],vertices[b],vertices[a],paint);
+  }
+  mesh(material,group) {
+    if (!this.positions.length) return null;
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position',new THREE.Float32BufferAttribute(this.positions,3));
+    geometry.setAttribute('color',new THREE.Float32BufferAttribute(this.colors,3));
+    geometry.computeVertexNormals();
+    const mesh = new THREE.Mesh(geometry,material);
+    group.add(mesh);
+    return mesh;
+  }
+}
+
+const box = new THREE.BoxGeometry();
+const crown = new THREE.IcosahedronGeometry(1,0);
+const fixtureMaterial = new THREE.MeshLambertMaterial();
+function instances(group,geometry,items) {
+  if (!items.length) return;
+  const mesh = new THREE.InstancedMesh(geometry,fixtureMaterial,items.length);
+  const pose = new THREE.Object3D();
+  const paint = new THREE.Color();
+  items.forEach(([x,y,z,w,h,d,color],i) => {
+    pose.position.set(x,y,z);
+    pose.rotation.y = Math.sin(x+z)*.17;
+    pose.scale.set(w,h,d);
+    pose.updateMatrix();
+    mesh.setMatrixAt(i,pose.matrix);
+    mesh.setColorAt(i,paint.set(color));
+  });
+  group.add(mesh);
+}
+
+function building(shell,details,rings,id,design) {
+  const outer = rings[0];
+  const width = Math.max(...outer.map(p=>p[0])) - Math.min(...outer.map(p=>p[0]));
+  const depth = Math.max(...outer.map(p=>p[1])) - Math.min(...outer.map(p=>p[1]));
+  const seed = parseInt(id.slice(0,6),16);
+  const stories = design?.stories || (Math.min(width,depth) < 5 ? 1 : (width*depth < 220 ? 2 + Number(seed%7===0) : 2 + seed%4));
+  const height = stories * 3.05 + .22;
+  const color = design?.wall || wallTones[seed%wallTones.length];
+  shell.polygon(rings,height,'#514e49');
+  for (const ring of rings) {
+    for (let i=1; i<ring.length; i++) {
+      const [x,z] = ring[i-1];
+      const [u,v] = ring[i];
+      const length = Math.hypot(u-x,v-z);
+      if (length < .32) continue;
+      const dx=(u-x)/length, dz=(v-z)/length;
+      const wall = (batch, from, to, bottom, top, offset, paint) => batch.quad(
+        [x+dx*from-dz*offset,bottom,z+dz*from+dx*offset],
+        [x+dx*to-dz*offset,bottom,z+dz*to+dx*offset],
+        [x+dx*to-dz*offset,top,z+dz*to+dx*offset],
+        [x+dx*from-dz*offset,top,z+dz*from+dx*offset],paint,
+      );
+      wall(shell,0,length,0,height,0,color);
+      wall(shell,0,length,0,.42,.012,'#6c6861');
+      wall(shell,0,length,height-.34,height+.03,.04,design?.trim || '#c4b6a4');
+      if (length < 2.1 || width*depth < 35 || ring !== outer) continue;
+      const bays = Math.floor(length/(design?.commercial ? 2.7 : 2.75)) || 1;
+      const step = length/bays;
+      for (let floor=0;floor<stories;floor++) {
+        const shop = floor===0 && design?.commercial;
+      if (shop) wall(shell,0,length,2.69,2.9,.038,design.trim||'#6c6254');
+        for (let bay=0;bay<bays;bay++) {
+          const center=step*(bay+.5), half=step*(shop ? .40 : .255);
+          const y=floor*3.05+(shop ? .22 : 1);
+          const upper=y+(shop ? 2.22 : 1.45);
+          wall(details,center-half,center+half,y,upper,.033,shop ? '#413d35' : '#ddd0bb');
+          wall(details,center-half+.075,center+half-.075,y+.078,upper-.075,.055,
+            shop ? (bay%3===0 ? '#647b76' : '#344945') : (bay%3===0 ? '#627272' : '#3f545b'));
+          wall(details,center-.025,center+.025,y,upper,.066,shop ? '#b7af9b' : '#c0b5a6');
+          wall(details,center-half,center+half,upper-.41,upper-.365,.065,'#a5a899');
+        }
+      }
+    }
+  }
+}
+
+export function inside([x,z],ring) {
+  let hit=false;
+  for (let i=1,j=0;i<ring.length;j=i++) {
+    const [a,b]=ring[i], [c,d]=ring[j];
+    if ((b>z)!==(d>z) && x<(c-a)*(z-b)/(d-b)+a) hit=!hit;
+  }
+  return hit;
+}
+
+function collider(rings) {
+  const exterior = rings[0];
+  const minX=Math.min(...exterior.map(p=>p[0])), maxX=Math.max(...exterior.map(p=>p[0]));
+  const minZ=Math.min(...exterior.map(p=>p[1])), maxZ=Math.max(...exterior.map(p=>p[1]));
+  return (x,z) => x>=minX && x<=maxX && z>=minZ && z<=maxZ &&
+    inside([x,z],exterior) && !rings.slice(1).some(r=>inside([x,z],r));
+}
+
+export function segmentDistance(x,z,a,b) {
+  const dx=b[0]-a[0], dz=b[1]-a[1];
+  const t=THREE.MathUtils.clamp(((x-a[0])*dx+(z-a[1])*dz)/(dx*dx+dz*dz || 1),0,1);
+  return Math.hypot(x-a[0]-t*dx,z-a[1]-t*dz);
+}
+
+function strip(batch,a,b,width,y,paint) {
+  const h=Math.hypot(b[0]-a[0],b[1]-a[1]);
+  if (h<.04) return;
+  const nx=(b[1]-a[1])/h*width/2, nz=(a[0]-b[0])/h*width/2;
+  batch.quad([a[0]+nx,y,a[1]+nz],[b[0]+nx,y,b[1]+nz],[b[0]-nx,y,b[1]-nz],[a[0]-nx,y,a[1]-nz],paint);
+}
+
+function road(batch,kind,width,bridge,points,fixtures,decks) {
+  const lane = pavement.includes(kind);
+  const height = bridge ? (lane ? 2.8 : 2.9) : .025;
+  for (let i=1;i<points.length;i++) {
+    const a=points[i-1],b=points[i];
+    const length=Math.hypot(b[0]-a[0],b[1]-a[1]);
+    if (length<.08) continue;
+    const direction=[(b[0]-a[0])/length,(b[1]-a[1])/length];
+    const offset=(distance,side=0)=>[a[0]+direction[0]*distance+direction[1]*side,a[1]+direction[1]*distance-direction[0]*side];
+    if (lane && !bridge && kind!=='motorway' && kind!=='service') strip(batch,a,b,width+1.0,.013,'#878078');
+    strip(batch,a,b,width,height, lane ? (kind==='service' ? '#5b5956' : '#484944') : '#9a9383');
+    if (bridge) {
+      decks.push([a,b,width*.56,height,kind]);
+      for (const side of [-1,1]) {
+        strip(batch,offset(0,side*(width/2-.12)),offset(length,side*(width/2-.12)),.22,height+.55,'#929694');
+        for (let d=2;d<length;d+=8) {
+          const [x,z]=offset(d,side*(width/2-.12));
+          fixtures.push([x,height+.29,z,.18,.59,.18,'#6a7475']);
+        }
+      }
+      if (lane && length>13) {
+        for (let d=11;d<length;d+=22) {
+          const [x,z]=offset(d);
+          fixtures.push([x,.78,z,1.1,3.8,1.7,'#797b72']);
+        }
+      }
+    }
+    if (lane && width>=8 && length>3) {
+      for (let d=1;d<length-1;d+=8) {
+        strip(batch,offset(d),offset(Math.min(d+2.8,length-1)),.13,height+.022,width>=10 ? '#d5aa4b' : '#c1baaa');
+      }
+    }
+  }
+}
+
+export function makeTile(data,designs,detailed) {
+  const group=new THREE.Group();
+  const ground=new Batch(), shell=new Batch(), details=new Batch(), river=new Batch();
+  const fixtures=[], foliage=[], blockers=[], water=[], decks=[];
+  for (const rings of data.osm.parks) ground.polygon(rings,.007,'#788053');
+  for (const [kind,rings] of data.dc.surfaces) {
+    if (kind==='water') {
+      river.polygon(rings,.016,'#ffffff');
+      water.push(collider(rings));
+    } else {
+      ground.polygon(rings,kind==='crosswalk'?.072:.06,kind==='crosswalk'?'#c3bba9':'#a59e90');
+    }
+  }
+  for (const [kind,width,bridge,points] of data.osm.roads) road(ground,kind,width,bridge,points,fixtures,decks);
+  for (const [id,rings] of data.dc.buildings) {
+    const design=designs[id];
+    if (!design?.open) blockers.push(collider(rings));
+    building(shell,details,rings,id,design);
+  }
+  for (const [kind,x,z] of data.osm.props) {
+    if (kind==='tree') {
+      const size=2+Math.abs(Math.sin(x*13+z))*2.2;
+      fixtures.push([x,1.95,z,.29,3.9,.29,'#635746']);
+      foliage.push([x,3.1+size*.45,z,size*.76,size,size*.76,'#55683c']);
+      foliage.push([x+.7,3.6+size*.47,z-.5,size*.56,size*.71,size*.53,'#667a46']);
+    } else if (kind==='bus_stop') {
+      fixtures.push([x,1.4,z,.09,2.8,.09,'#555f64'],[x,2.65,z,.34,.39,.10,'#386789']);
+    } else {
+      fixtures.push([x,2.14,z,.13,4.3,.13,'#5a605a'],[x,4.08,z,.29,.64,.29,'#4f5141']);
+      if(kind==='traffic_signals') fixtures.push([x,4.11,z,.30,.12,.31,'#ccb04b']);
+    }
+  }
+  const waterMesh=river.mesh(materials.water,group);
+  if (waterMesh) waterMesh.renderOrder=1;
+  ground.mesh(materials.opaque,group);
+  shell.mesh(materials.facade,group);
+  const trim = detailed ? details.mesh(materials.window,group) : null;
+  instances(group,box,fixtures);
+  instances(group,crown,foliage);
+  return {group,trim,blockers,water,decks};
+}
+
+export function updateWater(seconds) {
+  waterTime.value=seconds;
+}

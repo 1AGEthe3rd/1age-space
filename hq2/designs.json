@@ -1,0 +1,168 @@
+{
+  "b6d982df-204f-420a-8413-75668f069f59": {
+    "stories": 4,
+    "wall": "#996347",
+    "commercial": true,
+    "frontage": [
+      23,
+      -9
+    ],
+    "signs": [
+      {
+        "text": "MLK GATEWAY",
+        "propertyId": "place-us-washington-mlk-gateway-phase-1",
+        "arrival": [
+          34.04,
+          10.44
+        ],
+        "face": [
+          34.02,
+          10.5
+        ]
+      }
+    ]
+  },
+  "5b3f2506-c407-43bf-afcf-2d4d230c8cef": {
+    "stories": 6,
+    "wall": "#b0a391",
+    "commercial": true,
+    "frontage": [
+      -7,
+      9
+    ],
+    "signs": [
+      {
+        "text": "MLK GATEWAY",
+        "propertyId": "place-us-washington-mlk-gateway-phase-2",
+        "arrival": [
+          -12.69,
+          2.77
+        ],
+        "face": [
+          -12.73,
+          2.76
+        ]
+      },
+      {
+        "text": "GROUNDED",
+        "propertyId": "place-us-washington-grounded-1913",
+        "arrival": [
+          -19.92,
+          24.43
+        ],
+        "face": [
+          -19.93,
+          24.42
+        ]
+      }
+    ]
+  },
+  "dd686ef3-d4c6-4c40-a9e9-03baf84d0400": {
+    "stories": 2,
+    "wall": "#b18b69",
+    "commercial": true,
+    "frontage": [
+      124.4,
+      51.9
+    ],
+    "signs": [
+      {
+        "text": "ANACOSTIA ARTS CENTER",
+        "propertyId": "place-us-washington-anacostia-arts-1231",
+        "arrival": [
+          89,
+          20
+        ],
+        "face": [
+          89,
+          30
+        ]
+      }
+    ]
+  },
+  "5938a032-c52e-4969-ad85-4192858088b7": {
+    "stories": 3,
+    "wall": "#a56849",
+    "commercial": true,
+    "frontage": [
+      -32.33,
+      111.92
+    ],
+    "signs": [
+      {
+        "text": "BUSBOYS AND POETS",
+        "propertyId": "place-us-washington-busboys-2004",
+        "arrival": [
+          -32.33,
+          111.92
+        ],
+        "face": [
+          -30.78,
+          112.5
+        ]
+      }
+    ]
+  },
+  "76c90cd9-3039-4c4e-beda-18b87485b63b": {
+    "stories": 5,
+    "wall": "#ada699",
+    "commercial": true,
+    "frontage": [
+      143.84,
+      46.53
+    ],
+    "signs": [
+      {
+        "text": "DCITY SMOKEHOUSE",
+        "propertyId": "place-us-washington-dcity-1301",
+        "arrival": [
+          130,
+          41
+        ],
+        "face": [
+          143.84,
+          46.53
+        ]
+      }
+    ]
+  },
+  "29d17e68-f6a2-4534-98b2-ae67d7814260": {
+    "stories": 2,
+    "wall": "#98795d",
+    "commercial": true,
+    "frontage": [
+      218.82,
+      51.25
+    ],
+    "signs": []
+  },
+  "ab381791-706f-498c-a87a-fe1eeba9c2ba": {
+    "stories": 2,
+    "wall": "#98795d",
+    "commercial": true,
+    "frontage": [
+      -14.37,
+      58.96
+    ],
+    "signs": []
+  },
+  "c6158d3b-e9d0-4682-88b4-38a0456a3488": {
+    "stories": 1,
+    "wall": "#a4a19a",
+    "commercial": true,
+    "signs": [
+      {
+        "text": "ANACOSTIA STATION",
+        "arrival": [
+          -546,
+          569
+        ],
+        "face": [
+          -553,
+          569
+        ],
+        "destinationId": "anacostia-metro"
+      }
+    ]
+  }
+}

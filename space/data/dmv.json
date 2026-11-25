@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "id": "us-dc-dmv",
+  "name": "Washington metropolitan area",
+  "updatedAt": "2026-11-25",
+  "cities": [
+    {
+      "id": "us-dc-washington",
+      "name": "Washington, D.C.",
+      "role": "first_explorable_city",
+      "coverage": "partial"
+    },
+    {
+      "id": "us-md-prince-georges",
+      "name": "Prince George’s County, Maryland",
+      "role": "metro_expansion",
+      "coverage": "planned"
+    },
+    {
+      "id": "us-va-arlington",
+      "name": "Arlington, Virginia",
+      "role": "metro_expansion",
+      "coverage": "planned"
+    },
+    {
+      "id": "us-va-alexandria",
+      "name": "Alexandria, Virginia",
+      "role": "metro_expansion",
+      "coverage": "planned"
+    }
+  ],
+  "protectedZones": [
+    {
+      "id": "dc-southeast",
+      "cityId": "us-dc-washington",
+      "name": "Southeast Washington, D.C.",
+      "publicExploration": true,
+      "claimEligible": false
+    },
+    {
+      "id": "historic-anacostia",
+      "cityId": "us-dc-washington",
+      "name": "Historic Anacostia",
+      "parentId": "dc-southeast",
+      "publicExploration": true,
+      "claimEligible": false
+    },
+    {
+      "id": "hq2",
+      "cityId": "us-dc-washington",
+      "name": "HQ2",
+      "parentId": "historic-anacostia",
+      "publicExploration": true,
+      "claimEligible": false
+    },
+    {
+      "id": "dc-federal-landmarks",
+      "cityId": "us-dc-washington",
+      "name": "Protected landmarks and memorials",
+      "publicExploration": true,
+      "claimEligible": false
+    },
+    {
+      "id": "oneage-treasury",
+      "cityId": "us-dc-washington",
+      "name": "1AGE Department of Treasury",
+      "publicExploration": true,
+      "claimEligible": false
+    }
+  ],
+  "sources": {
+    "metro": "https://www.wmata.com/content/dam/wmata-com/maps/Rail%20Station%20Vicinity%20Maps/Anacostia_vicinity-map.pdf",
+    "park": "https://www.nps.gov/anac/index.htm",
+    "bridge": "https://www.nps.gov/places/11th-street-bridge.htm",
+    "riverwalk": "https://home.nps.gov/anac/planyourvisit/anacostia-riverwalk-trail.htm",
+    "gateway": "https://www.mlkgatewaydc.com/",
+    "treasury-exterior": "https://home.treasury.gov/north-wing-architecture"
+  },
+  "destinations": [
+    {
+      "id": "hq2-gateway",
+      "name": "MLK & Marion Barry",
+      "district": "Historic Anacostia",
+      "cityId": "us-dc-washington",
+      "kind": "street",
+      "source": "gateway",
+      "arrival": [
+        14,
+        -19
+      ],
+      "lookAt": [
+        -24,
+        95
+      ],
+      "protectionZoneId": "hq2"
+    },
+    {
+      "id": "anacostia-park",
+      "name": "Anacostia Park · Riverwalk",
+      "district": "Southeast waterfront",
+      "cityId": "us-dc-washington",
+      "kind": "park",
+      "source": "riverwalk",
+      "arrival": [
+        -39,
+        -338
+      ],
+      "lookAt": [
+        -124,
+        -429
+      ],
+      "protectionZoneId": "dc-southeast"
+    },
+    {
+      "id": "anacostia-metro",
+      "name": "Anacostia Metro · Howard Road",
+      "district": "Southeast waterfront",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "metro",
+      "arrival": [
+        -537,
+        557
+      ],
+      "lookAt": [
+        -560,
+        574
+      ],
+      "protectionZoneId": "dc-southeast"
+    },
+    {
+      "id": "11th-street-bridge",
+      "name": "11th Street Bridge · Southeast approach",
+      "district": "Southeast waterfront",
+      "cityId": "us-dc-washington",
+      "kind": "bridge",
+      "source": "bridge",
+      "arrival": [
+        -106,
+        -399
+      ],
+      "lookAt": [
+        -196,
+        -514
+      ],
+      "protectionZoneId": "dc-southeast"
+    },
+    {
+      "id": "oneage-treasury",
+      "name": "1AGE Department of Treasury",
+      "district": "Downtown Washington",
+      "cityId": "us-dc-washington",
+      "kind": "education",
+      "source": "treasury-exterior",
+      "protectionZoneId": "oneage-treasury",
+      "plannedRooms": [
+        "Treasury Grand Hall",
+        "$1AGE Digital Mint",
+        "Cryptocurrency Network Chamber",
+        "Cryptocurrency Law Library"
+      ]
+    },
+    {
+      "id": "white-house",
+      "name": "White House · Public exterior",
+      "district": "Downtown Washington",
+      "cityId": "us-dc-washington",
+      "kind": "landmark",
+      "protectionZoneId": "dc-federal-landmarks"
+    },
+    {
+      "id": "national-mall",
+      "name": "National Mall",
+      "district": "Downtown Washington",
+      "cityId": "us-dc-washington",
+      "kind": "landmark",
+      "protectionZoneId": "dc-federal-landmarks"
+    },
+    {
+      "id": "washington-monument",
+      "name": "Washington Monument",
+      "district": "National Mall",
+      "cityId": "us-dc-washington",
+      "kind": "landmark",
+      "protectionZoneId": "dc-federal-landmarks"
+    },
+    {
+      "id": "lincoln-memorial",
+      "name": "Lincoln Memorial",
+      "district": "National Mall",
+      "cityId": "us-dc-washington",
+      "kind": "landmark",
+      "protectionZoneId": "dc-federal-landmarks"
+    },
+    {
+      "id": "jefferson-memorial",
+      "name": "Jefferson Memorial",
+      "district": "Tidal Basin",
+      "cityId": "us-dc-washington",
+      "kind": "landmark",
+      "protectionZoneId": "dc-federal-landmarks"
+    },
+    {
+      "id": "mlk-memorial",
+      "name": "Martin Luther King, Jr. Memorial",
+      "district": "Tidal Basin",
+      "cityId": "us-dc-washington",
+      "kind": "landmark",
+      "protectionZoneId": "dc-federal-landmarks"
+    },
+    {
+      "id": "capitol-exterior",
+      "name": "U.S. Capitol · Public exterior",
+      "district": "Capitol Hill",
+      "cityId": "us-dc-washington",
+      "kind": "landmark",
+      "protectionZoneId": "dc-federal-landmarks"
+    },
+    {
+      "id": "smithsonian",
+      "name": "Smithsonian public destinations",
+      "district": "National Mall",
+      "cityId": "us-dc-washington",
+      "kind": "landmark",
+      "protectionZoneId": "dc-federal-landmarks"
+    },
+    {
+      "id": "navy-yard",
+      "name": "Navy Yard",
+      "district": "Capitol Riverfront",
+      "cityId": "us-dc-washington",
+      "kind": "neighborhood"
+    },
+    {
+      "id": "capitol-hill",
+      "name": "Capitol Hill",
+      "district": "Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "neighborhood"
+    },
+    {
+      "id": "southwest-waterfront",
+      "name": "Southwest Waterfront",
+      "district": "Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "neighborhood"
+    },
+    {
+      "id": "georgetown",
+      "name": "Georgetown",
+      "district": "Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "neighborhood"
+    },
+    {
+      "id": "southern-avenue",
+      "name": "Southern Avenue Metro",
+      "district": "Prince George’s County",
+      "cityId": "us-md-prince-georges",
+      "kind": "station"
+    },
+    {
+      "id": "national-harbor",
+      "name": "National Harbor",
+      "district": "Prince George’s County",
+      "cityId": "us-md-prince-georges",
+      "kind": "neighborhood"
+    },
+    {
+      "id": "rosslyn",
+      "name": "Rosslyn",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "neighborhood"
+    },
+    {
+      "id": "pentagon-city",
+      "name": "Pentagon City",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "neighborhood"
+    },
+    {
+      "id": "old-town-alexandria",
+      "name": "Old Town Alexandria",
+      "district": "Alexandria",
+      "cityId": "us-va-alexandria",
+      "kind": "neighborhood"
+    }
+  ],
+  "connections": [
+    {
+      "id": "hq2-walk-to-metro",
+      "from": "hq2-gateway",
+      "to": "anacostia-metro",
+      "mode": "walking",
+      "via": [
+        "Martin Luther King Jr. Avenue SE",
+        "Howard Road SE"
+      ]
+    },
+    {
+      "id": "hq2-walk-to-bridge",
+      "from": "hq2-gateway",
+      "to": "11th-street-bridge",
+      "mode": "walking",
+      "via": [
+        "Martin Luther King Jr. Avenue SE",
+        "11th Street SE"
+      ]
+    },
+    {
+      "id": "hq2-walk-to-river",
+      "from": "11th-street-bridge",
+      "to": "anacostia-park",
+      "mode": "walking",
+      "via": [
+        "Anacostia Drive SE",
+        "Anacostia Riverwalk Trail"
+      ]
+    }
+  ]
+}
