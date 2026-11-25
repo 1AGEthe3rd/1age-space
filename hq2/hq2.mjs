@@ -187,7 +187,7 @@ function enterSuite(suite) {
 }
 function exitSuite() {
   if(!indoor) return;
-  indoor=null;
+  indoor=null; current=null; nearby.hidden=true;
   camera.position.copy(streetPose.position);
   ({yaw,pitch,moving}=streetPose);
   $('#map-button').hidden=false;
@@ -195,6 +195,39 @@ function exitSuite() {
   $('h1').textContent='Historic Anacostia';
   lastNearby=0;
   renderer.domElement.focus();
+}
+function activate(target) {
+  if(!target) return;
+  if(target==='showroom-entry') return enterSuite(suites.find(suite=>suite.type==='apps'));
+  if(!indoor) return showPlace(record(target));
+  const app=target.userData.application;
+  $('#place-title').textContent='1AGE '+app.name;
+  const body=$('#place-details');
+  body.replaceChildren();
+  label('p',app.description,body);
+  link('Open 1AGE '+app.name,app.url,body);
+  details.showModal();
+}
+function showroomDoor() {
+  const sign=Object.values(designs).flatMap(d=>d.signs).find(s=>s.propertyId==='place-us-washington-mlk-gateway-phase-2');
+  const normal=new THREE.Vector2(sign.arrival[0]-sign.face[0],sign.arrival[1]-sign.face[1]).normalize();
+  const door=new THREE.Group();
+  door.rotation.y=Math.atan2(normal.x,normal.y);
+  door.position.set(sign.face[0]+normal.x*.22,0,sign.face[1]+normal.y*.22);
+  function piece(w,h,d,x,y,z,color) {
+    const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color}));
+    mesh.position.set(x,y,z);door.add(mesh);
+    mesh.userData.id='showroom-entry';
+    return mesh;
+  }
+  piece(1.55,2.48,.12,0,1.24,0,'#383c38');
+  const glass=piece(1.32,2.27,.08,0,1.19,.09,'#496c70');
+  piece(.045,.56,.09,.47,1.14,.18,'#d8c6a3');
+  scene.add(door);
+  door.updateMatrixWorld(true);
+  const world=glass.getWorldPosition(new THREE.Vector3());
+  glass.userData.streetPosition=world;
+  markers.push(glass);
 }
 function showPlace(row) {
   if(!row) return;
@@ -351,11 +384,17 @@ function frame(now) {
     camera.position.y=THREE.MathUtils.lerp(camera.position.y,1.68+floor,Math.min(1,12*dt));
     camera.rotation.set(pitch,yaw,0,'YXZ');
     if(!indoor) refreshTiles(camera.position.x,camera.position.z);
-    if(!indoor&&now-lastNearby>150) {
-      current=markers.map(marker=>({id:marker.userData.id,distance:Math.hypot(marker.position.x-camera.position.x,marker.position.z-camera.position.z)}))
-        .filter(marker=>marker.distance<21).sort((a,b)=>a.distance-b.distance)[0]?.id;
+    if(indoor) {
+      current=indoor.stations.filter(screen=>screen.position.distanceTo(camera.position)<3.4)
+        .sort((a,b)=>a.position.distanceTo(camera.position)-b.position.distanceTo(camera.position))[0];
       nearby.hidden=!current;
-      if(current) nearby.textContent=record(current)?.name||'Place details';
+      if(current) nearby.textContent='Explore 1AGE '+current.userData.application.name;
+    }
+    if(!indoor&&now-lastNearby>150) {
+      current=markers.map(marker=>{const p=marker.userData.streetPosition||marker.position;return {id:marker.userData.id,distance:Math.hypot(p.x-camera.position.x,p.z-camera.position.z)};})
+        .filter(marker=>marker.distance<(marker.id==='showroom-entry'?3:21)).sort((a,b)=>Number(b.id==='showroom-entry')-Number(a.id==='showroom-entry')||a.distance-b.distance)[0]?.id;
+      nearby.hidden=!current;
+      if(current) nearby.textContent=current==='showroom-entry'?'Enter HQ2 showroom':record(current)?.name||'Place details';
       const corner=nearestIntersection(intersections,camera.position.x,camera.position.z);
       const name=corner?.blades.map(blade=>blade.label).join(' / ')||'';
       const street=$('#current-street');
@@ -365,7 +404,7 @@ function frame(now) {
       lastNearby=now;
     }
   }
-  for(const marker of markers) marker.visible=marker.position.distanceTo(camera.position)<115;
+  for(const marker of markers) marker.visible=(marker.userData.streetPosition||marker.position).distanceTo(camera.position)<115;
   skyMesh.position.copy(camera.position);
   updateWater(now/1000);
   renderer.render(indoor?.scene||scene,camera);
@@ -375,7 +414,7 @@ function bind(canvas) {
   addEventListener('keydown',event=>{
     if(places.open||details.open||event.target.closest?.('button,input,a')) return;
     if(movementKeys.has(event.code)) {event.preventDefault();keys.add(event.code);}
-    if(event.code==='KeyE'&&current&&!event.repeat) showPlace(record(current));
+    if(event.code==='KeyE'&&current&&!event.repeat) activate(current);
   });
   addEventListener('keyup',event=>keys.delete(event.code));
   addEventListener('blur',()=>{keys.clear();pointer=null;input=emptyInput();});
@@ -396,16 +435,16 @@ function bind(canvas) {
   });
   for(const name of ['pointerup','pointercancel','lostpointercapture']) canvas.addEventListener(name,event=>{
     if(pointer?.id!==event.pointerId) return;
-    if(!indoor&&name==='pointerup'&&pointer.distance<7) {
+    if(name==='pointerup'&&pointer.distance<7) {
       const bounds=canvas.getBoundingClientRect();
       ray.setFromCamera(new THREE.Vector2(2*(event.clientX-bounds.left)/bounds.width-1,1-2*(event.clientY-bounds.top)/bounds.height),camera);
-      const hit=ray.intersectObjects(markers).find(item=>item.object.visible&&item.distance<24);
-      if(hit) showPlace(record(hit.object.userData.id));
+      const hit=ray.intersectObjects(indoor?indoor.stations:markers).find(item=>item.object.visible&&item.distance<(indoor?4:24));
+      if(hit) activate(indoor?hit.object:hit.object.userData.id);
     }
     pointer=null;
   });
   $('#map-button').addEventListener('click',()=>{keys.clear();populateList();places.showModal();});
-  nearby.addEventListener('click',()=>showPlace(record(current)));
+  nearby.addEventListener('click',()=>activate(current));
   $('#place-search').addEventListener('input',populateList);
   for(const dialog of [places,details]) dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
   addEventListener('resize',()=>{
@@ -455,6 +494,7 @@ async function start() {
   signposts=intersectionSigns(intersections);
   scene.add(signposts);
   Object.values(designs).forEach(design=>design.signs.forEach(makeStorefrontSign));
+  showroomDoor();
   ray=new THREE.Raycaster();
   bind(renderer.domElement);
   $('#exit-suite').onclick=exitSuite;

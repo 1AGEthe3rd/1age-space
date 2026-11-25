@@ -1,5 +1,14 @@
 import * as T from '../space/shared/three.module.js';
 
+export const applications=[
+  ['Page','Explore orbital profiles and social links.'],
+  ['Space','Discover virtual spaces and commercial properties.'],
+  ['Games','Explore the 1AGE games platform.'],
+  ['Exchange','Explore the virtual financial platform.'],
+  ['Quest','Discover learning and exploration quests.'],
+  ['Cash','Explore the 1AGE account credit platform.'],
+].map(([name,description])=>({name,description,url:'https://1age.'+name.toLowerCase()+'/'}));
+
 const gateway='place-us-washington-mlk-gateway-phase-2';
 export const suites=[
   {parent:gateway,title:'HQ2 application showroom',address:'1911 Martin Luther King Jr. Avenue SE',area:1519,type:'apps'},
@@ -20,7 +29,7 @@ function sign(text,width) {
 }
 
 export function createInterior(suite) {
-  const scene=new T.Scene(), obstacles=[];
+  const scene=new T.Scene(), obstacles=[], stations=[];
   const width=suite.type==='market'?13:10;
   const depth=suite.area?suite.area*.09290304/width:11;
   const cube=new T.BoxGeometry(), materials=new Map();
@@ -31,7 +40,7 @@ export function createInterior(suite) {
     if(solid) obstacles.push([x-w/2-.24,x+w/2+.24,z-d/2-.24,z+d/2+.24]);
   }
   function panel(text,x,y,z,w) {
-    const mesh=sign(text,w);mesh.position.set(x,y,z);scene.add(mesh);
+    const mesh=sign(text,w);mesh.position.set(x,y,z);scene.add(mesh);return mesh;
   }
   const back=-depth/2, side=width/2, wall=suite.type==='plants'?'#afb99c':'#b8ada0';
   box(0,-.09,0,width,.18,depth,'#8c7561');
@@ -61,14 +70,15 @@ export function createInterior(suite) {
     panel('CAFÉ',side-1.35,1.55,-2.2,1.1);
     for(const x of [-1.7,.2]) box(x,.035,back+2,.68,.07,1.75,'#677b70');
   } else {
-    const apps=['PAGE','SPACE','GAMES','EXCHANGE','QUEST','CASH'];
     for(let i=0;i<6;i++) {
       const x=(i%2?1:-1)*(side-1.45),z=back+2.1+Math.floor(i/2)*3.7;
       box(x,.49,z,1.95,.98,1.1,'#645247',true);
       box(x,1.03,z,2.1,.1,1.24,'#b49a76');
       if(suite.type==='apps') {
         box(x,1.52,z-.32,1.35,.82,.12,'#28373b');
-        panel(apps[i],x,1.53,z-.24,1.21);
+        const face=panel(applications[i].name.toUpperCase(),x,1.53,z-.24,1.21);
+        face.userData.application=applications[i];
+        stations.push(face);
       } else {
         for(const dx of [-.86,.86]) box(x+dx,1.8,z,.08,1.6,.08,'#5d4940');
         box(x,2.65,z,2.15,.13,1.49,i%2?'#48736e':'#b77251');
@@ -78,7 +88,7 @@ export function createInterior(suite) {
   }
   scene.add(new T.HemisphereLight('#fff2dd','#a08b77',2.2));
   const lamp=new T.PointLight('#fff2d2',85,30,2);lamp.position.set(0,3.45,0);scene.add(lamp);
-  return {scene,spawn:depth/2-1,clear(x,z){
+  return {scene,stations,spawn:depth/2-1,clear(x,z){
     return Math.abs(x)<side-.28&&Math.abs(z)<depth/2-.28&&!obstacles.some(([a,b,c,d])=>x>a&&x<b&&z>c&&z<d);
   }};
 }

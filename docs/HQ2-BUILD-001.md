@@ -72,3 +72,7 @@ In Places, select MLK Gateway Phase II or Grounded and choose an interior. Retur
 The [leasing bulletin](https://www.mlkgatewaydc.com/leasing) lists 1,519 sq ft at 1911 MLK and 2,205 sq ft at 1111 Marion Barry. Rectangular proportions, layouts and fixtures are design assumptions. Current vacancy, physical occupancy rights and commercial partnerships remain unverified. The [Grounded operator FAQ](https://feelgrounded.com/pages/faq) informed the program at 1913 MLK. Its interior dimensions are estimated. The [Anacostia House project page](https://www.mlkgatewaydc.com/anacostiahouse) identifies the building at 1916 13th Street SE. Its new exterior destination uses the existing mapped footprint and an approximate façade.
 
 Screenshots from the review build: [application showroom](images/hq2/hq2-003-showroom.jpg), [creator market](images/hq2/hq2-003-market.jpg), [plant shop and café](images/hq2/hq2-003-plant-cafe.jpg).
+
+## Build 004 · Application showroom
+
+A concept doorway at the MLK Gateway Phase II frontage opens the showroom through the nearby action or a tap on the glass. Inside, approach or select a display to read about its application and open the corresponding 1AGE domain. External links open separately so the street return and showroom session are preserved. The doorway location is approximate.
