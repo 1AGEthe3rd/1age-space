@@ -1,3 +1,4 @@
+import {createMetro} from './metro.mjs';
 import {suites,createInterior} from './interiors.mjs';
 import * as THREE from '../space/shared/three.module.js';
 import {subscribeInput} from '../space/shared/gamepad.mjs';
@@ -164,7 +165,7 @@ function populateList() {
     label('small',subtitle+(row.arrival?'':' · '+(row.property || row.address ? 'Catalog only' : 'Planned')),button);
     button.addEventListener('click',()=>{
       places.close();
-      if(row.arrival && !row.property && !row.address && row.kind!=='intersection') arrive(row);
+      if(row.arrival && !row.property && !row.address && row.kind!=='intersection'&&row.id!=='anacostia-metro') arrive(row);
       else showPlace(row);
     });
   }
@@ -199,6 +200,53 @@ function pickupPreview() {
   };
   details.showModal();
 }
+let metro;
+function enterMetro() {
+  details.close();
+  ++travel;
+  status.hidden=true;
+  metro??=createMetro();
+  metro.reset();railDisplay='';
+  indoor=metro;
+  moving=true;current=null;nearby.hidden=true;
+  $('#map-button').hidden=true;
+  $('#current-street').hidden=false;
+  camera.position.set(-3.5,1.68,3);yaw=-.72;pitch=0;
+  renderer.domElement.focus();
+  updateMetro();
+}
+function leaveMetro() {
+  indoor=null;current=null;nearby.hidden=true;
+  $('#rail-actions').hidden=true;
+  $('#map-button').hidden=false;
+  $('#exit-suite').hidden=true;
+  $('h1').textContent='Historic Anacostia';
+  arrive(record('anacostia-metro'));
+}
+let railDisplay='';
+function updateMetro() {
+  const display=[metro.name,metro.next,metro.aboard,metro.riding,Math.abs(camera.position.z)>3].join('|');
+  if(display===railDisplay) return;
+  railDisplay=display;
+  $('h1').textContent=metro.riding?'Next · '+metro.next:metro.name;
+  $('#current-street').textContent='Green Line · Virtual service';
+  $('#exit-suite').hidden=!metro.atStreet;
+  $('#rail-actions').hidden=false;
+  for(const [id,dir] of [['rail-north',-1],['rail-south',1]]) {
+    const button=$('#'+id), next=metro.adjacent(dir);
+    button.hidden=!metro.aboard||metro.riding||!next;
+    if(next) button.textContent='Ride to '+next;
+  }
+  nearby.hidden=metro.riding||(!metro.aboard&&Math.abs(camera.position.z)>3);
+  nearby.textContent=metro.aboard?'Step onto platform':'Board train';
+}
+function boardMetro() {
+  if(nearby.hidden||metro.riding) return;
+  metro.toggle();
+  camera.position.set(metro.aboard?0:-3.5,1.68,metro.aboard?2:1);
+  yaw=metro.aboard?0:-.72;pitch=0;
+  renderer.domElement.focus();updateMetro();
+}
 function enterSuite(suite) {
   if(suite.type==='dispensary'&&!adultConfirmed) return requestDispensaryEntry(suite);
   details.close();
@@ -216,6 +264,7 @@ function enterSuite(suite) {
 }
 function exitSuite() {
   if(!indoor) return;
+  if(indoor===metro) return leaveMetro();
   indoor=null; current=null; nearby.hidden=true;
   camera.position.copy(streetPose.position);
   ({yaw,pitch,moving}=streetPose);
@@ -288,6 +337,7 @@ function showPlace(row) {
     link('Shared catalog record','../catalog.html?property='+encodeURIComponent(property.id),body);
   } else {
     label('p',row.address ? row.kind+' · '+row.address : row.district + (row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
+    if(row.id==='anacostia-metro') label('button','Enter Green Line platform',body).onclick=enterMetro;
     const suite=suites.find(item=>item.parent===row.id);
     if(suite) {
       if(suite.type==='grocery') label('p','Original virtual interior. Layout, dimensions and stock are illustrative.',body);
@@ -411,6 +461,7 @@ function skyDome() {
 let skyMesh;
 function frame(now) {
   const dt=Math.min(.05,(now-(last||now))/1000);
+  const railDt=(now-(last||now))/1000;
   last=now;
   if(moving&&!places.open&&!details.open) {
     const x=Number(keys.has('KeyD')||keys.has('ArrowRight'))-Number(keys.has('KeyA')||keys.has('ArrowLeft'))+input.move.x;
@@ -426,7 +477,9 @@ function frame(now) {
     camera.position.y=THREE.MathUtils.lerp(camera.position.y,1.68+floor,Math.min(1,12*dt));
     camera.rotation.set(pitch,yaw,0,'YXZ');
     if(!indoor) refreshTiles(camera.position.x,camera.position.z);
-    if(indoor) {
+    if(metro&&indoor===metro) {
+      metro.tick(Math.min(.25,railDt));updateMetro();
+    } else if(indoor) {
       current=indoor.stations.filter(screen=>screen.position.distanceTo(camera.position)<3.4)
         .sort((a,b)=>a.position.distanceTo(camera.position)-b.position.distanceTo(camera.position))[0];
       nearby.hidden=!current;
@@ -456,7 +509,10 @@ function bind(canvas) {
   addEventListener('keydown',event=>{
     if(places.open||details.open||event.target.closest?.('button,input,a')) return;
     if(movementKeys.has(event.code)) {event.preventDefault();keys.add(event.code);}
-    if(event.code==='KeyE'&&current&&!event.repeat) activate(current);
+    if(event.code==='KeyE'&&!event.repeat) {
+      if(metro&&indoor===metro) boardMetro();
+      else if(current) activate(current);
+    }
   });
   addEventListener('keyup',event=>keys.delete(event.code));
   addEventListener('blur',()=>{keys.clear();pointer=null;input=emptyInput();});
@@ -486,7 +542,8 @@ function bind(canvas) {
     pointer=null;
   });
   $('#map-button').addEventListener('click',()=>{keys.clear();populateList();places.showModal();});
-  nearby.addEventListener('click',()=>activate(current));
+  nearby.addEventListener('click',()=>metro&&indoor===metro?boardMetro():activate(current));
+  for(const [id,dir] of [['rail-north',-1],['rail-south',1]]) $('#'+id).onclick=()=>{metro.depart(dir);updateMetro();renderer.domElement.focus();};
   $('#place-search').addEventListener('input',populateList);
   for(const dialog of [places,details]) dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
   addEventListener('resize',()=>{
@@ -533,6 +590,9 @@ async function start() {
   scene.add(light);
   skyMesh=skyDome();
   streetscape();
+  const station=record('anacostia-metro');
+  const [sx,sz]=station.arrival;
+  makeStorefrontSign({text:'ANACOSTIA · GREEN LINE',destinationId:station.id,arrival:station.arrival,face:[sx-3,sz+2]});
   signposts=intersectionSigns(intersections);
   scene.add(signposts);
   Object.values(designs).forEach(design=>design.signs.forEach(makeStorefrontSign));
