@@ -162,6 +162,39 @@ function strip(batch,a,b,width,y,paint) {
   batch.quad([a[0]+nx,y,a[1]+nz],[b[0]+nx,y,b[1]+nz],[b[0]-nx,y,b[1]-nz],[a[0]-nx,y,a[1]-nz],paint);
 }
 
+function crosswalk(batch,rings) {
+  const ring=rings[0];
+  const edge=ring.slice(1).reduce((longest,b,i)=>{
+    const a=ring[i], length=Math.hypot(a[0]-b[0],a[1]-b[1]);
+    return length>longest.length ? {a,b,length} : longest;
+  },{length:0});
+  if (edge.length<2) return;
+  const dx=(edge.b[0]-edge.a[0])/edge.length;
+  const dz=(edge.b[1]-edge.a[1])/edge.length;
+  const vertices=ring.slice(0,-1).map(([x,z])=>{
+    const a=x-edge.a[0],b=z-edge.a[1];
+    return [a*dx+b*dz,-a*dz+b*dx];
+  });
+  const span=Math.max(...vertices.map(p=>p[0]));
+  const from=Math.min(...vertices.map(p=>p[0]));
+  const world=(u,v)=>[edge.a[0]+u*dx-v*dz,.097,edge.a[1]+u*dz+v*dx];
+  function extent(u) {
+    const crossings=[];
+    for(let i=0;i<vertices.length;i++) {
+      const [x,y]=vertices[i],[a,b]=vertices[(i+1)%vertices.length];
+      if((x<=u)===(a<=u)) continue;
+      crossings.push(y+(b-y)*(u-x)/(a-x));
+    }
+    crossings.sort((a,b)=>a-b);
+    return crossings.length===2 ? [crossings[0]+.13,crossings[1]-.13] : null;
+  }
+  for(let u=from+.19;u+.34<span;u+=.77) {
+    const a=extent(u),b=extent(u+.34);
+    if(!a||!b||a[1]<=a[0]||b[1]<=b[0]) continue;
+    batch.quad(world(u,a[0]),world(u+.34,b[0]),world(u+.34,b[1]),world(u,a[1]),'#e7e1cb');
+  }
+}
+
 function road(batch,kind,width,bridge,points,fixtures,decks) {
   const lane = pavement.includes(kind);
   const height = bridge ? (lane ? 2.8 : 2.9) : .025;
@@ -199,15 +232,18 @@ function road(batch,kind,width,bridge,points,fixtures,decks) {
 
 export function makeTile(data,designs,detailed) {
   const group=new THREE.Group();
-  const ground=new Batch(), shell=new Batch(), details=new Batch(), river=new Batch();
+  const ground=new Batch(), markings=new Batch(), shell=new Batch(), details=new Batch(), river=new Batch();
   const fixtures=[], foliage=[], blockers=[], water=[], decks=[];
   for (const rings of data.osm.parks) ground.polygon(rings,.007,'#788053');
   for (const [kind,rings] of data.dc.surfaces) {
     if (kind==='water') {
       river.polygon(rings,.016,'#ffffff');
       water.push(collider(rings));
+    } else if(kind==='crosswalk') {
+      ground.polygon(rings,.084,'#595853');
+      crosswalk(markings,rings);
     } else {
-      ground.polygon(rings,kind==='crosswalk'?.072:.06,kind==='crosswalk'?'#c3bba9':'#a59e90');
+      ground.polygon(rings,.063,'#a59e90');
     }
   }
   for (const [kind,width,bridge,points] of data.osm.roads) road(ground,kind,width,bridge,points,fixtures,decks);
@@ -226,12 +262,16 @@ export function makeTile(data,designs,detailed) {
       fixtures.push([x,1.4,z,.09,2.8,.09,'#555f64'],[x,2.65,z,.34,.39,.10,'#386789']);
     } else {
       fixtures.push([x,2.14,z,.13,4.3,.13,'#5a605a'],[x,4.08,z,.29,.64,.29,'#4f5141']);
-      if(kind==='traffic_signals') fixtures.push([x,4.11,z,.30,.12,.31,'#ccb04b']);
+      if(kind==='traffic_signals') {
+        fixtures.push([x,4.25,z,.31,.83,.31,'#594b30']);
+        fixtures.push([x,4.49,z,.26,.15,.33,'#b44535'],[x,4.25,z,.26,.15,.33,'#9d813e'],[x,4.01,z,.26,.15,.33,'#3f6651']);
+      }
     }
   }
   const waterMesh=river.mesh(materials.water,group);
   if (waterMesh) waterMesh.renderOrder=1;
   ground.mesh(materials.opaque,group);
+  markings.mesh(materials.opaque,group);
   shell.mesh(materials.facade,group);
   const trim = detailed ? details.mesh(materials.window,group) : null;
   instances(group,box,fixtures);

@@ -52,3 +52,15 @@ Screenshots from the running development scene:
 ## Rollback
 
 The review baseline is d7028142e1e21667bcd17a800d58504cd39d21fe. This review branch requires no production rollback. If a later release needs reversal, revert the HQ2 integration commit through a reviewed PR and use the normal 1AGE Space release workflow. Keep the review branch for traceability.
+
+## Build 002 · Street signs and intersections
+
+The next review commit adds 40 street-name blades covering 22 named streets at 19 mapped junctions. The route runs from the MLK Gateway and Historic Anacostia commercial blocks toward Howard Road, Anacostia Drive and the 11th Street Bridge approaches. Search Places by street name or abbreviation to inspect a junction and open its stable street arrival. The HUD shows the nearest signed junction at street level.
+
+Mapped crossing polygons now have painted ladder markings. Signal heads have separate lenses. The sign art, post placement and traffic-control details are original approximations. This pass does not simulate traffic or certify continuous pedestrian routes throughout the district.
+
+Verification passed 67 Python and 11 Node tests. Desktop Chromium and an emulated mobile viewport verified intersection search, scene arrival and direct-link reload.
+
+- [Marion Barry Avenue street signs](images/hq2/hq2-002-marion-barry-street-signs.jpg)
+- [MLK Gateway crosswalk](images/hq2/hq2-002-mlk-crosswalk.jpg)
+- [Howard Road mobile view](images/hq2/hq2-002-howard-road-mobile.jpg)

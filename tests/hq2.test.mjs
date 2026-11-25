@@ -30,3 +30,19 @@ test('protected places and linked businesses remain searchable; regional plans h
   assert.equal(region.destinations.find(x=>x.id==='oneage-treasury').arrival,undefined);
   assert(region.destinations.filter(x=>x.cityId!=='us-dc-washington').every(x=>!x.arrival));
 });
+
+test('named street signs preserve OSM provenance and occupy walkable corners',async()=>{
+  const intersections=load('../hq2/geography/intersections.json');
+  const {nearestIntersection}=await import('../hq2/signs.mjs');
+  assert.equal(new Set(intersections.map(c=>c.osmNode)).size,intersections.length);
+  assert(intersections.length>=19);
+  const gateway=nearestIntersection(intersections,2.6,-9.4);
+  assert.deepEqual(gateway.blades.map(b=>b.name).sort(),['Marion Barry Avenue SE','Martin Luther King Jr. Avenue SE']);
+  assert.equal(nearestIntersection(intersections,900,900),null);
+  for(const junction of intersections) {
+    assert(junction.blades.length>=2);
+    assert(junction.blades.every(blade=>blade.name.endsWith(' SE') && /^\d+$/.test(blade.osmWay)));
+    for(const [x,z] of [junction.post,junction.arrival])
+      assert(!tiles.some(tile=>[...tile.blockers,...tile.water].some(collides=>collides(x,z))),junction.osmNode);
+  }
+});

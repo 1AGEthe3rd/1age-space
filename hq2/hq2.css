@@ -35,3 +35,5 @@ dialog label{display:block;margin:.9rem 0 .25rem;font-size:.88rem}
 #place-details a{display:inline-block;margin:0 1rem .45rem 0}
 body:has(dialog[open]) #oneage-controller{visibility:hidden}
 @media(max-width:480px){.hud div{padding:9px 11px}.hud button{padding:8px 12px}.foot{bottom:max(21px,env(safe-area-inset-bottom))}.attribution{font-size:.62rem}}
+
+#current-street{font-size:.72rem;font-weight:610;color:#d1e3dc;max-width:36ch;margin-top:.3rem}

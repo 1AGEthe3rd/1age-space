@@ -2,6 +2,7 @@ import * as THREE from '../space/shared/three.module.js';
 import {subscribeInput} from '../space/shared/gamepad.mjs';
 import {emptyInput} from '../space/shared/gamepad-model.mjs';
 import {makeTile,segmentDistance,updateWater} from './streets.mjs';
+import {intersectionSigns,nearestIntersection} from './signs.mjs';
 
 const $ = selector => document.querySelector(selector);
 const tiles = new Map();
@@ -11,7 +12,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(innerWidth<600 ? 70 : 64,innerWidth/innerHeight,.075,660);
 const status = $('#scene-status'), places = $('#places'), details = $('#place'), nearby = $('#nearby');
 const low = matchMedia('(pointer:coarse)').matches || (navigator.deviceMemory && navigator.deviceMemory<=4);
-let geography, designs, destinations, properties, sources, businesses, renderer, ray, yaw=0, pitch=0, input=emptyInput();
+let geography, designs, intersections, signposts, destinations, properties, sources, businesses, renderer, ray, yaw=0, pitch=0, input=emptyInput();
 let pointer, current, tileCenter, travel=0, last=0, lastNearby=0, moving=false;
 
 const markers=[];
@@ -121,7 +122,23 @@ function surface(x,z) {
   if(blocked||(river&&!onFootpath)) return null;
   return deck;
 }
+function intersectionRecord(corner) {
+  return {
+    id:'intersection-'+corner.osmNode,
+    name:corner.blades.map(blade=>blade.name).join(' & '),
+    shortName:corner.blades.map(blade=>blade.label).join(' / '),
+    district:'Street intersection · Washington, D.C.',
+    arrival:corner.arrival,
+    lookAt:corner.post,
+    sourceUrl:'https://www.openstreetmap.org/node/'+corner.osmNode,
+    kind:'intersection',
+  };
+}
 function record(id) {
+  if(id?.startsWith('intersection-')) {
+    const corner=intersections.find(value=>id==='intersection-'+value.osmNode);
+    return corner ? intersectionRecord(corner) : undefined;
+  }
   const property=properties.get(id);
   if(property) return {...property.spaceDestination,id,name:property.name,property};
   return destinations.get(id);
@@ -135,15 +152,16 @@ function populateList() {
   list.replaceChildren();
   const rows=[...destinations.values()].filter(row=>row.arrival);
   rows.push(...[...properties.values()].map(property=>record(property.id)));
+  if(needle) rows.push(...intersections.map(intersectionRecord));
   rows.push(...[...destinations.values()].filter(row=>!row.arrival));
   for(const row of rows) {
     const subtitle=row.property ? row.property.address.line1 : row.district;
-    if(!`${row.name} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
+    if(!`${row.name} ${row.shortName||''} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
     const button=label('button',row.name,list);
     label('small',subtitle+(row.arrival?'':' · '+(row.property ? 'Catalog only' : 'Planned')),button);
     button.addEventListener('click',()=>{
       places.close();
-      if(row.arrival && !row.property) arrive(row);
+      if(row.arrival && !row.property && row.kind!=='intersection') arrive(row);
       else showPlace(row);
     });
   }
@@ -177,7 +195,7 @@ function showPlace(row) {
       const list=label('ul','',body);
       row.plannedRooms.forEach(name=>label('li',name,list));
     }
-    const url=destinations.get(row.id)?.sourceUrl;
+    const url=row.sourceUrl;
     if(url) link('Public reference',url,body);
   }
   if(row.arrival) {
@@ -212,7 +230,7 @@ async function arrive(row,{historyMode=true,focus=true}={}) {
   camera.position.set(position[0],1.68+(surface(...position)||0),position[1]);
   const [tx,tz]=row.lookAt;
   yaw=Math.atan2(position[0]-tx,position[1]-tz);
-  pitch=-.015;
+  pitch=row.kind==='intersection' ? .28 : -.015;
   camera.rotation.set(pitch,yaw,0,'YXZ');
   const url=new URL(location.href);
   if(row.id==='hq2-gateway') url.searchParams.delete('destination');
@@ -223,11 +241,11 @@ async function arrive(row,{historyMode=true,focus=true}={}) {
   if(focus) renderer.domElement.focus({preventScroll:true});
   refreshTiles(...position);
 }
-function makeSign(sign) {
+function makeStorefrontSign(sign) {
   const canvas=document.createElement('canvas');
   canvas.width=512; canvas.height=80;
   const context=canvas.getContext('2d');
-  context.fillStyle=sign.text==='GROUNDED'?'#374633':sign.street?'#245340':'#282d2c';
+  context.fillStyle=sign.text==='GROUNDED'?'#374633':'#282d2c';
   context.fillRect(0,0,512,80);
   context.strokeStyle='#b5a98d';
   context.strokeRect(5,5,502,70);
@@ -238,10 +256,10 @@ function makeSign(sign) {
   context.fillText(sign.text,256,40,466);
   const texture=new THREE.CanvasTexture(canvas);
   texture.colorSpace=THREE.SRGBColorSpace;
-  const width=sign.street?2.8:Math.min(8.6,Math.max(3.4,sign.text.length*.36));
+  const width=Math.min(8.6,Math.max(3.4,sign.text.length*.36));
   const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,width*80/512),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}));
   const n=new THREE.Vector2(sign.arrival[0]-sign.face[0],sign.arrival[1]-sign.face[1]).normalize();
-  mesh.position.set(sign.face[0]+n.x*.33,sign.height||3.24,sign.face[1]+n.y*.33);
+  mesh.position.set(sign.face[0]+n.x*.33,3.24,sign.face[1]+n.y*.33);
   mesh.rotation.y=Math.atan2(n.x,n.y);
   mesh.userData.id=sign.propertyId||sign.destinationId;
   scene.add(mesh);
@@ -259,8 +277,7 @@ function streetscape() {
     lamp.position.set(x+.22,5.22,z);
     scene.add(post,lamp);
   }
-  makeSign({text:'MLK JR AVE SE',arrival:[9,-12],face:[12,-27],height:3.25,street:true});
-  makeSign({text:'MARION BARRY AVE SE',arrival:[25,11],face:[18,1],height:3.18,street:true});
+
 }
 function skyDome() {
   const material=new THREE.ShaderMaterial({
@@ -304,6 +321,12 @@ function frame(now) {
         .filter(marker=>marker.distance<21).sort((a,b)=>a.distance-b.distance)[0]?.id;
       nearby.hidden=!current;
       if(current) nearby.textContent=record(current)?.name||'Place details';
+      const corner=nearestIntersection(intersections,camera.position.x,camera.position.z);
+      const name=corner?.blades.map(blade=>blade.label).join(' / ')||'';
+      const street=$('#current-street');
+      if(street.textContent!==name) street.textContent=name;
+      street.hidden=!name;
+      for(const post of signposts.children) post.visible=post.position.distanceTo(camera.position)<140;
       lastNearby=now;
     }
   }
@@ -358,11 +381,13 @@ function bind(canvas) {
   });
 }
 async function start() {
-  const [geo,style,region,catalog]=await Promise.all([
+  const [geo,style,region,catalog,streetData]=await Promise.all([
     json('geography/index.json'),json('designs.json'),json('../space/data/dmv.json'),json('../space/data/catalog.json'),
+    json('geography/intersections.json'),
   ]);
   geography=geo;
   designs=style;
+  intersections=streetData;
   destinations=new Map(region.destinations.map(row=>[row.id,{...row,sourceUrl:region.sources[row.source]}]));
   properties=new Map(catalog.properties.filter(row=>row.protection?.zoneId==='hq2').map(row=>[row.id,row]));
   sources=new Map(catalog.sources.map(row=>[row.id,row]));
@@ -392,7 +417,9 @@ async function start() {
   scene.add(light);
   skyMesh=skyDome();
   streetscape();
-  Object.values(designs).forEach(design=>design.signs.forEach(makeSign));
+  signposts=intersectionSigns(intersections);
+  scene.add(signposts);
+  Object.values(designs).forEach(design=>design.signs.forEach(makeStorefrontSign));
   ray=new THREE.Raycaster();
   bind(renderer.domElement);
   const enter=()=>{
