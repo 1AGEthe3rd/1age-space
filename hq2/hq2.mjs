@@ -1,3 +1,4 @@
+import {attachCitySky} from '../space/shared/weather/city-sky.mjs';
 import {createMetro} from './metro.mjs';
 import {suites,createInterior} from './interiors.mjs';
 import * as THREE from '../space/shared/three.module.js';
@@ -442,15 +443,28 @@ function streetscape() {
 function skyDome() {
   const material=new THREE.ShaderMaterial({
     side:THREE.BackSide,depthWrite:false,
+    uniforms:{skyColor:{value:new THREE.Color()},cover:{value:0},sunGlow:{value:0},clock:{value:0}},
     vertexShader:`varying vec3 direction;
       void main(){ direction=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
     fragmentShader:`varying vec3 direction;
+      uniform vec3 skyColor;
+      uniform float cover,sunGlow,clock;
+      float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+      float noise(vec2 p){
+        vec2 i=floor(p),f=fract(p);
+        f=f*f*(3.-2.*f);
+        return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);
+      }
       void main(){
         vec3 ray=normalize(direction);
         float height=smoothstep(-.06,.63,ray.y);
-        vec3 color=mix(vec3(.70,.77,.79),vec3(.31,.55,.69),height);
+        vec3 color=skyColor*mix(1.14,.82,height);
+        vec2 p=ray.xz*3./max(.18,ray.y+.18)+vec2(clock*.008,0.);
+        float cloud=smoothstep(.27,.70,.68*noise(p)+.32*noise(2.3*p));
+        color=mix(color,skyColor*mix(.69,1.30,cloud),cover*smoothstep(-.04,.18,ray.y));
         float sun=pow(max(0.,dot(ray,normalize(vec3(-.52,.42,.50)))),29.);
-        gl_FragColor=vec4(mix(color,vec3(.94,.84,.68),sun*.35),1.);
+        gl_FragColor=vec4(mix(color,vec3(.94,.84,.68),sun*sunGlow),1.);
+        #include <colorspace_fragment>
       }`,
   });
   const dome=new THREE.Mesh(new THREE.SphereGeometry(610,24,12),material);
@@ -458,7 +472,8 @@ function skyDome() {
   scene.add(dome);
   return dome;
 }
-let skyMesh;
+let skyMesh,weatherTick,daylight,lastWeatherLabel;
+const weatherLabel=$('#weather');
 function frame(now) {
   const dt=Math.min(.05,(now-(last||now))/1000);
   const railDt=(now-(last||now))/1000;
@@ -500,6 +515,19 @@ function frame(now) {
     }
   }
   for(const marker of markers) marker.visible=(marker.userData.streetPosition||marker.position).distanceTo(camera.position)<115;
+  weatherTick(dt,camera,Boolean(indoor));
+  if(!indoor){
+    const uniforms=skyMesh.material.uniforms;
+    uniforms.skyColor.value.copy(scene.background);
+    uniforms.sunGlow.value=Math.max(0,(daylight.intensity-.12)/2.35)*.42;
+    if(lastWeatherLabel!==weatherLabel.textContent){
+      lastWeatherLabel=weatherLabel.textContent;
+      uniforms.cover.value=/partly|few clouds/i.test(lastWeatherLabel) ? .48 :
+        /cloud|overcast|rain|snow|storm|fog|mist|drizzle|haze/i.test(lastWeatherLabel) ? .9 : .06;
+    }
+    uniforms.clock.value=now/1000;
+    scene.fog.density=(low?.006:.0047)*180/scene.fog.far;
+  }
   skyMesh.position.copy(camera.position);
   updateWater(now/1000);
   renderer.render(indoor?.scene||scene,camera);
@@ -584,11 +612,15 @@ async function start() {
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(5000,5000),new THREE.MeshLambertMaterial({color:'#77765d'}));
   ground.rotation.x=-Math.PI/2;
   ground.position.y=-.013;
-  scene.add(ground,new THREE.HemisphereLight('#f2f7ff','#9b9281',2.25));
+  const ambient=new THREE.HemisphereLight('#f2f7ff','#9b9281',2.25);
+  scene.add(ground,ambient);
   const light=new THREE.DirectionalLight('#ffe7bc',2.15);
   light.position.set(-90,80,110);
   scene.add(light);
   skyMesh=skyDome();
+  daylight=light;
+  weatherTick=attachCitySky({scene,sun:light,ambient,station:'KDCA',latitude:38.86,longitude:-76.99,
+    timeZone:'America/New_York',status:weatherLabel});
   streetscape();
   const station=record('anacostia-metro');
   const [sx,sz]=station.arrival;
