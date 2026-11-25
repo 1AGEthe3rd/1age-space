@@ -37,3 +37,5 @@ body:has(dialog[open]) #oneage-controller{visibility:hidden}
 @media(max-width:480px){.hud div{padding:9px 11px}.hud button{padding:8px 12px}.foot{bottom:max(21px,env(safe-area-inset-bottom))}.attribution{font-size:.62rem}}
 
 #current-street{font-size:.72rem;font-weight:610;color:#d1e3dc;max-width:36ch;margin-top:.3rem}
+#rail-actions:not([hidden]){display:flex;flex-wrap:wrap;justify-content:center;gap:5px;width:min(24rem,65vw)}
+#rail-actions button{background:#15392d;color:white;border:1px solid #90b69f;border-radius:8px;padding:8px}
