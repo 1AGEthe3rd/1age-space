@@ -92,6 +92,13 @@
       "url": "/hq1/?stop=emerson",
       "representation": "approximate",
       "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
+    },
+    {
+      "id": "kenton-denver",
+      "name": "Downtown Kenton \u00b7 N Denver Avenue",
+      "url": "/hq1/?rail=yellow&station=kenton-n-denver-ave",
+      "representation": "approximate",
+      "source": "https://www.portlandoregon.gov/shared/cfm/image.cfm?id=327295"
     }
   ],
   "propertyConnections": [

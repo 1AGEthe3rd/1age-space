@@ -1,3 +1,4 @@
+import {insideKentonStudio,kentonStation} from './kenton.mjs';
 import * as T from '../../space/shared/three.module.js';
 import {subscribeInput} from '../../space/shared/gamepad.mjs';
 import {createYellowLine} from './yellow-line.mjs';
@@ -19,7 +20,7 @@ export function enterRail(){
   function toggle(){
     if(rail.riding||(!rail.aboard&&!nearDoor()))return;
     rail.toggle();camera.position.set(rail.aboard?0:-3,1.56,rail.aboard?2:1.8);
-    yaw=rail.aboard?.42:rail.name==='Expo Center'?1.13:-1.02;
+    yaw=rail.aboard?.42:rail.name===kentonStation?Math.PI/2:rail.name==='Expo Center'?1.13:-1.02;
   }
   function depart(dir){rail.depart(dir);}
   function nearDoor(){return Math.abs(camera.position.z)<3.2 && camera.position.x>-4.8;}
@@ -48,8 +49,12 @@ export function enterRail(){
     const nz=camera.position.z+step*(z*Math.cos(yaw)-x*Math.sin(yaw));
     if(rail.clear(nx,camera.position.z))camera.position.x=nx;
     if(rail.clear(camera.position.x,nz))camera.position.z=nz;
-    camera.rotation.set(pitch,yaw,0,'YXZ');weather(dt,camera,rail.aboard);
-    station.textContent=rail.riding?'Next · '+rail.next:rail.name;
+    camera.rotation.set(pitch,yaw,0,'YXZ');weather(dt,camera,rail.aboard||(rail.name===kentonStation&&insideKentonStudio(camera.position.x,camera.position.z)));
+    let place=rail.name;
+    if(!rail.aboard&&rail.name===kentonStation&&camera.position.x<-6){
+      place=insideKentonStudio(camera.position.x,camera.position.z)?'1AGE Design Studio':'N Denver Ave · Kenton';
+    }
+    station.textContent=rail.riding?'Next · '+rail.next:place;
     action.textContent=rail.aboard?'Leave train':'Board train';
     action.disabled=rail.riding||(!rail.aboard&&!nearDoor());
     for(const [b,d] of [[north,1],[south,-1]]){

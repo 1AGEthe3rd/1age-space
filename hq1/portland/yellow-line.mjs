@@ -1,3 +1,4 @@
+import {buildKenton,kentonStation,kentonWalkable} from './kenton.mjs';
 // Eight adjacent TriMet Yellow Line stations. Original compressed surface alignment.
 import * as T from '../../space/shared/three.module.js';
 
@@ -31,7 +32,7 @@ export function createYellowLine(stationId) {
     ctx.font='bold 50px system-ui';ctx.fillText(text,35,67,700);
     const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;
     const face=new T.Mesh(new T.PlaneGeometry(6,.75),new T.MeshBasicMaterial({map:texture,side:T.DoubleSide}));
-    face.position.set(x,y,z);parent.add(face);
+    face.position.set(x,y,z);parent.add(face);return face;
   }
   for(let i=0;i<stops.length;i++){
     const z=i*spacing;
@@ -49,14 +50,7 @@ export function createYellowLine(stationId) {
       }
       sign(corridor,'Transit Center',-9.6,2.1,z-6);
     }
-    if(stops[i]==='Kenton/N Denver Ave'){
-      for(let row=0;row<3;row++){
-        const front=z-10+row*9;
-        box(corridor,-11.8,1.6,front,5.5,5,8.5,['#916451','#b78d69','#99735c'][row]);
-        box(corridor,-9,1.3,front,.1,2.2,6.7,'#58747b');
-        box(corridor,-8.7,2.7,front,.8,.17,7.3,'#465849');
-      }
-    }
+    if(stops[i]===kentonStation)buildKenton({box,sign,group:corridor,origin:z});
     if(stops[i]==='Delta Park/Vanport'){
       for(let row=0;row<7;row++){
         const x=-10-row%3*2,at=z-20+row*6;
@@ -74,10 +68,11 @@ export function createYellowLine(stationId) {
   box(corridor,0,-1.12,routeLength/2,250,.4,routeLength+160,'#858973');
   box(corridor,0,-.94,routeLength/2,4.7,.16,routeLength+65,'#81786e');
   box(corridor,0,6.75,routeLength/2,.045,.05,routeLength+65,'#474d50');
+  const kentonZ=stops.indexOf(kentonStation)*spacing;
   for(let z=-15,i=0;z<routeLength+40;z+=19,i++){
     box(corridor,12,-.85,z,7,.15,19,'#5b6061');
     for(const side of [-1,1]){
-      if(z>routeLength-62 && side<0) continue; // Terminal forecourt.
+      if((z>routeLength-62 || Math.abs(z-kentonZ)<28) && side<0) continue; // Terminal forecourt.
       const x=side*(21+i%3*2),h=4+i%4;
       box(corridor,x,h/2-.92,z,9,h,12,i%2?'#b39883':'#bfad96');
       for(const off of [-3,0,3])box(corridor,x-side*4.54,2.1,z+off,.08,1.35,1.7,'#526873');
@@ -155,6 +150,6 @@ export function createYellowLine(stationId) {
       position(stop+(target-stop)*t*t*(3-2*t),Math.max(0,1-progress*10,(progress-.9)*10));
       if(progress===1) stop=target;
     },
-    clear(x,z){return aboard?Math.abs(x)<.66&&Math.abs(z)<6 : (x>-6&&x<-1.7&&Math.abs(z)<14.7)||(stop===stops.length-1&&x>=-23&&x<=-4&&Math.abs(z)<10.7)}
+    clear(x,z){return aboard?Math.abs(x)<.66&&Math.abs(z)<6 : (x>-6&&x<-1.7&&Math.abs(z)<14.7)||(stops[stop]===kentonStation&&kentonWalkable(x,z))||(stop===stops.length-1&&x>=-23&&x<=-4&&Math.abs(z)<10.7)}
   };
 }
