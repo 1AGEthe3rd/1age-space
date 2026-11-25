@@ -1,5 +1,7 @@
+import {albertaBlocks} from './alberta-blocks.mjs';
 // End the drivable arms inside the walking boundary so a parked driver can exit.
 export const crossings = {
+  ...Object.fromEntries(albertaBlocks.map(({id,z,halfWidth})=>[id,{z,halfWidth,minX:-5.95}])),
   alberta: { z:13, halfWidth:5.4 },
   killingsworth: { z:-66, halfWidth:5 },
   church: { z:-87, halfWidth:3.7, minX:-5.95 },
@@ -11,8 +13,10 @@ export function fitsRoad(x,z,heading) {
   const cos=Math.cos(heading), sin=Math.sin(heading);
   if (Math.abs(x)+.92*Math.abs(cos)+2.05*Math.abs(sin)<=5.95)
     return z-.92*Math.abs(sin)-2.05*Math.abs(cos)>=-258 && z+.92*Math.abs(sin)+2.05*Math.abs(cos)<=117;
-  const road=roads.find(r=>Math.abs(z-r.z)<=r.halfWidth+2.25);
-  if (!road) return false;
+  return roads.some(road=>Math.abs(z-road.z)<=road.halfWidth+2.25 && fitsCrossing(x,z,cos,sin,road));
+}
+
+function fitsCrossing(x,z,cos,sin,road){
   for (const side of [-.92,.92]) for (const end of [-2.05,2.05]) {
     const px=x+side*cos+end*sin, pz=z-side*sin+end*cos;
     if (px<(road.minX??-31) || px>(road.maxX??31) || (Math.abs(px)>5.95 && Math.abs(pz-road.z)>road.halfWidth)) return false;

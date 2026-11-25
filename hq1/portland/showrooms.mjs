@@ -1,6 +1,8 @@
+import {albertaBlocks} from './alberta-blocks.mjs';
 import * as T from '../../space/shared/three.module.js';
 
 export const stops = {
+  ...Object.fromEntries(albertaBlocks.map(({id,z})=>[id,{x:9.1,z:z+4.6,heading:-.85}])),
   church:{x:8.6,z:-80.4,heading:-.89},
   jessup:{x:-8.4,z:-106.7,heading:.82},
   killingsworth:{x:-9.7,z:-51,heading:-.46},

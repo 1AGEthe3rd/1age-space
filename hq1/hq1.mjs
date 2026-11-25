@@ -1,3 +1,4 @@
+import {buildAlbertaBlocks} from './portland/alberta-blocks.mjs';
 import {buildChurch,churchFrontages} from './portland/church.mjs';
 import {buildKillingsworth} from './portland/killingsworth.mjs';
 import {buildShowrooms,stops} from './portland/showrooms.mjs';
@@ -35,6 +36,7 @@ function renderDistrict() {
   let yaw = start.heading, pitch = 0;
   const view = search.get('view');
   const previewCameras = {
+    sumner: {position:[-4,2.35,-17],target:[18,2.3,-24]},
     church: {position:[-4,2.25,-79],target:[18,2.2,-89]},
     killingsworth: {position:[-2,2.6,-49],target:[4,2.5,-70]},
     jarrett: { position:[-6.3,2.45,-162], target:[6,2.5,-132] },
@@ -114,6 +116,7 @@ function renderDistrict() {
   } else {
     buildStreet(builder);
     buildChurch(builder);
+    buildAlbertaBlocks(builder);
     buildJarrettBlock(builder);
     const albertaSignal=buildShowrooms(builder,blockers);
     const killingsworthSignal=buildKillingsworth(builder);

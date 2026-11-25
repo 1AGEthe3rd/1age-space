@@ -64,6 +64,34 @@
       "url": "/hq1/?stop=jessup",
       "representation": "approximate",
       "source": "https://www.portland.gov/transportation/bicycle-committee/documents/regional-flexible-funds-allocation-bac-november/download"
+    },
+    {
+      "id": "webster",
+      "name": "NE MLK Jr Blvd at NE Webster St",
+      "url": "/hq1/?stop=webster",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
+    },
+    {
+      "id": "sumner",
+      "name": "NE MLK Jr Blvd at NE Sumner St",
+      "url": "/hq1/?stop=sumner",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
+    },
+    {
+      "id": "roselawn",
+      "name": "NE MLK Jr Blvd at NE Roselawn St",
+      "url": "/hq1/?stop=roselawn",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
+    },
+    {
+      "id": "emerson",
+      "name": "NE MLK Jr Blvd at NE Emerson St",
+      "url": "/hq1/?stop=emerson",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
     }
   ],
   "propertyConnections": [

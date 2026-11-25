@@ -1,3 +1,4 @@
+import {albertaBlocks,eastSidewalkRuns} from './portland/alberta-blocks.mjs';
 import * as THREE from '../space/shared/three.module.js';
 
 function surfaceTexture(paint) {
@@ -62,16 +63,16 @@ export function buildingFootprint({ position, orientation, appearance }) {
 
 export const neighboringBuildings = [
   { x:-17.3, z:1.3, width:13, depth:9, height:6.2, color:'#9e7557', accent:'#343d35', style:'workshop' },
-  { x:18, z:.6, width:11.7, depth:9, height:8.2, color:'#b1866f', accent:'#414744', style:'brick' },
-  { x:18, z:-14, width:13.6, depth:9, height:5.6, color:'#c27a63', accent:'#483f3a', style:'brick' },
+  { x:18, z:1.4, width:8.2, depth:9, height:8.2, color:'#b1866f', accent:'#414744', style:'brick' },
+  { x:18, z:-15, width:9.4, depth:9, height:5.6, color:'#c27a63', accent:'#483f3a', style:'brick' },
   { x:-17.3, z:-48, width:14, depth:9, height:9.1, color:'#ad8f71', accent:'#45534d', style:'brick' },
-  { x:18, z:-34, width:14, depth:9, height:7.4, color:'#d8c5a1', accent:'#435452', style:'stucco' },
-  { x:18, z:-51, width:12.6, depth:9, height:5.8, color:'#978873', accent:'#464943', style:'workshop' },
+  { x:18, z:-34, width:10.4, depth:9, height:7.4, color:'#d8c5a1', accent:'#435452', style:'stucco' },
+  { x:18, z:-50.3, width:6.8, depth:9, height:5.8, color:'#978873', accent:'#464943', style:'workshop' },
 ].map(({ x,z,...appearance }) => ({
   position:{ x,z }, orientation:x < 0 ? Math.PI/2 : -Math.PI/2, appearance,
 })).concat([
   { position:{ x:26.4,z:26.4 }, orientation:Math.PI, appearance:{ width:15.6,depth:8.2,height:6.2,color:'#b7846c',accent:'#3e4a45',style:'brick' } },
-  { position:{ x:28.2,z:1.3 }, orientation:0, appearance:{ width:12.6,depth:8.5,height:7.8,color:'#ccc2a0',accent:'#4e554d',style:'stucco' } },
+  { position:{ x:28.2,z:1.9 }, orientation:0, appearance:{ width:12.6,depth:8.5,height:7.8,color:'#ccc2a0',accent:'#4e554d',style:'stucco' } },
   { position:{ x:-28.2,z:1.3 }, orientation:0, appearance:{ width:10.4,depth:8.4,height:5.8,color:'#a08161',accent:'#474d44',style:'workshop' } },
 ]);
 
@@ -157,11 +158,12 @@ export function buildStreet({ box, sign, scene, material }) {
   box(0,-.36,-24,94,.56,100,'#716d5a');
   box(0,.018,-24,12,.035,100,asphalt);
   for (const side of [-1,1]) {
-    for (const [z,length] of [[-72.5,3],[-26.75,68.5],[23.5,10]]) {
+    const middle=side>0?eastSidewalkRuns():[[-26.75,68.5]];
+    for (const [z,length] of [[-72.5,3],...middle,[23.5,10]]) {
       box(side*8.9,.04,z,5.8,.08,length,concrete);
       box(side*6,.08,z,.19,.13,length,'#b0a89b');
     }
-    for (let z=-72; z<7; z+=2.3) if (Math.abs(z+66)>5) box(side*8.9,.082,z,5.68,.006,.018,'#9f998a');
+    for (let z=-72; z<7; z+=2.3) if (Math.abs(z+66)>5 && (side<0 || albertaBlocks.every(r=>Math.abs(z-r.z)>r.halfWidth))) box(side*8.9,.082,z,5.68,.006,.018,'#9f998a');
     for (const z of [6.5,19.5]) box(side*6.8,.084,z,1.36,.025,.82,'#bb8e60');
   }
   box(0,.012,13,72,.043,10.88,material('asphalt','#494b48',20,4));
@@ -213,7 +215,7 @@ export function buildStreet({ box, sign, scene, material }) {
       box(x-side*1.13,5.40,z,.45,.16,.22,'#404744');
       box(x-side*1.13,5.31,z,.32,.02,.15,'#fff2c9',{glow:true});
     }
-    for (const z of [-59,-41,-17.8,-5,22]) {
+    for (const z of (side>0?[-52,-36,-16,1,22]:[-59,-41,-17.8,-5,22])) {
       const x=side*7.6;
       box(x,.092,z,1.45,.024,1.65,'#6d5b4c');
       box(x,1.54,z,.17,3,.19,'#665044');

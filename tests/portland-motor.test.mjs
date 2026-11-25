@@ -10,7 +10,8 @@ test('van eases up to town speed, brakes to a standstill and reverses slowly',()
   c.reverse=true;run(c,4,1,0);assert.ok(c.z>before && c.speed>=-2.8);
 });
 test('steering turns the van right and prevents the body leaving the carriageway',()=>{
-  const c=vehicle();run(c,1,1,0);run(c,1,1,0,1);assert.ok(c.x>0 && c.heading<0);
+  const c=vehicle();c.z=45; // Uninterrupted MLK curb south of Alberta.
+  run(c,1,1,0);run(c,1,1,0,1);assert.ok(c.x>0 && c.heading<0);
   run(c,24,1,0,1);assert.ok(Math.abs(c.x)<5.95 && c.speed===0);
 });
 test('driver stops before contacting another parked van',()=>{
