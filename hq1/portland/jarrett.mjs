@@ -16,8 +16,9 @@ export function buildJarrettBlock({box, sign, scene, material}) {
   box(0,.020,-165,72,.04,8,road);
   for (const side of [-1,1]) {
     for (const [z,length] of [[-138.5,45],[-174.5,11]]) {
-      box(side*8.9,.04,z,5.8,.08,length,sidewalk);
-      box(side*6,.08,z,.19,.13,length,'#b0a89b');
+      const trim=side<0 && z===-138.5 ? .2 : 0;
+      box(side*8.9,.04,z-trim/2,5.8,.08,length-trim,sidewalk);
+      box(side*6,.08,z-trim/2,.19,.13,length-trim,'#b0a89b');
     }
     for (const z of [-159.8,-170.2]) {
       box(side*22,.04,z,20,.08,2.4,sidewalk);

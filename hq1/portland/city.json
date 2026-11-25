@@ -50,6 +50,20 @@
       "url": "/hq1/?stop=killingsworth",
       "representation": "approximate",
       "source": "https://www.portland.gov/transportation/bicycle-committee/documents/regional-flexible-funds-allocation-bac-november/download"
+    },
+    {
+      "id": "church",
+      "name": "NE MLK Jr Blvd at NE Church St",
+      "url": "/hq1/?stop=church",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/bicycle-committee/documents/regional-flexible-funds-allocation-bac-november/download"
+    },
+    {
+      "id": "jessup",
+      "name": "NE MLK Jr Blvd at NE Jessup St",
+      "url": "/hq1/?stop=jessup",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/bicycle-committee/documents/regional-flexible-funds-allocation-bac-november/download"
     }
   ],
   "propertyConnections": [

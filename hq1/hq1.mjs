@@ -1,3 +1,4 @@
+import {buildChurch,churchFrontages} from './portland/church.mjs';
 import {buildKillingsworth} from './portland/killingsworth.mjs';
 import {buildShowrooms,stops} from './portland/showrooms.mjs';
 import {createActivities} from './portland/activities.mjs';
@@ -34,6 +35,7 @@ function renderDistrict() {
   let yaw = start.heading, pitch = 0;
   const view = search.get('view');
   const previewCameras = {
+    church: {position:[-4,2.25,-79],target:[18,2.2,-89]},
     killingsworth: {position:[-2,2.6,-49],target:[4,2.5,-70]},
     jarrett: { position:[-6.3,2.45,-162], target:[6,2.5,-132] },
     neighborhood: { position:[-8.5,3.2,-23], target:[-15,2.73,-32] },
@@ -111,12 +113,13 @@ function renderDistrict() {
     document.querySelector('header a').textContent = 'Return to HQ1';
   } else {
     buildStreet(builder);
+    buildChurch(builder);
     buildJarrettBlock(builder);
     const albertaSignal=buildShowrooms(builder,blockers);
     const killingsworthSignal=buildKillingsworth(builder);
     signals=seconds=>{albertaSignal(seconds);killingsworthSignal(seconds);};
     if (!preview) activities=createActivities(scene,camera,clear);
-    for (const building of [...neighboringBuildings, ...jarrettBlock, ...neighborhood.venues]) {
+    for (const building of [...neighboringBuildings, ...jarrettBlock, ...churchFrontages, ...neighborhood.venues]) {
       if (building.appearance.style === 'nlc') {
         doorTargets.set(building.id, buildNorthLeftChefSite(builder));
       } else {
