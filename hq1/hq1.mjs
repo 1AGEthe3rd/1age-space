@@ -1,3 +1,4 @@
+import { buildJarrettBlock, jarrettBlock } from './portland/jarrett.mjs';
 import * as THREE from '../space/shared/three.module.js';
 import { subscribeInput } from '../space/shared/gamepad.mjs';
 import { PadReader } from '../space/shared/gamepad-model.mjs';
@@ -30,6 +31,7 @@ function renderDistrict() {
   let yaw = start.heading, pitch = 0;
   const view = search.get('view');
   const previewCameras = {
+    jarrett: { position:[-6.3,2.45,-162], target:[6,2.5,-132] },
     neighborhood: { position:[-8.5,3.2,-23], target:[-15,2.73,-32] },
     street: { position:[-4.6,2.14,6.35], target:[-1.4,2.05,-30] },
     nnb: { position:[-.8,2.65,-30.3], target:[-12.1,2.48,-31] },
@@ -105,7 +107,8 @@ function renderDistrict() {
     document.querySelector('header a').textContent = 'Return to HQ1';
   } else {
     buildStreet(builder);
-    for (const building of [...neighboringBuildings, ...neighborhood.venues]) {
+    buildJarrettBlock(builder);
+    for (const building of [...neighboringBuildings, ...jarrettBlock, ...neighborhood.venues]) {
       if (building.appearance.style === 'nlc') {
         doorTargets.set(building.id, buildNorthLeftChefSite(builder));
       } else {
