@@ -1,7 +1,7 @@
 // Stop order from WMATA's public rail system map. Scene distances and times are compressed.
 import * as T from '../space/shared/three.module.js';
 
-export const stops=['Navy Yard–Ballpark','Anacostia','Congress Heights','Southern Avenue'];
+export const stops=['Navy Yard–Ballpark','Anacostia','Congress Heights','Southern Avenue','Naylor Road','Suitland','Branch Avenue'];
 const spacing=100;
 const boxGeometry=new T.BoxGeometry();
 
@@ -37,8 +37,9 @@ export function createMetro() {
       box(tunnel,-3.6,3.86,z+k,3,.04,.16,'#fff4c5');
     }
   }
-  for(const x of [-.75,.75]) box(tunnel,x,-.65,150,.1,.13,360,'#9da7aa');
-  for(let z=-24;z<328;z+=5){
+  const span=(stops.length-1)*spacing;
+  for(const x of [-.75,.75]) box(tunnel,x,-.65,span/2,.1,.13,span+60,'#9da7aa');
+  for(let z=-24;z<span+28;z+=5){
     box(tunnel,2.7,1.4,z,.1,.15,.8,'#ffda87');
     box(tunnel,0,-.81,z,2.7,.18,.4,'#615954');
   }
@@ -71,7 +72,9 @@ export function createMetro() {
   return {scene,stations:[],get name(){return stops[stop]},get aboard(){return aboard},
     get riding(){return progress<1},get atStreet(){return stop===1&&!aboard},
     get next(){return stops[target]},
-    reset(){stop=1;target=1;progress=1;aboard=false;position(stop,1)},
+    reset(name='Anacostia'){stop=stops.indexOf(name);
+      if(stop<0) stop=1;
+      target=stop;progress=1;aboard=false;position(stop,1)},
     adjacent(dir){return stops[stop+dir]},
     toggle(){if(progress===1) aboard=!aboard},
     depart(dir){if(!aboard||progress<1||!stops[stop+dir]) return;target=stop+dir;progress=0},

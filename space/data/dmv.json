@@ -79,7 +79,8 @@
     "anacostia-organics": "https://abca.dc.gov/service/find-medical-cannabis-retailer",
     "second-chance-market": "https://www.openstreetmap.org/way/151561217",
     "nams-market": "https://www.openstreetmap.org/way/295276792",
-    "therapy-mlk": "https://abca.dc.gov/service/find-medical-cannabis-retailer"
+    "therapy-mlk": "https://abca.dc.gov/service/find-medical-cannabis-retailer",
+    "green-line": "https://www.wmata.com/content/dam/wmata-com/maps/system-map-rail.pdf"
   },
   "destinations": [
     {
@@ -131,7 +132,8 @@
         -560,
         574
       ],
-      "protectionZoneId": "dc-southeast"
+      "protectionZoneId": "dc-southeast",
+      "railStop": "Anacostia"
     },
     {
       "id": "11th-street-bridge",
@@ -262,7 +264,9 @@
       "name": "Southern Avenue Metro",
       "district": "Prince George’s County",
       "cityId": "us-md-prince-georges",
-      "kind": "station"
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Southern Avenue"
     },
     {
       "id": "national-harbor",
@@ -376,6 +380,51 @@
       "source": "therapy-mlk",
       "protectionZoneId": "dc-southeast",
       "statusNote": "Listed in the DC ABCA medical cannabis retailer directory. Current opening hours unverified."
+    },
+    {
+      "id": "navy-yard-ballpark",
+      "name": "Navy Yard–Ballpark Metro",
+      "district": "Capitol Riverfront",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Navy Yard–Ballpark"
+    },
+    {
+      "id": "congress-heights-metro",
+      "name": "Congress Heights Metro",
+      "district": "Southeast Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Congress Heights"
+    },
+    {
+      "id": "naylor-road",
+      "name": "Naylor Road Metro",
+      "district": "Prince George’s County",
+      "cityId": "us-md-prince-georges",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Naylor Road"
+    },
+    {
+      "id": "suitland-metro",
+      "name": "Suitland Metro",
+      "district": "Prince George’s County",
+      "cityId": "us-md-prince-georges",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Suitland"
+    },
+    {
+      "id": "branch-avenue",
+      "name": "Branch Avenue Metro",
+      "district": "Prince George’s County",
+      "cityId": "us-md-prince-georges",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Branch Avenue"
     }
   ],
   "connections": [
