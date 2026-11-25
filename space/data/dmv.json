@@ -74,7 +74,8 @@
     "bridge": "https://www.nps.gov/places/11th-street-bridge.htm",
     "riverwalk": "https://home.nps.gov/anac/planyourvisit/anacostia-riverwalk-trail.htm",
     "gateway": "https://www.mlkgatewaydc.com/",
-    "treasury-exterior": "https://home.treasury.gov/north-wing-architecture"
+    "treasury-exterior": "https://home.treasury.gov/north-wing-architecture",
+    "anacostia-house": "https://www.mlkgatewaydc.com/anacostiahouse"
   },
   "destinations": [
     {
@@ -286,6 +287,23 @@
       "district": "Alexandria",
       "cityId": "us-va-alexandria",
       "kind": "neighborhood"
+    },
+    {
+      "id": "anacostia-house",
+      "name": "Anacostia House · 1916 13th Street SE",
+      "district": "Historic Anacostia",
+      "cityId": "us-dc-washington",
+      "kind": "building",
+      "source": "anacostia-house",
+      "arrival": [
+        137,
+        69
+      ],
+      "lookAt": [
+        136.8,
+        70.14
+      ],
+      "protectionZoneId": "hq2"
     }
   ],
   "connections": [

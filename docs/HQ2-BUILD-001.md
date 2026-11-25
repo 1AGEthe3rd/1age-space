@@ -64,3 +64,11 @@ Verification passed 67 Python and 11 Node tests. Desktop Chromium and an emulate
 - [Marion Barry Avenue street signs](images/hq2/hq2-002-marion-barry-street-signs.jpg)
 - [MLK Gateway crosswalk](images/hq2/hq2-002-mlk-crosswalk.jpg)
 - [Howard Road mobile view](images/hq2/hq2-002-howard-road-mobile.jpg)
+
+## Build 003 · Gateway interiors
+
+In Places, select MLK Gateway Phase II or Grounded and choose an interior. Return to street restores the previous camera position and heading. The showroom contains six 1AGE application display stations. The market contains six creator stalls. The plant shop study combines plant displays, a café counter and a small wellness area. These are original virtual design studies with collision-aware walking. The application displays are exhibits.
+
+The [leasing bulletin](https://www.mlkgatewaydc.com/leasing) lists 1,519 sq ft at 1911 MLK and 2,205 sq ft at 1111 Marion Barry. Rectangular proportions, layouts and fixtures are design assumptions. Current vacancy, physical occupancy rights and commercial partnerships remain unverified. The [Grounded operator FAQ](https://feelgrounded.com/pages/faq) informed the program at 1913 MLK. Its interior dimensions are estimated. The [Anacostia House project page](https://www.mlkgatewaydc.com/anacostiahouse) identifies the building at 1916 13th Street SE. Its new exterior destination uses the existing mapped footprint and an approximate façade.
+
+Screenshots from the review build: [application showroom](images/hq2/hq2-003-showroom.jpg), [creator market](images/hq2/hq2-003-market.jpg), [plant shop and café](images/hq2/hq2-003-plant-cafe.jpg).

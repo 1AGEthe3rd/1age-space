@@ -164,5 +164,24 @@
         "destinationId": "anacostia-metro"
       }
     ]
+  },
+  "d4b738cd-64b3-46e6-99cf-e671e469b088": {
+    "stories": 2,
+    "wall": "#a5644f",
+    "trim": "#e2d6bc",
+    "signs": [
+      {
+        "text": "ANACOSTIA HOUSE",
+        "arrival": [
+          137,
+          69
+        ],
+        "face": [
+          136.8,
+          70.14
+        ],
+        "destinationId": "anacostia-house"
+      }
+    ]
   }
 }

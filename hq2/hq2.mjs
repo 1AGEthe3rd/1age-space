@@ -1,3 +1,4 @@
+import {suites,createInterior} from './interiors.mjs';
 import * as THREE from '../space/shared/three.module.js';
 import {subscribeInput} from '../space/shared/gamepad.mjs';
 import {emptyInput} from '../space/shared/gamepad-model.mjs';
@@ -105,6 +106,7 @@ function collisionTiles(x,z) {
   return these;
 }
 function surface(x,z) {
+  if(indoor) return indoor.clear(x,z)?0:null;
   const [minX,minZ,maxX,maxZ]=geography.bounds;
   if(x<minX+.5||x>maxX-.5||z<minZ+.5||z>maxZ-.5) return null;
   const nearbyTiles=collisionTiles(x,z);
@@ -167,6 +169,33 @@ function populateList() {
   }
   if(!list.childElementCount) label('p','No matching places.',list);
 }
+let indoor=null, streetPose;
+const rooms=new Map();
+function enterSuite(suite) {
+  details.close();
+  streetPose={position:camera.position.clone(),yaw,pitch,moving};
+  if(!rooms.has(suite)) rooms.set(suite,createInterior(suite));
+  indoor=rooms.get(suite);
+  camera.position.set(0,1.68,indoor.spawn);
+  yaw=0; pitch=0; moving=true; current=null; nearby.hidden=true;
+  $('#current-street').hidden=false;
+  $('#current-street').textContent=suite.address+' · Virtual concept';
+  $('h1').textContent=suite.title;
+  $('#map-button').hidden=true;
+  $('#exit-suite').hidden=false;
+  renderer.domElement.focus();
+}
+function exitSuite() {
+  if(!indoor) return;
+  indoor=null;
+  camera.position.copy(streetPose.position);
+  ({yaw,pitch,moving}=streetPose);
+  $('#map-button').hidden=false;
+  $('#exit-suite').hidden=true;
+  $('h1').textContent='Historic Anacostia';
+  lastNearby=0;
+  renderer.domElement.focus();
+}
 function showPlace(row) {
   if(!row) return;
   $('#place-title').textContent=row.name;
@@ -185,6 +214,12 @@ function showPlace(row) {
     for(const id of property.verification.sourceIds) {
       const source=sources.get(id);
       if(source?.url) link(source.title,source.url,label('li','',evidence));
+    }
+    for(const suite of suites.filter(item=>item.parent===property.id)) {
+      label('p',suite.address+' · '+(suite.area?suite.area.toLocaleString('en-US')+' sq ft advertised. Original virtual layout.':'Original concept based on the operator’s published services. Dimensions estimated.'),body);
+      const enter=label('button','Enter '+suite.title,body);
+      enter.className='detail-button';
+      enter.onclick=()=>enterSuite(suite);
     }
     link('Shared catalog record','../catalog.html?property='+encodeURIComponent(property.id),body);
   } else {
@@ -315,8 +350,8 @@ function frame(now) {
     const floor=surface(camera.position.x,camera.position.z)||0;
     camera.position.y=THREE.MathUtils.lerp(camera.position.y,1.68+floor,Math.min(1,12*dt));
     camera.rotation.set(pitch,yaw,0,'YXZ');
-    refreshTiles(camera.position.x,camera.position.z);
-    if(now-lastNearby>150) {
+    if(!indoor) refreshTiles(camera.position.x,camera.position.z);
+    if(!indoor&&now-lastNearby>150) {
       current=markers.map(marker=>({id:marker.userData.id,distance:Math.hypot(marker.position.x-camera.position.x,marker.position.z-camera.position.z)}))
         .filter(marker=>marker.distance<21).sort((a,b)=>a.distance-b.distance)[0]?.id;
       nearby.hidden=!current;
@@ -333,7 +368,7 @@ function frame(now) {
   for(const marker of markers) marker.visible=marker.position.distanceTo(camera.position)<115;
   skyMesh.position.copy(camera.position);
   updateWater(now/1000);
-  renderer.render(scene,camera);
+  renderer.render(indoor?.scene||scene,camera);
 }
 function bind(canvas) {
   const movementKeys=new Set(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowLeft','ArrowDown','ArrowRight']);
@@ -361,7 +396,7 @@ function bind(canvas) {
   });
   for(const name of ['pointerup','pointercancel','lostpointercapture']) canvas.addEventListener(name,event=>{
     if(pointer?.id!==event.pointerId) return;
-    if(name==='pointerup'&&pointer.distance<7) {
+    if(!indoor&&name==='pointerup'&&pointer.distance<7) {
       const bounds=canvas.getBoundingClientRect();
       ray.setFromCamera(new THREE.Vector2(2*(event.clientX-bounds.left)/bounds.width-1,1-2*(event.clientY-bounds.top)/bounds.height),camera);
       const hit=ray.intersectObjects(markers).find(item=>item.object.visible&&item.distance<24);
@@ -422,7 +457,9 @@ async function start() {
   Object.values(designs).forEach(design=>design.signs.forEach(makeStorefrontSign));
   ray=new THREE.Raycaster();
   bind(renderer.domElement);
+  $('#exit-suite').onclick=exitSuite;
   const enter=()=>{
+    exitSuite();
     const target=record(new URL(location.href).searchParams.get('destination'));
     arrive(target?.arrival ? target : record('hq2-gateway'),{historyMode:false,focus:false});
     if(target&&!target.arrival) showPlace(target);
