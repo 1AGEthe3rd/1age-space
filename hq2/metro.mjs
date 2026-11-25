@@ -70,7 +70,7 @@ export function createMetro() {
   }
   position(stop,1);
   return {scene,stations:[],get name(){return stops[stop]},get aboard(){return aboard},
-    get riding(){return progress<1},get atStreet(){return stop===1&&!aboard},
+    get riding(){return progress<1},get atStreet(){return (stop===0||stop===1)&&!aboard},
     get next(){return stops[target]},
     reset(name='Anacostia'){stop=stops.indexOf(name);
       if(stop<0) stop=1;

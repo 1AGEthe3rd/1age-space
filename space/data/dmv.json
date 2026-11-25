@@ -80,7 +80,8 @@
     "second-chance-market": "https://www.openstreetmap.org/way/151561217",
     "nams-market": "https://www.openstreetmap.org/way/295276792",
     "therapy-mlk": "https://abca.dc.gov/service/find-medical-cannabis-retailer",
-    "green-line": "https://www.wmata.com/content/dam/wmata-com/maps/system-map-rail.pdf"
+    "green-line": "https://www.wmata.com/content/dam/wmata-com/maps/system-map-rail.pdf",
+    "navy-yard-west": "https://www.wmata.com/initiatives/plans/upload/Navy-Yard-Final_Report_Memo_2016-04-07.pdf"
   },
   "destinations": [
     {
@@ -425,6 +426,24 @@
       "kind": "station",
       "source": "green-line",
       "railStop": "Branch Avenue"
+    },
+    {
+      "id": "navy-yard-half-street",
+      "name": "Navy Yard–Ballpark · Half Street entrance",
+      "address": "55 M Street SE",
+      "district": "Capitol Riverfront",
+      "cityId": "us-dc-washington",
+      "kind": "station entrance",
+      "source": "navy-yard-west",
+      "arrival": [
+        -1623.54,
+        -970.41
+      ],
+      "lookAt": [
+        -1624.34,
+        -982.41
+      ],
+      "protectionZoneId": "dc-southeast"
     }
   ],
   "connections": [

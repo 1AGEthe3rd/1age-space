@@ -110,8 +110,9 @@ function collisionTiles(x,z) {
 }
 function surface(x,z) {
   if(indoor) return indoor.clear(x,z)?0:null;
-  const [minX,minZ,maxX,maxZ]=geography.bounds;
-  if(x<minX+.5||x>maxX-.5||z<minZ+.5||z>maxZ-.5) return null;
+  const withinDistrict=geography.districtBounds.some(([left,top,right,bottom])=>
+    x>=left+.5&&x<=right-.5&&z>=top+.5&&z<=bottom-.5);
+  if(!withinDistrict) return null;
   const nearbyTiles=collisionTiles(x,z);
   if(!nearbyTiles) return null;
   let blocked=false, river=false, deck=0, onFootpath=false;
@@ -222,7 +223,7 @@ function leaveMetro() {
   $('#map-button').hidden=false;
   $('#exit-suite').hidden=true;
   $('h1').textContent='Historic Anacostia';
-  arrive(record('anacostia-metro'));
+  arrive(record(metro.name==='Navy Yard–Ballpark'?'navy-yard-half-street':'anacostia-metro'));
 }
 let railDisplay='';
 function updateMetro() {
@@ -339,6 +340,7 @@ function showPlace(row) {
   } else {
     label('p',row.address ? row.kind+' · '+row.address : row.district + (row.railStop ? ' · Green Line platform' : row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
     if(row.railStop) label('button','Enter Green Line platform',body).onclick=()=>enterMetro(row);
+    if(row.id==='navy-yard-half-street') label('button','Enter Green Line platform',body).onclick=()=>enterMetro(record('navy-yard-ballpark'));
     const suite=suites.find(item=>item.parent===row.id);
     if(suite) {
       if(suite.type==='grocery') label('p','Original virtual interior. Layout, dimensions and stock are illustrative.',body);
@@ -385,6 +387,7 @@ async function arrive(row,{historyMode=true,focus=true}={}) {
     position=candidates.map(([dx,dz])=>[x+dx,z+dz]).find(([a,b])=>surface(a,b)!==null);
     if(!position) {status.textContent='This arrival is temporarily unavailable.';return;}
   }
+  $('h1').textContent=position[0]<geography.bounds[0]?'Navy Yard':'Historic Anacostia';
   camera.position.set(position[0],1.68+(surface(...position)||0),position[1]);
   const [tx,tz]=row.lookAt;
   yaw=Math.atan2(position[0]-tx,position[1]-tz);
@@ -625,6 +628,12 @@ async function start() {
   const station=record('anacostia-metro');
   const [sx,sz]=station.arrival;
   makeStorefrontSign({text:'ANACOSTIA · GREEN LINE',destinationId:station.id,arrival:station.arrival,face:[sx-3,sz+2]});
+  const west=record('navy-yard-half-street');
+  const [wx,wz]=west.arrival;
+  const pylon=new THREE.Mesh(new THREE.BoxGeometry(.62,3.7,.64),new THREE.MeshLambertMaterial({color:'#413c35'}));
+  pylon.position.set(wx,1.85,wz-3.5);
+  scene.add(pylon);
+  makeStorefrontSign({text:'NAVY YARD–BALLPARK',destinationId:west.id,arrival:west.arrival,face:[wx,wz-3.5]});
   signposts=intersectionSigns(intersections);
   scene.add(signposts);
   Object.values(designs).forEach(design=>design.signs.forEach(makeStorefrontSign));
