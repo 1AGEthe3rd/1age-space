@@ -22,5 +22,5 @@ class FeedTests(unittest.TestCase):
   with self.assertRaises(CatalogError):convert(self.rows,'test')
  def test_office_index_filter(self):
   with tempfile.TemporaryDirectory() as t:
-   path=Path(t)/'db';build(self.data,path);result=query(path,space_use='office');self.assertEqual(result['total'],10);self.assertTrue(all('office' in p['spaceUses'] for p in result['properties']));self.assertEqual(query(path,space_use='warehouse')['total'],0)
+   path=Path(t)/'db';build(self.data,path);result=query(path,space_use='office');self.assertEqual(result['total'],sum('office' in p.get('spaceUses',[]) for p in self.data['properties']));self.assertTrue(all('office' in p['spaceUses'] for p in result['properties']));self.assertEqual(query(path,space_use='warehouse')['total'],0)
 if __name__=='__main__':unittest.main()

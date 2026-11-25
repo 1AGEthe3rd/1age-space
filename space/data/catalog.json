@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-21",
+  "updatedAt": "2026-11-25",
   "coverage": {
     "scope": "starter_catalog",
     "complete": false,
@@ -661,6 +661,132 @@
       ],
       "rights": "City of New York / NYC Department of City Planning, Facilities Database 26v1. Museum subset modified by filtering and grouping addresses. No City endorsement; source may contain administrative rather than facility-site addresses. https://data.cityofnewyork.us/stories/s/Terms-of-Use/k9k7-3cje",
       "termsUrl": "https://data.cityofnewyork.us/stories/s/Terms-of-Use/k9k7-3cje"
+    },
+    {
+      "id": "src-hq2-gateway",
+      "title": "MLK Gateway operator",
+      "url": "https://www.mlkgatewaydc.com/",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "categories",
+        "occupancy"
+      ],
+      "rights": "Factual reference. No endorsement or asset reuse.",
+      "kind": "operator_official"
+    },
+    {
+      "id": "src-hq2-dmped",
+      "title": "DC DMPED · MLK Gateway",
+      "url": "https://dmped.dc.gov/release/plans-anacostia%E2%80%99s-mlk-gateway-revealed",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories"
+      ],
+      "rights": "Factual reference. No endorsement or asset reuse.",
+      "kind": "municipal_open_data"
+    },
+    {
+      "id": "src-hq2-leasing",
+      "title": "MLK Gateway · operator leasing bulletin",
+      "url": "https://www.mlkgatewaydc.com/leasing",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "address",
+        "leasingNotice"
+      ],
+      "rights": "Factual reference. No endorsement or asset reuse.",
+      "kind": "operator_official"
+    },
+    {
+      "id": "src-hq2-grounded",
+      "title": "Grounded · operator FAQ",
+      "url": "https://feelgrounded.com/pages/faq",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "occupancy"
+      ],
+      "rights": "Factual reference. No endorsement or asset reuse.",
+      "kind": "operator_official"
+    },
+    {
+      "id": "src-hq2-busboys",
+      "title": "Busboys and Poets · locations",
+      "url": "https://www.busboysandpoets.com/contact-us/",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "occupancy"
+      ],
+      "rights": "Factual reference. No endorsement or asset reuse.",
+      "kind": "operator_official"
+    },
+    {
+      "id": "src-hq2-dcity",
+      "title": "DCity Smokehouse · locations",
+      "url": "https://www.dcitysmokehouse.com/contact",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "name",
+        "address",
+        "categories",
+        "occupancy"
+      ],
+      "rights": "Factual reference. No endorsement or asset reuse.",
+      "kind": "operator_official"
+    },
+    {
+      "id": "src-hq2-dc-footprints",
+      "title": "DC OCTO · Building Footprints",
+      "url": "https://www.arcgis.com/home/item.html?id=a657b34942564aa8b06f293cb0934cbd",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "coordinates",
+        "footprint"
+      ],
+      "rights": "DC OCTO, CC BY 4.0. Footprints projected and simplified for the scene. Pin is a scene approximation.",
+      "kind": "municipal_open_data"
+    },
+    {
+      "id": "src-hq2-dc-vacancy",
+      "title": "DC OCTO · Vacant and Blighted Building Addresses",
+      "url": "https://www.arcgis.com/home/item.html?id=da48e51ca21e450f9bcd1a39f098f2ca",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "address",
+        "categories",
+        "coordinates",
+        "designation"
+      ],
+      "rights": "DC OCTO, CC BY 4.0. Address designation is a research lead without a case-level status or leasing authorization.",
+      "kind": "municipal_open_data"
+    },
+    {
+      "id": "src-hq2-gateway-tenants",
+      "title": "MLK Gateway tenant directory",
+      "url": "https://www.mlkgatewaydc.com/tenants",
+      "checkedAt": "2026-11-25",
+      "publishedAt": null,
+      "scope": [
+        "businesses"
+      ],
+      "rights": "Factual reference. No endorsement or asset reuse.",
+      "kind": "operator_official"
     }
   ],
   "properties": [
@@ -1213,18 +1339,25 @@
         "countryCode": "US",
         "postalCode": "20020"
       },
-      "coordinates": null,
+      "coordinates": {
+        "latitude": 38.8669521,
+        "longitude": -76.987598,
+        "sourceIds": [
+          "src-hq2-dc-footprints"
+        ]
+      },
       "categories": [
         "commercial",
         "art"
       ],
-      "district": "Historic Anacostia · HQ2 research",
+      "district": "Historic Anacostia · HQ2",
       "description": "Arts and small-business venue documented by the center. Its contact page reports a renovation closure; a public closure is not evidence of physical vacancy.",
       "verification": {
         "status": "source_checked",
         "sourceIds": [
           "src-aac-contact",
-          "src-aac-about"
+          "src-aac-about",
+          "src-hq2-dc-footprints"
         ],
         "checkedAt": "2026-11-20",
         "fields": [
@@ -1259,16 +1392,34 @@
         "status": "not_offered",
         "spaceIds": []
       },
-      "buildingIds": [],
+      "buildingIds": [
+        "building-dc-anacostia-arts-1231"
+      ],
       "businessIds": [],
       "worldDestination": null,
-      "updatedAt": "2026-11-20",
+      "updatedAt": "2026-11-25",
       "operatingNotice": {
         "text": "Operator contact page reports temporary closure for renovation. Confirm with the operator before visiting.",
         "sourceIds": [
           "src-aac-contact"
         ],
         "checkedAt": "2026-11-20"
+      },
+      "spaceDestination": {
+        "path": "/hq2/?destination=place-us-washington-anacostia-arts-1231",
+        "arrival": [
+          89,
+          20
+        ],
+        "lookAt": [
+          89,
+          30
+        ]
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
       }
     },
     {
@@ -1908,7 +2059,7 @@
       "categories": [
         "art"
       ],
-      "district": "Historic Anacostia · HQ2 research",
+      "district": "Historic Anacostia · HQ2",
       "description": "Theater location documented in the Playhouse’s 2024 brochure. Current operations and facility availability have not been independently confirmed.",
       "verification": {
         "status": "source_checked",
@@ -1947,7 +2098,12 @@
       "buildingIds": [],
       "businessIds": [],
       "worldDestination": null,
-      "updatedAt": "2026-11-20"
+      "updatedAt": "2026-11-25",
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      }
     },
     {
       "id": "place-us-memphis-southmain-138",
@@ -31517,6 +31673,703 @@
         ],
         "checkedAt": "2026-11-21"
       }
+    },
+    {
+      "id": "place-us-washington-mlk-gateway-phase-1",
+      "name": "MLK Gateway · Phase I",
+      "address": {
+        "line1": "1201–1215 Marion Barry Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": {
+        "latitude": 38.8671696,
+        "longitude": -76.9884361,
+        "sourceIds": [
+          "src-hq2-dc-footprints"
+        ]
+      },
+      "categories": [
+        "commercial"
+      ],
+      "district": "Historic Anacostia · HQ2",
+      "description": "Historic retail frontage with offices above. The operator identifies Enlightened as anchor and lists retail tenants.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hq2-gateway",
+          "src-hq2-dmped",
+          "src-hq2-gateway-tenants",
+          "src-hq2-dc-footprints"
+        ],
+        "checkedAt": "2026-11-25",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-hq2-gateway",
+            "src-hq2-dmped"
+          ],
+          "address": [
+            "src-hq2-dmped"
+          ],
+          "categories": [
+            "src-hq2-gateway",
+            "src-hq2-dmped"
+          ]
+        }
+      },
+      "physical": {
+        "status": "occupied",
+        "listingId": null,
+        "sourceIds": [
+          "src-hq2-gateway"
+        ],
+        "verifiedAt": "2026-11-25",
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [
+        "building-dc-mlk-gateway-phase-1"
+      ],
+      "businessIds": [
+        "business-dc-enlightened",
+        "business-dc-kitchen-savages",
+        "business-dc-capital-one-caf"
+      ],
+      "worldDestination": null,
+      "updatedAt": "2026-11-25",
+      "spaceDestination": {
+        "path": "/hq2/?destination=place-us-washington-mlk-gateway-phase-1",
+        "arrival": [
+          34.04,
+          10.44
+        ],
+        "lookAt": [
+          34.02,
+          10.5
+        ]
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      },
+      "spaceUses": [
+        "office",
+        "retail"
+      ]
+    },
+    {
+      "id": "place-us-washington-mlk-gateway-phase-2",
+      "name": "MLK Gateway · Phase II",
+      "address": {
+        "line1": "1909 Martin Luther King Jr. Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": {
+        "latitude": 38.867322,
+        "longitude": -76.9890352,
+        "sourceIds": [
+          "src-hq2-dc-footprints"
+        ]
+      },
+      "categories": [
+        "commercial"
+      ],
+      "district": "Historic Anacostia · HQ2",
+      "description": "Mixed-use building anchored by the D.C. Department of Housing and Community Development. Individual units can have different occupancy.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hq2-gateway",
+          "src-hq2-dmped",
+          "src-hq2-leasing",
+          "src-hq2-gateway-tenants",
+          "src-hq2-dc-footprints"
+        ],
+        "checkedAt": "2026-11-25",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-hq2-gateway",
+            "src-hq2-dmped"
+          ],
+          "address": [
+            "src-hq2-dmped",
+            "src-hq2-leasing"
+          ],
+          "categories": [
+            "src-hq2-gateway",
+            "src-hq2-dmped"
+          ]
+        }
+      },
+      "physical": {
+        "status": "occupied",
+        "listingId": null,
+        "sourceIds": [
+          "src-hq2-gateway"
+        ],
+        "verifiedAt": "2026-11-25",
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [
+        "building-dc-mlk-gateway-phase-2"
+      ],
+      "businessIds": [
+        "business-dc-dc-department-of-housing-and-community-development"
+      ],
+      "worldDestination": null,
+      "updatedAt": "2026-11-25",
+      "leasingNotice": {
+        "text": "The operator advertises some retail and office suites. Confirm current status directly with the operator. No independent physical vacancy confirmation.",
+        "sourceIds": [
+          "src-hq2-leasing"
+        ],
+        "checkedAt": "2026-11-25"
+      },
+      "spaceDestination": {
+        "path": "/hq2/?destination=place-us-washington-mlk-gateway-phase-2",
+        "arrival": [
+          -12.69,
+          2.77
+        ],
+        "lookAt": [
+          -12.73,
+          2.76
+        ]
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      },
+      "spaceUses": [
+        "office",
+        "retail",
+        "mixed_use"
+      ]
+    },
+    {
+      "id": "place-us-washington-grounded-1913",
+      "name": "Grounded",
+      "address": {
+        "line1": "1913 Martin Luther King Jr. Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": {
+        "latitude": 38.8671374,
+        "longitude": -76.988908,
+        "sourceIds": [
+          "src-hq2-dc-footprints"
+        ]
+      },
+      "categories": [
+        "commercial"
+      ],
+      "district": "Historic Anacostia · HQ2",
+      "description": "The operator lists this location as its plant shop, café and wellness space.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hq2-grounded",
+          "src-hq2-dc-footprints"
+        ],
+        "checkedAt": "2026-11-25",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-hq2-grounded"
+          ],
+          "address": [
+            "src-hq2-grounded"
+          ],
+          "categories": [
+            "src-hq2-grounded"
+          ]
+        }
+      },
+      "physical": {
+        "status": "occupied",
+        "listingId": null,
+        "sourceIds": [
+          "src-hq2-grounded"
+        ],
+        "verifiedAt": "2026-11-25",
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [
+        "building-dc-mlk-gateway-phase-2"
+      ],
+      "businessIds": [
+        "business-dc-grounded"
+      ],
+      "worldDestination": null,
+      "updatedAt": "2026-11-25",
+      "spaceDestination": {
+        "path": "/hq2/?destination=place-us-washington-grounded-1913",
+        "arrival": [
+          -19.92,
+          24.43
+        ],
+        "lookAt": [
+          -19.93,
+          24.42
+        ]
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      },
+      "spaceUses": [
+        "retail",
+        "restaurant"
+      ]
+    },
+    {
+      "id": "place-us-washington-busboys-2004",
+      "name": "Busboys and Poets · Anacostia",
+      "address": {
+        "line1": "2004 Martin Luther King Jr. Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": {
+        "latitude": 38.8662237,
+        "longitude": -76.9888177,
+        "sourceIds": [
+          "src-hq2-dc-footprints"
+        ]
+      },
+      "categories": [
+        "commercial"
+      ],
+      "district": "Historic Anacostia · HQ2",
+      "description": "Restaurant and bookstore on Martin Luther King Jr. Avenue SE.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hq2-busboys",
+          "src-hq2-dc-footprints"
+        ],
+        "checkedAt": "2026-11-25",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-hq2-busboys"
+          ],
+          "address": [
+            "src-hq2-busboys"
+          ],
+          "categories": [
+            "src-hq2-busboys"
+          ]
+        }
+      },
+      "physical": {
+        "status": "occupied",
+        "listingId": null,
+        "sourceIds": [
+          "src-hq2-busboys"
+        ],
+        "verifiedAt": "2026-11-25",
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [
+        "building-dc-busboys-2004"
+      ],
+      "businessIds": [
+        "business-dc-busboys-and-poets"
+      ],
+      "worldDestination": null,
+      "updatedAt": "2026-11-25",
+      "spaceDestination": {
+        "path": "/hq2/?destination=place-us-washington-busboys-2004",
+        "arrival": [
+          -32.33,
+          111.92
+        ],
+        "lookAt": [
+          -30.78,
+          112.5
+        ]
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      },
+      "spaceUses": [
+        "restaurant",
+        "retail"
+      ]
+    },
+    {
+      "id": "place-us-washington-dcity-1301",
+      "name": "DCity Smokehouse · Anacostia",
+      "address": {
+        "line1": "1301 Marion Barry Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": {
+        "latitude": 38.8668183,
+        "longitude": -76.9868417,
+        "sourceIds": [
+          "src-hq2-dc-footprints"
+        ]
+      },
+      "categories": [
+        "commercial"
+      ],
+      "district": "Historic Anacostia · HQ2",
+      "description": "The operator lists its Anacostia restaurant at this address.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hq2-dcity",
+          "src-hq2-dc-footprints"
+        ],
+        "checkedAt": "2026-11-25",
+        "fields": [
+          "name",
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "name": [
+            "src-hq2-dcity"
+          ],
+          "address": [
+            "src-hq2-dcity"
+          ],
+          "categories": [
+            "src-hq2-dcity"
+          ]
+        }
+      },
+      "physical": {
+        "status": "occupied",
+        "listingId": null,
+        "sourceIds": [
+          "src-hq2-dcity"
+        ],
+        "verifiedAt": "2026-11-25",
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [
+        "building-dc-dcity-1301"
+      ],
+      "businessIds": [
+        "business-dc-dcity-smokehouse"
+      ],
+      "worldDestination": null,
+      "updatedAt": "2026-11-25",
+      "spaceDestination": {
+        "path": "/hq2/?destination=place-us-washington-dcity-1301",
+        "arrival": [
+          130,
+          41
+        ],
+        "lookAt": [
+          143.84,
+          46.53
+        ]
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      },
+      "spaceUses": [
+        "restaurant"
+      ]
+    },
+    {
+      "id": "place-us-washington-commercial-1319",
+      "name": "1319 Marion Barry Avenue",
+      "address": {
+        "line1": "1319 Marion Barry Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": {
+        "longitude": -76.9864926,
+        "latitude": 38.8667862,
+        "sourceIds": [
+          "src-hq2-dc-vacancy"
+        ]
+      },
+      "categories": [
+        "commercial"
+      ],
+      "district": "Historic Anacostia · HQ2",
+      "description": "Included in the District’s vacant and blighted address layer. Exact case classification, current physical occupancy and lease availability are unconfirmed.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hq2-dc-vacancy",
+          "src-hq2-dc-footprints"
+        ],
+        "checkedAt": "2026-11-25",
+        "fields": [
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "address": [
+            "src-hq2-dc-vacancy"
+          ],
+          "categories": [
+            "src-hq2-dc-vacancy"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [
+        "building-dc-commercial-1319"
+      ],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-25",
+      "vacancyEvidence": {
+        "status": "vacant_or_blighted_register",
+        "sourceIds": [
+          "src-hq2-dc-vacancy"
+        ],
+        "checkedAt": "2026-11-25"
+      },
+      "spaceDestination": {
+        "path": "/hq2/?destination=place-us-washington-commercial-1319",
+        "arrival": [
+          218.82,
+          51.25
+        ],
+        "lookAt": [
+          195.09,
+          48.93
+        ]
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      }
+    },
+    {
+      "id": "place-us-washington-commercial-1337",
+      "name": "1337 Marion Barry Avenue",
+      "address": {
+        "line1": "1337 Marion Barry Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": {
+        "longitude": -76.985818,
+        "latitude": 38.8666923,
+        "sourceIds": [
+          "src-hq2-dc-vacancy"
+        ]
+      },
+      "categories": [
+        "commercial"
+      ],
+      "district": "Historic Anacostia · HQ2",
+      "description": "Included in the District’s vacant and blighted address layer. Exact case classification, current physical occupancy and lease availability are unconfirmed.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hq2-dc-vacancy"
+        ],
+        "checkedAt": "2026-11-25",
+        "fields": [
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "address": [
+            "src-hq2-dc-vacancy"
+          ],
+          "categories": [
+            "src-hq2-dc-vacancy"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-25",
+      "vacancyEvidence": {
+        "status": "vacant_or_blighted_register",
+        "sourceIds": [
+          "src-hq2-dc-vacancy"
+        ],
+        "checkedAt": "2026-11-25"
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      },
+      "spaceUses": [
+        "mixed_use"
+      ]
+    },
+    {
+      "id": "place-us-washington-commercial-1924",
+      "name": "1924 Martin Luther King Jr. Avenue",
+      "address": {
+        "line1": "1924 Martin Luther King Jr. Avenue SE",
+        "city": "Washington, D.C.",
+        "region": "District of Columbia",
+        "countryCode": "US",
+        "postalCode": "20020"
+      },
+      "coordinates": {
+        "longitude": -76.9886648,
+        "latitude": 38.8668373,
+        "sourceIds": [
+          "src-hq2-dc-vacancy"
+        ]
+      },
+      "categories": [
+        "commercial"
+      ],
+      "district": "Historic Anacostia · HQ2",
+      "description": "Included in the District’s vacant and blighted address layer. Exact case classification, current physical occupancy and lease availability are unconfirmed.",
+      "verification": {
+        "status": "source_checked",
+        "sourceIds": [
+          "src-hq2-dc-vacancy",
+          "src-hq2-dc-footprints"
+        ],
+        "checkedAt": "2026-11-25",
+        "fields": [
+          "address",
+          "categories"
+        ],
+        "fieldSources": {
+          "address": [
+            "src-hq2-dc-vacancy"
+          ],
+          "categories": [
+            "src-hq2-dc-vacancy"
+          ]
+        }
+      },
+      "physical": {
+        "status": "unknown",
+        "listingId": null,
+        "sourceIds": [],
+        "verifiedAt": null,
+        "expiresAt": null
+      },
+      "virtual": {
+        "status": "not_offered",
+        "spaceIds": []
+      },
+      "buildingIds": [
+        "building-dc-commercial-1924"
+      ],
+      "businessIds": [],
+      "worldDestination": null,
+      "updatedAt": "2026-11-25",
+      "vacancyEvidence": {
+        "status": "vacant_or_blighted_register",
+        "sourceIds": [
+          "src-hq2-dc-vacancy"
+        ],
+        "checkedAt": "2026-11-25"
+      },
+      "spaceDestination": {
+        "path": "/hq2/?destination=place-us-washington-commercial-1924",
+        "arrival": [
+          -14.37,
+          58.96
+        ],
+        "lookAt": [
+          -11.66,
+          55.91
+        ]
+      },
+      "protection": {
+        "zoneId": "hq2",
+        "publicExploration": true,
+        "claimEligible": false
+      }
     }
   ],
   "virtualSpaces": [
@@ -31531,13 +32384,202 @@
       "worldDestination": null
     }
   ],
-  "buildings": [],
-  "units": [],
+  "buildings": [
+    {
+      "id": "building-dc-mlk-gateway-phase-1",
+      "propertyId": "place-us-washington-mlk-gateway-phase-1",
+      "footprintId": "b6d982df-204f-420a-8413-75668f069f59",
+      "estimatedStories": 4,
+      "sourceIds": [
+        "src-hq2-dc-footprints"
+      ],
+      "exterior": "hq2_approximation",
+      "interior": null
+    },
+    {
+      "id": "building-dc-mlk-gateway-phase-2",
+      "propertyId": "place-us-washington-mlk-gateway-phase-2",
+      "footprintId": "5b3f2506-c407-43bf-afcf-2d4d230c8cef",
+      "estimatedStories": 6,
+      "sourceIds": [
+        "src-hq2-dc-footprints"
+      ],
+      "exterior": "hq2_approximation",
+      "interior": null
+    },
+    {
+      "id": "building-dc-anacostia-arts-1231",
+      "propertyId": "place-us-washington-anacostia-arts-1231",
+      "footprintId": "dd686ef3-d4c6-4c40-a9e9-03baf84d0400",
+      "estimatedStories": 2,
+      "sourceIds": [
+        "src-hq2-dc-footprints"
+      ],
+      "exterior": "hq2_approximation",
+      "interior": null
+    },
+    {
+      "id": "building-dc-busboys-2004",
+      "propertyId": "place-us-washington-busboys-2004",
+      "footprintId": "5938a032-c52e-4969-ad85-4192858088b7",
+      "estimatedStories": 3,
+      "sourceIds": [
+        "src-hq2-dc-footprints"
+      ],
+      "exterior": "hq2_approximation",
+      "interior": null
+    },
+    {
+      "id": "building-dc-dcity-1301",
+      "propertyId": "place-us-washington-dcity-1301",
+      "footprintId": "76c90cd9-3039-4c4e-beda-18b87485b63b",
+      "estimatedStories": 5,
+      "sourceIds": [
+        "src-hq2-dc-footprints"
+      ],
+      "exterior": "hq2_approximation",
+      "interior": null
+    },
+    {
+      "id": "building-dc-commercial-1319",
+      "propertyId": "place-us-washington-commercial-1319",
+      "footprintId": "29d17e68-f6a2-4534-98b2-ae67d7814260",
+      "estimatedStories": 2,
+      "sourceIds": [
+        "src-hq2-dc-footprints"
+      ],
+      "exterior": "hq2_approximation",
+      "interior": null
+    },
+    {
+      "id": "building-dc-commercial-1924",
+      "propertyId": "place-us-washington-commercial-1924",
+      "footprintId": "ab381791-706f-498c-a87a-fe1eeba9c2ba",
+      "estimatedStories": 2,
+      "sourceIds": [
+        "src-hq2-dc-footprints"
+      ],
+      "exterior": "hq2_approximation",
+      "interior": null
+    }
+  ],
+  "units": [
+    {
+      "id": "unit-dc-mlk-gateway-1911",
+      "buildingId": "building-dc-mlk-gateway-phase-2",
+      "addressLine1": "1911 Martin Luther King Jr. Avenue SE",
+      "squareFeet": 1519,
+      "use": "retail",
+      "physicalOccupancy": "unknown",
+      "physicalLeasing": "operator_advertised",
+      "sourceIds": [
+        "src-hq2-leasing"
+      ],
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "unit-dc-mlk-gateway-1111",
+      "buildingId": "building-dc-mlk-gateway-phase-2",
+      "addressLine1": "1111 Marion Barry Avenue SE",
+      "squareFeet": 2205,
+      "use": "retail",
+      "physicalOccupancy": "unknown",
+      "physicalLeasing": "operator_advertised",
+      "sourceIds": [
+        "src-hq2-leasing"
+      ],
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "unit-dc-mlk-gateway-1901",
+      "buildingId": "building-dc-mlk-gateway-phase-2",
+      "addressLine1": "1901 Martin Luther King Jr. Avenue SE",
+      "squareFeet": null,
+      "use": "retail",
+      "physicalOccupancy": "unknown",
+      "physicalLeasing": "operator_advertised",
+      "sourceIds": [
+        "src-hq2-leasing"
+      ],
+      "checkedAt": "2026-11-25"
+    }
+  ],
   "ownerClaims": [],
   "physicalListings": [],
   "virtualOccupancies": [],
   "leaseApplications": [],
   "creatorAssets": [],
   "workRequests": [],
-  "businessProfiles": []
+  "businessProfiles": [
+    {
+      "id": "business-dc-enlightened",
+      "name": "Enlightened",
+      "propertyId": "place-us-washington-mlk-gateway-phase-1",
+      "sourceIds": [
+        "src-hq2-gateway-tenants"
+      ],
+      "relationship": "operator_listed",
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "business-dc-kitchen-savages",
+      "name": "Kitchen Savages",
+      "propertyId": "place-us-washington-mlk-gateway-phase-1",
+      "sourceIds": [
+        "src-hq2-gateway-tenants"
+      ],
+      "relationship": "operator_listed",
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "business-dc-capital-one-caf",
+      "name": "Capital One Café",
+      "propertyId": "place-us-washington-mlk-gateway-phase-1",
+      "sourceIds": [
+        "src-hq2-gateway-tenants"
+      ],
+      "relationship": "operator_listed",
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "business-dc-dc-department-of-housing-and-community-development",
+      "name": "DC Department of Housing and Community Development",
+      "propertyId": "place-us-washington-mlk-gateway-phase-2",
+      "sourceIds": [
+        "src-hq2-gateway-tenants"
+      ],
+      "relationship": "operator_listed",
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "business-dc-grounded",
+      "name": "Grounded",
+      "propertyId": "place-us-washington-grounded-1913",
+      "sourceIds": [
+        "src-hq2-grounded"
+      ],
+      "relationship": "operator_listed",
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "business-dc-busboys-and-poets",
+      "name": "Busboys and Poets",
+      "propertyId": "place-us-washington-busboys-2004",
+      "sourceIds": [
+        "src-hq2-busboys"
+      ],
+      "relationship": "operator_listed",
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "business-dc-dcity-smokehouse",
+      "name": "DCity Smokehouse",
+      "propertyId": "place-us-washington-dcity-1301",
+      "sourceIds": [
+        "src-hq2-dcity"
+      ],
+      "relationship": "operator_listed",
+      "checkedAt": "2026-11-25"
+    }
+  ]
 }

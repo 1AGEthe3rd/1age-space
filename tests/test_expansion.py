@@ -10,6 +10,7 @@ class BatchTests(unittest.TestCase):
   self.catalog=json.loads((ROOT/'space/data/catalog.json').read_text());self.batch=json.loads((ROOT/'space/data/batches/2026-11-20-expanded-places.json').read_text())
  def test_expansion_is_idempotent_and_preserves_existing(self):
   ids={p['id'] for p in self.batch['properties']};sids={s['id'] for s in self.batch['sources']};base=copy.deepcopy(self.catalog);base['properties']=[p for p in base['properties'] if p['id'] not in ids];base['sources']=[s for s in base['sources'] if s['id'] not in sids]
+  base['buildings']=[row for row in base['buildings'] if row.get('propertyId') not in ids]
   merged,report=merge(base,self.batch);self.assertEqual(report['added'],24);self.assertEqual(merged['properties'][:len(base['properties'])],base['properties']);again,retry=merge(merged,self.batch);self.assertEqual(retry['added'],0);self.assertEqual(again,merged)
  def test_no_silent_record_overwrite(self):
   batch=copy.deepcopy(self.batch);batch['properties'][0]['name']='Unexpected replacement'
@@ -42,11 +43,20 @@ class APItests(unittest.TestCase):
    with self.assertRaises(urllib.error.HTTPError) as error:self.get(path)
    self.assertEqual(error.exception.code,status)
  def test_commercial_use_api_filter(self):
-  data=self.get('/api/space/properties?use=office');self.assertEqual(data['total'],10);self.assertTrue(all('office' in p['spaceUses'] for p in data['properties']))
+  data=self.get('/api/space/properties?use=office');self.assertGreaterEqual(data['total'],10);self.assertTrue(all('office' in p['spaceUses'] for p in data['properties']))
  def test_source_attribution_lookup(self):
   source=self.get('/api/space/sources/src-aac-contact');self.assertEqual(source['url'],'https://anacostiaartscenter.com/contact/');self.assertIn('operatingNotice',source['scope'])
  def test_writes_disabled(self):
   req=urllib.request.Request(self.url+'/api/space/properties',data=b'{}',method='POST')
   with self.assertRaises(urllib.error.HTTPError) as error:urllib.request.urlopen(req)
   self.assertEqual(error.exception.code,405)
+ def test_protected_property_public_reads_and_write_denial(self):
+  path='/api/space/properties/place-us-washington-mlk-gateway-phase-1'
+  public=self.get(path)
+  self.assertFalse(public['protection']['claimEligible'])
+  self.assertTrue(public['protection']['publicExploration'])
+  for method, operation in [('POST','claims'),('POST','purchases'),('POST','leases'),('PATCH','building'),('DELETE','control')]:
+   request=urllib.request.Request(self.url+path+'/'+operation,data=b'{}',method=method)
+   with self.assertRaises(urllib.error.HTTPError) as error:urllib.request.urlopen(request)
+   self.assertEqual(error.exception.code,403)
 if __name__=='__main__':unittest.main()
