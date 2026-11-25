@@ -15,3 +15,11 @@ footer p{margin:0 0 7px;background:#061311d9;border-radius:9px;padding:6px;font-
 @media(max-height:450px) and (orientation:landscape){footer{width:calc(100% - 245px);bottom:max(14px,env(safe-area-inset-bottom))}header{top:max(8px,env(safe-area-inset-top))}}
 .project-preview header,.project-preview footer,.project-preview #oneage-controller{visibility:hidden}
 .project-preview.unavailable footer{visibility:visible}
+.drive-panel{position:fixed;bottom:max(110px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(94vw,460px);text-align:center;z-index:46;pointer-events:none}
+.drive-panel div{margin-top:4px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
+.drive-panel button,.cabinet button,.drive-panel output{font:600 14px system-ui;color:#e5f3eb;background:#162923ed;border:1px solid #719180;border-radius:8px;padding:8px;min-height:40px}
+.drive-panel button,.cabinet button{pointer-events:auto;touch-action:none}
+.drive-panel button:disabled{opacity:.55}
+.cabinet{width:min(360px,90vw);background:#191629;color:#c9f6e9;border:2px solid #735486;border-radius:12px;text-align:center}
+.cabinet h2{margin:0 0 8px}.cabinet canvas{width:100%;height:auto;touch-action:none}.cabinet::backdrop{background:#101222bd}
+@media(orientation:landscape) and (max-height:500px){.drive-panel{bottom:8px;width:calc(100vw - 220px)}.cabinet canvas{max-height:45vh;object-fit:contain}}

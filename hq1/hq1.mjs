@@ -1,3 +1,5 @@
+import {buildShowrooms,stops} from './portland/showrooms.mjs';
+import {createActivities} from './portland/activities.mjs';
 import { buildJarrettBlock, jarrettBlock } from './portland/jarrett.mjs';
 import * as THREE from '../space/shared/three.module.js';
 import { subscribeInput } from '../space/shared/gamepad.mjs';
@@ -26,7 +28,7 @@ function renderDistrict() {
   scene.background = new THREE.Color('#b6c4ca');
   scene.fog = new THREE.Fog('#b6c4ca', 51, 117);
   const camera = new THREE.PerspectiveCamera(64, 1, .1, 130);
-  const start = interior ? { x:0, z:4.9, heading:0 } : arrivalFor(search);
+  const start = interior ? { x:0, z:4.9, heading:0 } : (Object.hasOwn(stops,search.get('stop')) && !search.has('return') ? stops[search.get('stop')] : arrivalFor(search));
   camera.position.set(start.x, 1.75, start.z);
   let yaw = start.heading, pitch = 0;
   const view = search.get('view');
@@ -45,7 +47,7 @@ function renderDistrict() {
   const boxBatches = new Map();
   const unit = new THREE.BoxGeometry(1, 1, 1);
   const material = streetscapeMaterials();
-  let interiorDoor;
+  let interiorDoor, signals, activities;
 
   function box(x, y, z, w, h, d, color, { glow = false, parent = scene, unbatched = false } = {}) {
     const key = color + ':' + glow;
@@ -108,6 +110,8 @@ function renderDistrict() {
   } else {
     buildStreet(builder);
     buildJarrettBlock(builder);
+    signals=buildShowrooms(builder,blockers);
+    if (!preview) activities=createActivities(scene,camera,clear);
     for (const building of [...neighboringBuildings, ...jarrettBlock, ...neighborhood.venues]) {
       if (building.appearance.style === 'nlc') {
         doorTargets.set(building.id, buildNorthLeftChefSite(builder));
@@ -154,10 +158,12 @@ function renderDistrict() {
     return venue.destination.interior ? url.search : url.href;
   }
   subscribeInput(input => { controls = input; });
-  function useEntrance() { if (current) location.assign(destination(current)); }
+  function useEntrance() { if (activities?.interact()) return; if (current) location.assign(destination(current)); }
   addEventListener('keydown', event => {
     if (event.target.closest?.('#oneage-controller')) return;
+    if (document.querySelector('dialog[open]')) return;
     keys.add(event.code);
+    if (!event.repeat) activities?.toggle(event.code);
     if (event.code === 'KeyE' && !event.repeat) useEntrance();
   });
   addEventListener('keyup', event => keys.delete(event.code));
@@ -214,6 +220,15 @@ function renderDistrict() {
   renderer.setAnimationLoop(now => {
     const dt = Math.min(.05, (now - (last || now)) / 1000);
     last = now;
+    const pads=readGamepads();
+    const pad=gamepad.sample(pads,document.hasFocus() && !document.hidden);
+    signals?.(now/1000);
+    if (pad.edges.includes(0) && !document.activeElement?.matches('a,button') && !document.querySelector('dialog[open]')) useEntrance();
+    const exitYaw=activities?.takeExitYaw();
+    if (exitYaw!=null) {yaw=exitYaw;pitch=0;}
+    if (activities?.frame(dt,keys,controls,Array.from(pads).find(Boolean),pad.edges,now/1000)) {
+      current=null;entry.hidden=true;renderer.render(scene,camera);return;
+    }
     const x = Number(keys.has('KeyD') || keys.has('ArrowRight')) - Number(keys.has('KeyA') || keys.has('ArrowLeft')) + controls.move.x;
     const z = Number(keys.has('KeyS') || keys.has('ArrowDown')) - Number(keys.has('KeyW') || keys.has('ArrowUp')) + controls.move.y;
     const d = 5.8 * dt / Math.max(1, Math.hypot(x,z));
@@ -242,8 +257,6 @@ function renderDistrict() {
         ? near.status + ' · E, A, or select the door'
         : interior?.status ?? defaultHint;
     }
-    const pad = gamepad.sample(readGamepads(), document.hasFocus() && !document.hidden);
-    if (pad.edges.includes(0) && !document.activeElement?.matches('a,button')) useEntrance();
     renderer.render(scene,camera);
   });
 }
