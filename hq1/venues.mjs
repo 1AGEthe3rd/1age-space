@@ -80,6 +80,7 @@ export function venueUrl(venue, door) {
 export function arrivalFor(search) {
   const params = new URLSearchParams(search);
   const venue = neighborhood.venues.find(item => item.id === params.get('return'));
+  if (!venue && params.get('stop') === 'jarrett') return { x:-8.9, z:-158, heading:Math.PI };
   return venue?.entrances?.find(item=>item.id===params.get('door'))?.arrival ?? venue?.arrival ?? neighborhood.arrival;
 }
 

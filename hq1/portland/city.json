@@ -1,0 +1,62 @@
+{
+  "city": {
+    "country": "US",
+    "region": "Oregon",
+    "city": "Portland"
+  },
+  "catalog": "/catalog.html?country=US&city=Portland",
+  "footprints": "/space/data/buildings/portland-area.json",
+  "district": {
+    "id": "hq1-portland-sol-road",
+    "scene": "/hq1/",
+    "developmentAuthority": "1AGEthe3rd Virtual Studio",
+    "publication": "founder_review_required",
+    "selfServiceClaims": false,
+    "protectedVenueIds": [
+      "hq1-nnb-gym",
+      "hq1-alberta-workroom",
+      "hq1-northleftchef"
+    ],
+    "boundary": null
+  },
+  "stops": [
+    {
+      "id": "jarrett",
+      "name": "NE MLK Jr Blvd at NE Jarrett St",
+      "url": "/hq1/?stop=jarrett",
+      "representation": "approximate"
+    },
+    {
+      "id": "retro",
+      "name": "Retro Game Bar",
+      "address": "6720 NE Martin Luther King Jr Blvd",
+      "url": "/hq1/?stop=retro",
+      "representation": "original_virtual_interpretation",
+      "source": "https://www.rgbpdx.com/contact-us",
+      "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "javan",
+      "name": "Javan Imports",
+      "address": "4545 NE Martin Luther King Jr Blvd",
+      "url": "/hq1/?stop=javan",
+      "representation": "original_virtual_interpretation",
+      "source": "https://www.javan-imports.com/contact",
+      "checkedAt": "2026-11-25"
+    }
+  ],
+  "propertyConnections": [
+    {
+      "propertyId": "property-hq1-5601-ne-mlk",
+      "venueId": "hq1-northleftchef",
+      "relationship": "virtual_design_reference"
+    },
+    {
+      "propertyId": "place-us-portland-openhaus-5020",
+      "operator": "openHAUS",
+      "occupancyEvidence": "operator_published_location",
+      "source": "https://www.openhauspdx.com/",
+      "checkedAt": "2026-11-25"
+    }
+  ]
+}
