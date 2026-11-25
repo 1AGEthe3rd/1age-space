@@ -161,9 +161,9 @@ function populateList() {
   rows.push(...[...destinations.values()].filter(row=>!row.arrival));
   for(const row of rows) {
     const subtitle=row.property ? row.property.address.line1 : row.address ? row.kind+' · '+row.address : row.district;
-    if(!`${row.name} ${row.shortName||''} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
+    if(!`${row.name} ${row.shortName||''} ${row.railStop?'Green Line platform':''} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
     const button=label('button',row.name,list);
-    label('small',subtitle+(row.arrival?'':' · '+(row.property || row.address ? 'Catalog only' : 'Planned')),button);
+    label('small',subtitle+(row.railStop?' · Green Line platform':row.arrival?'':' · '+(row.property || row.address ? 'Catalog only' : 'Planned')),button);
     button.addEventListener('click',()=>{
       places.close();
       if(row.arrival && !row.property && !row.address && row.kind!=='intersection'&&row.id!=='anacostia-metro') arrive(row);
@@ -202,12 +202,12 @@ function pickupPreview() {
   details.showModal();
 }
 let metro;
-function enterMetro() {
+function enterMetro(row) {
   details.close();
   ++travel;
   status.hidden=true;
   metro??=createMetro();
-  metro.reset();railDisplay='';
+  metro.reset(row.railStop);railDisplay='';
   indoor=metro;
   moving=true;current=null;nearby.hidden=true;
   $('#map-button').hidden=true;
@@ -337,8 +337,8 @@ function showPlace(row) {
     }
     link('Shared catalog record','../catalog.html?property='+encodeURIComponent(property.id),body);
   } else {
-    label('p',row.address ? row.kind+' · '+row.address : row.district + (row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
-    if(row.id==='anacostia-metro') label('button','Enter Green Line platform',body).onclick=enterMetro;
+    label('p',row.address ? row.kind+' · '+row.address : row.district + (row.railStop ? ' · Green Line platform' : row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
+    if(row.railStop) label('button','Enter Green Line platform',body).onclick=()=>enterMetro(row);
     const suite=suites.find(item=>item.parent===row.id);
     if(suite) {
       if(suite.type==='grocery') label('p','Original virtual interior. Layout, dimensions and stock are illustrative.',body);
@@ -633,8 +633,13 @@ async function start() {
   bind(renderer.domElement);
   $('#exit-suite').onclick=exitSuite;
   const enter=()=>{
-    exitSuite();
+    if(indoor===metro&&metro){
+      indoor=null;current=null;nearby.hidden=true;
+      $('#rail-actions').hidden=true;$('#exit-suite').hidden=true;$('#map-button').hidden=false;
+      $('h1').textContent='Historic Anacostia';
+    }else exitSuite();
     const target=record(new URL(location.href).searchParams.get('destination'));
+    if(target?.railStop&&!target.arrival){enterMetro(target);return;}
     arrive(target?.arrival ? target : record('hq2-gateway'),{historyMode:false,focus:false});
     if(target&&!target.arrival) showPlace(target);
   };
