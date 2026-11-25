@@ -183,5 +183,62 @@
         "destinationId": "anacostia-house"
       }
     ]
+  },
+  "70b19e46-9934-466f-aa71-88a646c9306f": {
+    "stories": 2,
+    "wall": "#a47760",
+    "commercial": true,
+    "signs": [
+      {
+        "text": "ANACOSTIA ORGANICS",
+        "destinationId": "anacostia-organics",
+        "arrival": [
+          -27,
+          163
+        ],
+        "face": [
+          -27.99,
+          162.69
+        ]
+      }
+    ]
+  },
+  "9a4839f4-2a1c-4e4b-a478-25d99c45967e": {
+    "stories": 2,
+    "wall": "#a47760",
+    "commercial": true,
+    "signs": [
+      {
+        "text": "2ND CHANCE CONVENIENCE STORE",
+        "destinationId": "second-chance-market",
+        "arrival": [
+          -32,
+          173
+        ],
+        "face": [
+          -31.54,
+          171.49
+        ]
+      }
+    ]
+  },
+  "4fbbc5d6-1187-4b59-bad2-07a2bd716658": {
+    "stories": 2,
+    "wall": "#a47760",
+    "commercial": true,
+    "signs": [
+      {
+        "text": "NAM’S MARKET",
+        "destinationId": "nams-market",
+        "arrival": [
+          159,
+          349
+        ],
+        "face": [
+          160.76,
+          349.43
+        ]
+      }
+    ]
   }
 }

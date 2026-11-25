@@ -157,13 +157,13 @@ function populateList() {
   if(needle) rows.push(...intersections.map(intersectionRecord));
   rows.push(...[...destinations.values()].filter(row=>!row.arrival));
   for(const row of rows) {
-    const subtitle=row.property ? row.property.address.line1 : row.district;
+    const subtitle=row.property ? row.property.address.line1 : row.address ? row.kind+' · '+row.address : row.district;
     if(!`${row.name} ${row.shortName||''} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
     const button=label('button',row.name,list);
-    label('small',subtitle+(row.arrival?'':' · '+(row.property ? 'Catalog only' : 'Planned')),button);
+    label('small',subtitle+(row.arrival?'':' · '+(row.property || row.address ? 'Catalog only' : 'Planned')),button);
     button.addEventListener('click',()=>{
       places.close();
-      if(row.arrival && !row.property && row.kind!=='intersection') arrive(row);
+      if(row.arrival && !row.property && !row.address && row.kind!=='intersection') arrive(row);
       else showPlace(row);
     });
   }
@@ -256,7 +256,8 @@ function showPlace(row) {
     }
     link('Shared catalog record','../catalog.html?property='+encodeURIComponent(property.id),body);
   } else {
-    label('p',row.district + (row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
+    label('p',row.address ? row.kind+' · '+row.address : row.district + (row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
+    if(row.statusNote) label('p',row.statusNote,body);
     if(row.protectionZoneId) label('p','Public exploration in designated areas. Reserved from acquisition in 1AGE Space.',body);
     if(row.kind==='education') {
       label('p','An original 1AGE educational institution. Independent of the U.S. Department of the Treasury.',body);

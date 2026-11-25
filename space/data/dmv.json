@@ -75,7 +75,11 @@
     "riverwalk": "https://home.nps.gov/anac/planyourvisit/anacostia-riverwalk-trail.htm",
     "gateway": "https://www.mlkgatewaydc.com/",
     "treasury-exterior": "https://home.treasury.gov/north-wing-architecture",
-    "anacostia-house": "https://www.mlkgatewaydc.com/anacostiahouse"
+    "anacostia-house": "https://www.mlkgatewaydc.com/anacostiahouse",
+    "anacostia-organics": "https://abca.dc.gov/service/find-medical-cannabis-retailer",
+    "second-chance-market": "https://www.openstreetmap.org/way/151561217",
+    "nams-market": "https://www.openstreetmap.org/way/295276792",
+    "therapy-mlk": "https://abca.dc.gov/service/find-medical-cannabis-retailer"
   },
   "destinations": [
     {
@@ -304,6 +308,74 @@
         70.14
       ],
       "protectionZoneId": "hq2"
+    },
+    {
+      "id": "anacostia-organics",
+      "name": "Anacostia Organics",
+      "address": "2022 Martin Luther King Jr. Avenue SE",
+      "district": "Southeast Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "Medical cannabis dispensary",
+      "source": "anacostia-organics",
+      "protectionZoneId": "dc-southeast",
+      "statusNote": "Listed in the DC ABCA medical cannabis retailer directory. Current opening hours unverified.",
+      "arrival": [
+        -27,
+        163
+      ],
+      "lookAt": [
+        -27.99,
+        162.69
+      ]
+    },
+    {
+      "id": "second-chance-market",
+      "name": "2nd Chance Convenience Store",
+      "address": "2026 Martin Luther King Jr. Avenue SE",
+      "district": "Southeast Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "Corner store",
+      "source": "second-chance-market",
+      "protectionZoneId": "dc-southeast",
+      "statusNote": "OpenStreetMap lists this store at this address. Current operations unverified.",
+      "arrival": [
+        -32,
+        173
+      ],
+      "lookAt": [
+        -31.54,
+        171.49
+      ]
+    },
+    {
+      "id": "nams-market",
+      "name": "Nam’s Market",
+      "address": "1327 W Street SE",
+      "district": "Southeast Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "Corner store",
+      "source": "nams-market",
+      "protectionZoneId": "dc-southeast",
+      "statusNote": "OpenStreetMap lists this store at this address. Current operations unverified.",
+      "arrival": [
+        159,
+        349
+      ],
+      "lookAt": [
+        160.76,
+        349.43
+      ]
+    },
+    {
+      "id": "therapy-mlk",
+      "name": "Therapy",
+      "address": "2923 Martin Luther King Jr. Avenue SE",
+      "district": "Southeast Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "Medical cannabis dispensary",
+      "source": "therapy-mlk",
+      "protectionZoneId": "dc-southeast",
+      "statusNote": "Listed in the DC ABCA medical cannabis retailer directory. Current opening hours unverified."
     }
   ],
   "connections": [
