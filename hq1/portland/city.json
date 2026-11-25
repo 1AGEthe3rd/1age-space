@@ -107,5 +107,20 @@
       "source": "https://www.openhauspdx.com/",
       "checkedAt": "2026-11-25"
     }
+  ],
+  "transit": [
+    {
+      "id": "trimet-max-yellow",
+      "url": "/hq1/?rail=yellow",
+      "entryStation": "N Killingsworth St",
+      "stations": [
+        "Overlook Park",
+        "N Prescott St",
+        "N Killingsworth St",
+        "Rosa Parks"
+      ],
+      "service": "simulated",
+      "source": "https://trimet.org/max/"
+    }
   ]
 }
