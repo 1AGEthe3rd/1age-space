@@ -43,6 +43,13 @@
       "representation": "original_virtual_interpretation",
       "source": "https://www.javan-imports.com/contact",
       "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "killingsworth",
+      "name": "NE MLK Jr Blvd at NE Killingsworth St",
+      "url": "/hq1/?stop=killingsworth",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/bicycle-committee/documents/regional-flexible-funds-allocation-bac-november/download"
     }
   ],
   "propertyConnections": [

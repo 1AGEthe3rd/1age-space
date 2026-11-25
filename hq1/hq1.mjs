@@ -1,3 +1,4 @@
+import {buildKillingsworth} from './portland/killingsworth.mjs';
 import {buildShowrooms,stops} from './portland/showrooms.mjs';
 import {createActivities} from './portland/activities.mjs';
 import { buildJarrettBlock, jarrettBlock } from './portland/jarrett.mjs';
@@ -33,6 +34,7 @@ function renderDistrict() {
   let yaw = start.heading, pitch = 0;
   const view = search.get('view');
   const previewCameras = {
+    killingsworth: {position:[-2,2.6,-49],target:[4,2.5,-70]},
     jarrett: { position:[-6.3,2.45,-162], target:[6,2.5,-132] },
     neighborhood: { position:[-8.5,3.2,-23], target:[-15,2.73,-32] },
     street: { position:[-4.6,2.14,6.35], target:[-1.4,2.05,-30] },
@@ -110,7 +112,9 @@ function renderDistrict() {
   } else {
     buildStreet(builder);
     buildJarrettBlock(builder);
-    signals=buildShowrooms(builder,blockers);
+    const albertaSignal=buildShowrooms(builder,blockers);
+    const killingsworthSignal=buildKillingsworth(builder);
+    signals=seconds=>{albertaSignal(seconds);killingsworthSignal(seconds);};
     if (!preview) activities=createActivities(scene,camera,clear);
     for (const building of [...neighboringBuildings, ...jarrettBlock, ...neighborhood.venues]) {
       if (building.appearance.style === 'nlc') {

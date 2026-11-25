@@ -1,3 +1,4 @@
+import {fitsRoad} from './crossings.mjs';
 // Metres, seconds and radians. Positive speed points down the vehicle's local -Z.
 export function stepVan(car, input, dt, parked) {
   const approach = (value,target,step) => value + Math.sign(target-value)*Math.min(step,Math.abs(target-value));
@@ -11,15 +12,7 @@ export function stepVan(car, input, dt, parked) {
   const heading=car.heading+car.speed*Math.tan(car.steer)/2.6*dt;
   const x=car.x-Math.sin(heading)*car.speed*dt;
   const z=car.z-Math.cos(heading)*car.speed*dt;
-  // Four corners must fit the boulevard, including when reversing at full lock.
-  for(const side of [-.92,.92]) for(const end of [-2.05,2.05]) {
-    const cornerX=x+side*Math.cos(heading)+end*Math.sin(heading);
-    const cornerZ=z-side*Math.sin(heading)+end*Math.cos(heading);
-    if(Math.abs(cornerX)>5.95 || cornerZ < -258 || cornerZ > 117) {
-      car.speed=0;
-      return;
-    }
-  }
+  if(!fitsRoad(x,z,heading)){car.speed=0;return;}
   if(parked && Math.hypot(x-parked.x,z-parked.z)<4.6){
     // Separating axes of both oriented vehicle footprints.
     const axes=h=>[[Math.cos(h),-Math.sin(h)],[Math.sin(h),Math.cos(h)]];

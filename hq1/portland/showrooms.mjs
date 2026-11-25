@@ -1,6 +1,7 @@
 import * as T from '../../space/shared/three.module.js';
 
 export const stops = {
+  killingsworth:{x:-9.7,z:-51,heading:-.46},
   javan:{x:7.1,z:84,heading:Math.PI/2},
   retro:{x:9.1,z:-228,heading:-Math.PI/2}
 };

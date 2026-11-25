@@ -157,11 +157,11 @@ export function buildStreet({ box, sign, scene, material }) {
   box(0,-.36,-24,94,.56,100,'#716d5a');
   box(0,.018,-24,12,.035,100,asphalt);
   for (const side of [-1,1]) {
-    for (const [z,length] of [[-33.25,81.5],[23.5,10]]) {
+    for (const [z,length] of [[-72.5,3],[-26.75,68.5],[23.5,10]]) {
       box(side*8.9,.04,z,5.8,.08,length,concrete);
       box(side*6,.08,z,.19,.13,length,'#b0a89b');
     }
-    for (let z=-72; z<7; z+=2.3) box(side*8.9,.082,z,5.68,.006,.018,'#9f998a');
+    for (let z=-72; z<7; z+=2.3) if (Math.abs(z+66)>5) box(side*8.9,.082,z,5.68,.006,.018,'#9f998a');
     for (const z of [6.5,19.5]) box(side*6.8,.084,z,1.36,.025,.82,'#bb8e60');
   }
   box(0,.012,13,72,.043,10.88,material('asphalt','#494b48',20,4));
@@ -188,7 +188,7 @@ export function buildStreet({ box, sign, scene, material }) {
     box(xEnd-side*.78,3.37,19.6,.28,.16,.22,trafficGrey);
     box(xEnd-side*.78,3.285,19.6,.22,.012,.15,'#fff2c9',{glow:true});
   }
-  for (let z=-67; z<2; z+=6) {
+  for (let z=-55; z<2; z+=6) {
     for (const x of [-.11,.11]) box(x,.040,z,.074,.008,4.6,'#cfa651');
   }
   for (const z of [6.4,19.6]) {
