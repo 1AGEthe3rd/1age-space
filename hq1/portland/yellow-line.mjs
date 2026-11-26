@@ -2,11 +2,9 @@ import {buildKenton,kentonStation,kentonWalkable} from './kenton.mjs';
 // Eight adjacent TriMet Yellow Line stations. Original compressed surface alignment.
 import * as T from '../../space/shared/three.module.js';
 
-export const stops=['Overlook Park','N Prescott St','N Killingsworth St','Rosa Parks','N Lombard TC','Kenton/N Denver Ave','Delta Park/Vanport','Expo Center'];
-const yellowStops=stops;
+import {stops as yellowStops,airportYellowStops,redStops,stationId as toStationId} from './rail-network.mjs';
+export {stops,airportYellowStops,redStops} from './rail-network.mjs';
 const spacing=100;
-export const redStops=['Rose Quarter TC','Convention Center','NE 7th Ave','Lloyd Center/NE 11th Ave','Hollywood/NE 42nd Ave','NE 60th Ave','NE 82nd Ave','Gateway/NE 99th Ave TC','Parkrose/Sumner TC','Cascades','Mt Hood Ave','Portland International Airport'];
-export const airportYellowStops=['Interstate/Rose Quarter',...stops];
 const boxGeometry=new T.BoxGeometry();
 
 export function createYellowLine(stationId,line='yellow') {
@@ -135,7 +133,7 @@ export function createYellowLine(stationId,line='yellow') {
   for(const side of [-1,1]) for(const z of [-3.7,3.7]) box(car,side*1.48,.79,z,.07,.18,5.45,color);
   const ambient=new T.HemisphereLight('#fff3d8','#87858a',2.1);scene.add(ambient);
   const light=new T.DirectionalLight('#fff4df',2);light.position.set(-4,8,5);scene.add(light);
-  const found=stops.findIndex(name=>name.toLowerCase().replace(/[^a-z0-9]+/g,'-')===stationId);
+  const found=stops.findIndex(name=>toStationId(name)===stationId);
   const entry=found<0?(line==='red'?0:stops.indexOf('N Killingsworth St')):found;
   let stop=entry,target=entry,progress=1,aboard=false;
   function position(offset,open){
