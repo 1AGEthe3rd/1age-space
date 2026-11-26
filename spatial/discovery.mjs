@@ -2,6 +2,7 @@ import * as THREE from '../space/shared/three.module.js';
 import {createWalker} from './walking.mjs';
 import {createFloorMaterial,addArchitecture,addContactShade} from './architecture.mjs';
 import {earthTexture} from './earth-texture.mjs';
+import {mountPropertyPanel} from './property-panel.mjs';
 const $=s=>document.querySelector(s),stage=$('#scene'),status=$('#status'),panel=$('#panel'),body=$('#panel-body');
 try{
  const scene=new THREE.Scene();scene.background=new THREE.Color(0x03070f);
@@ -40,12 +41,12 @@ try{
  const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=256;const ctx=canvas.getContext('2d');ctx.fillStyle='#0b1827';ctx.fillRect(0,0,1024,256);ctx.strokeStyle='#8cd9f9';ctx.lineWidth=4;ctx.strokeRect(6,6,1012,244);ctx.fillStyle='#edf7ff';ctx.textAlign='center';ctx.font='600 64px system-ui';ctx.fillText(title,512,108);ctx.fillStyle='#a7cfdf';ctx.font='32px system-ui';ctx.fillText(subtitle,512,184);const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;return mesh(new THREE.PlaneGeometry(3.2,.8),new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide}),0,y,0,parent);
  }
  const destinations=[
- {id:'hq1',name:'PORTLAND HQ1',subtitle:'Soul District · Oregon',url:'../hq1/',x:-6.3,z:-3.6},
- {id:'hq2',name:'WASHINGTON D.C.',subtitle:'HQ2 · Historic Anacostia',url:'../hq2/',x:6.3,z:-3.6},
- {id:'catalog',name:'PROPERTY INDEX',subtitle:'Explore the existing catalog',url:'../catalog.html',x:0,z:-7.7}
+ {id:'catalog',name:'PROPERTY INDEX',subtitle:'Commercial properties',url:'../catalog.html',x:-6.3,z:-3.6},
+ {id:'ownership',name:'VIRTUAL OWNERSHIP',subtitle:'Empty spaces only',url:null,x:6.3,z:-3.6},
+ {id:'build',name:'BUILD A SPACE',subtitle:'Virtual creation',url:null,x:0,z:-7.7}
  ];
  function register(g,data){records.push(data);g.traverse(o=>{if(o.isMesh){o.userData.destination=data;targets.push(o);}});}
- register(hub,{id:'globe',name:'Global discovery',x:0,z:0,links:destinations.map(d=>[d.name,d.url])});
+ register(hub,{id:'globe',name:'Global property discovery',x:0,z:0,links:[]});
  function pavilion(d){
  const g=new THREE.Group();g.position.set(d.x,0,d.z);g.rotation.y=Math.atan2(-d.x,-d.z);scene.add(g);
  addContactShade(scene,d.x,d.z,2);
@@ -55,16 +56,16 @@ try{
  // Scale architectural exhibition models, explicitly conceptual rather than replicas.
  const colors=[std(0x7d9aaa),std(0xa9b4bc),std(0x596c80)];
  for(let i=0;i<7;i++){const x=(i%4-.0)*.58-.88,z=Math.floor(i/4)*.46-.23,h=.27+rand()*.65;box(.43,h,.36,colors[i%3],x,.27+h/2,z,g);box(.34,.035,.25,warm,x,.28+h,z,g);}
- label(g,d.name,d.subtitle,2.32);obstacles.push({x:d.x,z:d.z,r:1.87});register(g,{...d,links:[[d.id==='catalog'?'Open catalog':'Enter district',d.url]]});
+ label(g,d.name,d.subtitle,2.32);obstacles.push({x:d.x,z:d.z,r:1.87});register(g,{...d,links:d.url?[['Open property catalog',d.url]]:[]});
  }
  destinations.forEach(pavilion);
- function show(title,links,settings=false){$('#panel-title').textContent=title;body.replaceChildren();for(const [name,url] of links){const a=document.createElement('a');a.textContent=name;a.href=url;body.append(a);}if(settings){const select=document.createElement('select');select.setAttribute('aria-label','Graphics resolution');for(const [n,v] of [['Low','0.8'],['Balanced','1.5'],['High','2']])select.add(new Option(n,v));select.value=String(quality);select.onchange=()=>{quality=Number(select.value);resize();};body.append(select);}walker.clear();if(!panel.open)panel.showModal();}
+ function show(title,links,settings=false,section=null){$('#panel-title').textContent=title;body.replaceChildren();for(const [name,url] of links){const a=document.createElement('a');a.textContent=name;a.href=url;body.append(a);}if(section)mountPropertyPanel(body,section);if(settings){const select=document.createElement('select');select.setAttribute('aria-label','Graphics resolution');for(const [n,v] of [['Low','0.8'],['Balanced','1.5'],['High','2']])select.add(new Option(n,v));select.value=String(quality);select.onchange=()=>{quality=Number(select.value);resize();};body.append(select);}walker.clear();if(!panel.open)panel.showModal();}
  const distance=d=>Math.hypot(camera.position.x-d.x,camera.position.z-d.z);
- function interact(d){if(!d||distance(d)>4.6){status.textContent='Walk closer to a discovery station.';return;}status.textContent='';show(d.name,d.links);}
+ function interact(d){if(!d||distance(d)>4.6){status.textContent='Walk closer to a discovery station.';return;}status.textContent='';show(d.name,d.links,false,d.id);}
  const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
  const walker=createWalker(camera,renderer.domElement,{radius:10.15,eyeHeight:1.75,spawn:[0,1.75,7.8],obstacles,paused:()=>panel.open,onTap:e=>{const rect=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);ray.setFromCamera(pointer,camera);const hit=ray.intersectObjects(targets,false)[0];if(hit)interact(hit.object.userData.destination);}});
  $('#interact').onclick=()=>interact([...records].sort((a,b)=>distance(a)-distance(b))[0]);
- $('#menu').onclick=()=>show('1AGE',[['1AGE World','https://1age.world/'],['1AGE.com','https://1age.com/'],['Portland HQ1','../hq1/'],['Washington D.C. HQ2','../hq2/'],['Property catalog','../catalog.html']],true);
+ $('#menu').onclick=()=>show('1AGE',[['1AGE World','https://1age.world/'],['1AGE.com','https://1age.com/'],['Explore World cities','https://1age.world/destinations/'],['Property catalog','../catalog.html']],true);
  $('#reset').onclick=()=>{walker.clear();walker.reset();status.textContent='';};
  addEventListener('keydown',e=>{if(e.code==='KeyE'&&!panel.open&&!e.repeat&&!e.target?.closest?.('input,select,textarea'))$('#interact').click();});
  function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio,quality));renderer.setSize(innerWidth,innerHeight);}resize();addEventListener('resize',resize);
