@@ -1,3 +1,4 @@
+import {fitsJavanAccess} from './javan-lot.mjs';
 import {albertaBlocks} from './alberta-blocks.mjs';
 // End the drivable arms inside the walking boundary so a parked driver can exit.
 export const crossings = {
@@ -10,6 +11,7 @@ export const crossings = {
 };
 const roads = Object.values(crossings);
 export function fitsRoad(x,z,heading) {
+  if(x<0&&z>91&&z<119&&fitsJavanAccess(x,z,heading))return true;
   const cos=Math.cos(heading), sin=Math.sin(heading);
   if (Math.abs(x)+.92*Math.abs(cos)+2.05*Math.abs(sin)<=5.95)
     return z-.92*Math.abs(sin)-2.05*Math.abs(cos)>=-258 && z+.92*Math.abs(sin)+2.05*Math.abs(cos)<=117;

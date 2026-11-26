@@ -244,7 +244,7 @@ function renderDistrict() {
     if (pad.edges.includes(0) && !document.activeElement?.matches('a,button') && !document.querySelector('dialog[open]')) useEntrance();
     const exitYaw=activities?.takeExitYaw();
     if (exitYaw!=null) {yaw=exitYaw;pitch=0;}
-    if (activities?.frame(dt,keys,controls,Array.from(pads).find(Boolean),pad.edges,now/1000)) {
+    if (activities?.frame(dt,keys,controls,gamepad.armed?Array.from(pads).find(p=>p?.connected&&p.mapping==='standard'&&p.index===gamepad.index):null,pad.edges,now/1000)) {
       current=null;entry.hidden=true;renderer.render(scene,camera);return;
     }
     const x = Number(keys.has('KeyD') || keys.has('ArrowRight')) - Number(keys.has('KeyA') || keys.has('ArrowLeft')) + controls.move.x;
