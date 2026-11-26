@@ -280,7 +280,8 @@ function renderDistrict() {
 }
 
 try {
-  if(search.get('rail')==='yellow'){const {enterRail}=await import('./portland/rail-view.mjs');enterRail();}
+  if(['pdx','dca'].includes(search.get('airport'))){const {enterAirport}=await import('./portland/airport-view.mjs');enterAirport(search.get('airport'));}
+  else if(['yellow','red'].includes(search.get('rail'))){const {enterRail}=await import('./portland/rail-view.mjs');enterRail(search.get('rail'));}
   else renderDistrict();
 } catch (error) {
   if (!(error instanceof Error) || !error.message.includes('WebGL')) throw error;
