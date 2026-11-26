@@ -43,7 +43,7 @@ export function buildNorthLeftChefSite({ box, sign, scene, material }) {
   box(-13.8,.049,-86.5,4,.012,13.1,concrete);
   box(-10.6,.049,-86.5,4,.012,2.2,concrete); // Driveway/sidewalk connection to MLK.
   for (const near of [{ start:-28.4, z:-91.1, count:8 },{ start:-28.4,z:-81.5,count:6 }]) {
-    for (let i=0;i<=near.count;i++) box(near.start+i*2.51,.07,near.z,.060,.012,3.6,'#ded9c2');
+    for (let i=0;i<=near.count;i++) box(near.start+i*2.51,.07,near.z,.060,.012,3.6,'#b6a05b');
   }
   for (const x of [-25,-11.1]) {
     box(x,.846,-80,.13,1.69,.13,'#53504a');
@@ -57,19 +57,36 @@ export function buildNorthLeftChefSite({ box, sign, scene, material }) {
   sign('5601',scene,-8.4,4.53,-80.19,1.42,{background:'#332f2a'});
 
   const back=material('paving','#bdb6a4',6,2);
-  const white='#dfdbce', red='#9b4639', frame='#2c2d29';
+  const red='#9b4639', frame='#2c2d29';
+  // Visual approximation from the June 2025 leasing brochure; no source images embedded.
+  // Keep the existing gameplay footprint, doors and return poses until surveyed alignment.
+  const fascia='#c5b6a7';
+  const masonry=material('brick','#e1ddd4',5,2);
+  const redMasonry=material('brick',red,2,2);
+  const centerHalf=1.45;
   box(x,h/2,z-d/2,w,h,.20,back);
   for (const side of [-1,1]) box(x+side*w*.5,h*.5,z,.19,h,d,back);
   box(x,.09,z,w,.18,d,'#8c8376');
   box(x,h-.11,z,w+.2,.23,d+.2,'#c9c5b8');
-  for (const dx of [-w*.5,0,w*.5]) box(x+dx,1.54,z+f,.26,3.09,.29,dx===0 ? white : red);
-  box(x,3.24,z+f,w,.75,.24,white);
+  // Pale central service bay and red end piers frame the two separate glass storefronts.
+  box(x,1.54,z+f,centerHalf*2,3.09,.29,masonry);
+  for (const dx of [-w*.5+.24,w*.5-.24]) box(x+dx,1.54,z+f,.48,3.09,.29,redMasonry);
+  // The photographed service door is visual only; the existing two venue doors remain interactive.
+  box(x,.99,z+f+.16,.77,1.98,.045,'#c4bfb2');
+  box(x+.27,.93,z+f+.20,.045,.16,.045,frame);
+  box(x,2.55,z+f+.17,.18,.09,.08,frame);
+  // Low-profile roof fixtures visible in aerial reference; positions approximate.
+  for (const offset of [-5.7,4.8]) {
+    box(x+offset,h+.18,z-.8,1.2,.36,.85,'#a7a9a7');
+    box(x+offset,h+.37,z-.8,.86,.04,.62,'#666966');
+  }
+  box(x,3.24,z+f,w,.75,.24,fascia);
   box(x,3.61,z+f,w+.22,.075,.29,frame);
   const glazing = new THREE.MeshStandardMaterial({
     color:'#99abb0', roughness:.31, transparent:true, opacity:.26, depthWrite:false, metalness:.08,
   });
   for (const door of nlcDoors) {
-    const span=door.id==='cafe' ? [-w*.5+.14,-.14] : [.14,w*.5-.14];
+    const span=door.id==='cafe' ? [-w*.5+.48,-centerHalf] : [centerHalf,w*.5-.48];
     const edges=[span[0],door.offset-.71,door.offset+.71,span[1]];
     for (const index of [0,1,2]) {
       const left=edges[index], right=edges[index+1], width=right-left;
@@ -79,6 +96,8 @@ export function buildNorthLeftChefSite({ box, sign, scene, material }) {
       for (let side=0;side<=mullions;side++) box(x+left+width*side/mullions,1.59,z+f+.044,.055,2.81,.07,frame);
       for (const y of [.19,2.98]) box(xx,y,z+f+.04,width,.066,.073,frame);
       box(xx,.88,z+f+.045,width,.104,.08,red);
+      // Dark lower kick rail and warm red horizontal glazing band from the storefront reference.
+      box(xx,.24,z+f+.047,width,.12,.08,frame);
     }
     box(door.x+.45,1.08,z+f+.11,.05,.25,.05,'#beb199');
     box(door.x,2.64,z+f-1.1,3.85,.044,.10,'#f7e2bb',{glow:true});
