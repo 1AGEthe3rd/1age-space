@@ -43,7 +43,7 @@ export function buildNorthLeftChefSite({ box, sign, scene, material }) {
   box(-13.8,.049,-86.5,4,.012,13.1,concrete);
   box(-10.6,.049,-86.5,4,.012,2.2,concrete); // Driveway/sidewalk connection to MLK.
   for (const near of [{ start:-28.4, z:-91.1, count:8 },{ start:-28.4,z:-81.5,count:6 }]) {
-    for (let i=0;i<=near.count;i++) box(near.start+i*2.51,.07,near.z,.060,.012,3.6,'#ded9c2');
+    for (let i=0;i<=near.count;i++) box(near.start+i*2.51,.07,near.z,.060,.012,3.6,'#b6a05b');
   }
   for (const x of [-25,-11.1]) {
     box(x,.846,-80,.13,1.69,.13,'#53504a');
@@ -57,13 +57,17 @@ export function buildNorthLeftChefSite({ box, sign, scene, material }) {
   sign('5601',scene,-8.4,4.53,-80.19,1.42,{background:'#332f2a'});
 
   const back=material('paving','#bdb6a4',6,2);
-  const white='#dfdbce', red='#9b4639', frame='#2c2d29';
+  const red='#9b4639', frame='#2c2d29';
+  // Approximate muted rose fascia and light masonry from the published 5601 exterior reference.
+  // No imagery is embedded; dimensions, entrances and collision positions remain unchanged.
+  const fascia='#996c77';
+  const masonry=material('brick','#e1ddd4',5,2);
   box(x,h/2,z-d/2,w,h,.20,back);
   for (const side of [-1,1]) box(x+side*w*.5,h*.5,z,.19,h,d,back);
   box(x,.09,z,w,.18,d,'#8c8376');
   box(x,h-.11,z,w+.2,.23,d+.2,'#c9c5b8');
-  for (const dx of [-w*.5,0,w*.5]) box(x+dx,1.54,z+f,.26,3.09,.29,dx===0 ? white : red);
-  box(x,3.24,z+f,w,.75,.24,white);
+  for (const dx of [-w*.5,0,w*.5]) box(x+dx,1.54,z+f,.26,3.09,.29,dx===0 ? masonry : red);
+  box(x,3.24,z+f,w,.75,.24,fascia);
   box(x,3.61,z+f,w+.22,.075,.29,frame);
   const glazing = new THREE.MeshStandardMaterial({
     color:'#99abb0', roughness:.31, transparent:true, opacity:.26, depthWrite:false, metalness:.08,
