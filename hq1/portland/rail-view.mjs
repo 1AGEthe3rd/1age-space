@@ -2,13 +2,14 @@ import {insideKentonStudio,kentonStation} from './kenton.mjs';
 import * as T from '../../space/shared/three.module.js';
 import {subscribeInput} from '../../space/shared/gamepad.mjs';
 import {createYellowLine} from './yellow-line.mjs';
+import {platformConnection} from './rail-network.mjs';
 import {portlandSky} from './weather.mjs';
 
-export function enterRail(){
-  const rail=createYellowLine(new URLSearchParams(location.search).get('station')),camera=new T.PerspectiveCamera(66,1,.1,220);
+export function enterRail(line='yellow'){
+  const rail=createYellowLine(new URLSearchParams(location.search).get('station'),line==='red'?'red':'airport-yellow'),camera=new T.PerspectiveCamera(66,1,.1,220);
   const r=new T.WebGLRenderer({antialias:true});r.setPixelRatio(Math.min(1.5,devicePixelRatio));
   document.querySelector('#district').append(r.domElement);
-  document.querySelector('h1').textContent='MAX Yellow Line';
+  document.querySelector('h1').textContent='MAX '+(line==='red'?'Red':'Yellow')+' Line';
   const back=document.querySelector('header a');back.href='?stop=killingsworth';back.textContent='Return to HQ1';
   document.querySelector('#rail-link').hidden=true;
   const controls=document.createElement('section');controls.className='drive-panel rail-panel';
@@ -16,6 +17,7 @@ export function enterRail(){
   function button(label,fn){const b=document.createElement('button');b.textContent=label;b.onclick=fn;controls.append(b);return b;}
   const action=button('Board train',toggle);
   const north=button('Northbound',()=>depart(1)),south=button('Southbound',()=>depart(-1));
+  const transfer=document.createElement('a');transfer.hidden=true;controls.append(transfer);
   document.body.append(controls);
   function toggle(){
     if(rail.riding||(!rail.aboard&&!nearDoor()))return;
@@ -59,8 +61,10 @@ export function enterRail(){
     action.disabled=rail.riding||(!rail.aboard&&!nearDoor());
     for(const [b,d] of [[north,1],[south,-1]]){
       b.hidden=!rail.aboard;b.disabled=rail.riding||!rail.adjacent(d);
-      b.textContent=(d===1?'North':'South')+(rail.adjacent(d)?' · '+rail.adjacent(d):'');
+      b.textContent=(line==='red'?(d===1?'Airport':'City'):(d===1?'North':'South'))+(rail.adjacent(d)?' · '+rail.adjacent(d):'');
     }
+    const destination=platformConnection(line,rail.name,rail.aboard,rail.riding);
+    transfer.hidden=!destination;if(destination){transfer.href=destination[0];transfer.textContent=destination[1];}
     r.render(rail.scene,camera);
   });
 }

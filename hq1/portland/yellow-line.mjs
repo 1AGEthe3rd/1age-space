@@ -2,12 +2,17 @@ import {buildKenton,kentonStation,kentonWalkable} from './kenton.mjs';
 // Eight adjacent TriMet Yellow Line stations. Original compressed surface alignment.
 import * as T from '../../space/shared/three.module.js';
 
-export const stops=['Overlook Park','N Prescott St','N Killingsworth St','Rosa Parks','N Lombard TC','Kenton/N Denver Ave','Delta Park/Vanport','Expo Center'];
+import {stops as yellowStops,airportYellowStops,redStops,stationId as toStationId} from './rail-network.mjs';
+export {stops,airportYellowStops,redStops} from './rail-network.mjs';
 const spacing=100;
-const routeLength=(stops.length-1)*spacing;
 const boxGeometry=new T.BoxGeometry();
 
-export function createYellowLine(stationId) {
+export function createYellowLine(stationId,line='yellow') {
+  const stops=line==='red'?redStops:line==='airport-yellow'?airportYellowStops:yellowStops;
+  const routeLength=(stops.length-1)*spacing;
+  const color=line==='red'?'#c83b42':'#efbf39';
+  const label=line==='red'?'Red':'Yellow';
+  const terminal=line==='red'?'Portland International Airport':'Expo Center';
   const scene=new T.Scene(), materials=new Map(), doors=[];
   scene.background=new T.Color('#25292b');
   scene.fog=new T.Fog('#b4bdc4',42,180);
@@ -28,7 +33,7 @@ export function createYellowLine(stationId) {
   function sign(parent,text,x,y,z) {
     const canvas=document.createElement('canvas');canvas.width=768;canvas.height=96;
     const ctx=canvas.getContext('2d');ctx.fillStyle='#292821';ctx.fillRect(0,0,768,96);
-    ctx.fillStyle='#efbf39';ctx.fillRect(0,0,18,96);ctx.fillStyle='#fff';
+    ctx.fillStyle=color;ctx.fillRect(0,0,18,96);ctx.fillStyle='#fff';
     ctx.font='bold 50px system-ui';ctx.fillText(text,35,67,700);
     const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;
     const face=new T.Mesh(new T.PlaneGeometry(6,.75),new T.MeshBasicMaterial({map:texture,side:T.DoubleSide}));
@@ -92,7 +97,7 @@ export function createYellowLine(stationId) {
   }
   box(corridor,-22,4.35,routeLength,6,.28,30,'#53636c');
   for(const dz of [-12,12])box(corridor,-19.3,2.1,routeLength+dz,.22,4.2,.22,'#718087');
-  sign(corridor,'Expo Center · MAX',-13,2.7,routeLength-8);
+  sign(corridor,terminal+' · MAX',-13,2.7,routeLength-8);
   for(const x of [-.75,.75]) box(corridor,x,-.18,routeLength+19,.4,1.2,.5,'#c29750');
   box(corridor,0,.34,routeLength+19,2.3,.27,.34,'#c29750');
   for(const [color,matrices] of batches){
@@ -106,7 +111,7 @@ export function createYellowLine(stationId) {
     box(car,0,1.23,z,2.9,2.5,.12,'#c0c9cb');
     const face=z+Math.sign(z)*.09;
     box(car,0,1.64,face,2.55,.86,.06,'#334753');
-    box(car,0,.88,face,2.75,.18,.08,'#f1b638');
+    box(car,0,.88,face,2.75,.18,.08,color);
     for(const side of [-1,1])box(car,side*1.03,.60,face,.36,.16,.10,'#ffe6aa');
   }
   for(const x of [-1.42,1.42]){
@@ -124,12 +129,12 @@ export function createYellowLine(stationId) {
       doors.push({leaf,dir,platform:x<0});
     }
   }
-  sign(car,'MAX · Yellow Line',0,1.84,-6.34);
-  for(const side of [-1,1]) for(const z of [-3.7,3.7]) box(car,side*1.48,.79,z,.07,.18,5.45,'#e8b43b');
+  sign(car,'MAX · '+label+' Line',0,1.84,-6.34);
+  for(const side of [-1,1]) for(const z of [-3.7,3.7]) box(car,side*1.48,.79,z,.07,.18,5.45,color);
   const ambient=new T.HemisphereLight('#fff3d8','#87858a',2.1);scene.add(ambient);
   const light=new T.DirectionalLight('#fff4df',2);light.position.set(-4,8,5);scene.add(light);
-  const found=stops.findIndex(name=>name.toLowerCase().replace(/[^a-z0-9]+/g,'-')===stationId);
-  const entry=found<0?2:found;
+  const found=stops.findIndex(name=>toStationId(name)===stationId);
+  const entry=found<0?(line==='red'?0:stops.indexOf('N Killingsworth St')):found;
   let stop=entry,target=entry,progress=1,aboard=false;
   function position(offset,open){
     corridor.position.z=-offset*spacing;
@@ -137,7 +142,7 @@ export function createYellowLine(stationId) {
   }
   position(stop,1);
   return {scene,sun:light,ambient,get name(){return stops[stop]},get aboard(){return aboard},
-    get riding(){return progress<1},get atStreet(){return stop===2&&!aboard},
+    get riding(){return progress<1},get atStreet(){return stops[stop]==='N Killingsworth St'&&!aboard},
     get next(){return stops[target]},
     reset(){stop=entry;target=entry;progress=1;aboard=false;position(stop,1)},
     adjacent(dir){return stops[stop+dir]},
