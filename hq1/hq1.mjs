@@ -1,3 +1,8 @@
+import { buildOpenhaus } from './portland/openhaus.mjs';
+import {portlandSky} from './portland/weather.mjs';
+import {buildAlbertaBlocks} from './portland/alberta-blocks.mjs';
+import {buildChurch,churchFrontages} from './portland/church.mjs';
+import {buildKillingsworth} from './portland/killingsworth.mjs';
 import {buildShowrooms,stops} from './portland/showrooms.mjs';
 import {createActivities} from './portland/activities.mjs';
 import { buildJarrettBlock, jarrettBlock } from './portland/jarrett.mjs';
@@ -33,6 +38,9 @@ function renderDistrict() {
   let yaw = start.heading, pitch = 0;
   const view = search.get('view');
   const previewCameras = {
+    sumner: {position:[-4,2.35,-17],target:[18,2.3,-24]},
+    church: {position:[-4,2.25,-79],target:[18,2.2,-89]},
+    killingsworth: {position:[-2,2.6,-49],target:[4,2.5,-70]},
     jarrett: { position:[-6.3,2.45,-162], target:[6,2.5,-132] },
     neighborhood: { position:[-8.5,3.2,-23], target:[-15,2.73,-32] },
     street: { position:[-4.6,2.14,6.35], target:[-1.4,2.05,-30] },
@@ -109,12 +117,18 @@ function renderDistrict() {
     document.querySelector('header a').textContent = 'Return to HQ1';
   } else {
     buildStreet(builder);
+    buildChurch(builder);
+    buildAlbertaBlocks(builder);
     buildJarrettBlock(builder);
-    signals=buildShowrooms(builder,blockers);
+    const albertaSignal=buildShowrooms(builder,blockers);
+    const killingsworthSignal=buildKillingsworth(builder);
+    signals=seconds=>{albertaSignal(seconds);killingsworthSignal(seconds);};
     if (!preview) activities=createActivities(scene,camera,clear);
-    for (const building of [...neighboringBuildings, ...jarrettBlock, ...neighborhood.venues]) {
+    for (const building of [...neighboringBuildings, ...jarrettBlock, ...churchFrontages, ...neighborhood.venues]) {
       if (building.appearance.style === 'nlc') {
         doorTargets.set(building.id, buildNorthLeftChefSite(builder));
+      } else if (building.appearance.style === 'openhaus') {
+        buildOpenhaus(builder, building, blockers);
       } else {
         const door = buildFacade(builder, building);
         if (building.id) doorTargets.set(building.id, [door]);
@@ -134,10 +148,12 @@ function renderDistrict() {
     scene.add(plaque);
   }
   flushBoxes();
-  scene.add(new THREE.HemisphereLight('#e4efff','#82715c',interior ? 2.6 : 2.05));
+  const ambient=new THREE.HemisphereLight('#e4efff','#82715c',interior ? 2.6 : 2.05);
+  scene.add(ambient);
   const sun = new THREE.DirectionalLight('#fff0d9',2.35);
   sun.position.set(18,14,11);
   scene.add(sun);
+  const weather=!interior && !preview ? portlandSky(scene,sun,ambient) : null;
 
   const keys = new Set();
   const canvas = renderer.domElement;
@@ -222,6 +238,8 @@ function renderDistrict() {
     last = now;
     const pads=readGamepads();
     const pad=gamepad.sample(pads,document.hasFocus() && !document.hidden);
+    const {x:wx,z:wz}=camera.position;
+    weather?.(dt,camera,(Math.abs(wx+17)<5 && Math.abs(wz-84)<9)||(Math.abs(wx-17)<5 && Math.abs(wz+228)<9));
     signals?.(now/1000);
     if (pad.edges.includes(0) && !document.activeElement?.matches('a,button') && !document.querySelector('dialog[open]')) useEntrance();
     const exitYaw=activities?.takeExitYaw();
@@ -262,7 +280,8 @@ function renderDistrict() {
 }
 
 try {
-  renderDistrict();
+  if(search.get('rail')==='yellow'){const {enterRail}=await import('./portland/rail-view.mjs');enterRail();}
+  else renderDistrict();
 } catch (error) {
   if (!(error instanceof Error) || !error.message.includes('WebGL')) throw error;
   document.body.classList.add('unavailable');

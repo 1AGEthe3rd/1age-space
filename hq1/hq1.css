@@ -23,3 +23,8 @@ footer p{margin:0 0 7px;background:#061311d9;border-radius:9px;padding:6px;font-
 .cabinet{width:min(360px,90vw);background:#191629;color:#c9f6e9;border:2px solid #735486;border-radius:12px;text-align:center}
 .cabinet h2{margin:0 0 8px}.cabinet canvas{width:100%;height:auto;touch-action:none}.cabinet::backdrop{background:#101222bd}
 @media(orientation:landscape) and (max-height:500px){.drive-panel{bottom:8px;width:calc(100vw - 220px)}.cabinet canvas{max-height:45vh;object-fit:contain}}
+
+#weather{font-size:12px;text-shadow:0 1px 4px #000;background:#122029af}
+header #rail-link{order:1;margin-left:auto}header a:first-of-type{order:2}
+.rail-panel{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}.rail-panel button{pointer-events:auto}
+@media(max-width:550px){header{flex-wrap:wrap;gap:4px}header a{font-size:12px;min-height:36px;padding:6px 9px}}

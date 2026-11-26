@@ -1,0 +1,70 @@
+{
+  "crs": "EPSG:4326",
+  "reviewed": "2026-11-26",
+  "sources": [
+    "City of Portland Corporate GIS, Active Address Points (layer 1272), metadata layer 54157",
+    "City of Portland Bureau of Planning and Sustainability, Building Footprints (layer 48), metadata layer 52413"
+  ],
+  "addresses": [
+    {
+      "address": "4545 NE MARTIN LUTHER KING JR BLVD",
+      "addressId": 581892,
+      "buildingId": "1N1E22AD-16200-B1",
+      "propertyId": "R180463",
+      "longitude": -122.66197979972324,
+      "latitude": 45.55589619849863,
+      "side": "west",
+      "buildingAddress": "4525 NE M L KING BLVD",
+      "stories": 1,
+      "roof": "Pitched"
+    },
+    {
+      "address": "5020 NE MARTIN LUTHER KING JR BLVD",
+      "addressId": 889233,
+      "buildingId": "1N1E23BB-22600-B1",
+      "propertyId": "R261140",
+      "longitude": -122.66112589804509,
+      "latitude": 45.55941969888543,
+      "side": "east",
+      "buildingAddress": "5020 NE M L KING BLVD",
+      "stories": 1,
+      "roof": "Flat"
+    },
+    {
+      "address": "5601 NE MARTIN LUTHER KING JR BLVD",
+      "addressId": 576323,
+      "buildingId": "1N1E15DD-13700-B1",
+      "propertyId": "R243114",
+      "longitude": -122.66177587047565,
+      "latitude": 45.56355275662391,
+      "side": "west",
+      "buildingAddress": "5601 NE M L KING BLVD",
+      "stories": 1,
+      "roof": "Flat"
+    },
+    {
+      "address": "5775 NE MARTIN LUTHER KING JR BLVD",
+      "addressId": 576112,
+      "buildingId": "1N1E15DD-13600-B1",
+      "propertyId": "R243350",
+      "longitude": -122.66168870155373,
+      "latitude": 45.564982399514115,
+      "side": "west",
+      "buildingAddress": "5775 NE M L KING BLVD",
+      "stories": 1,
+      "roof": "Pitched"
+    },
+    {
+      "address": "6720 NE MARTIN LUTHER KING JR BLVD",
+      "addressId": 571739,
+      "buildingId": "1N1E14BC-16600-B1",
+      "propertyId": "R214322",
+      "longitude": -122.66119776775939,
+      "latitude": 45.57150211720838,
+      "side": "east",
+      "buildingAddress": "6720-6732 NE M L KING BLVD",
+      "stories": 1,
+      "roof": "Flat"
+    }
+  ]
+}

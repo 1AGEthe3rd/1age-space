@@ -21,6 +21,16 @@
   },
   "stops": [
     {
+      "id": "openhaus",
+      "name": "openHAUS and Harry Jackson Plaza",
+      "address": "5020 NE Martin Luther King Jr Blvd",
+      "url": "/hq1/?stop=openhaus",
+      "propertyId": "place-us-portland-openhaus-5020",
+      "representation": "partially_reconstructed",
+      "source": "https://www.openhauspdx.com/",
+      "checkedAt": "2026-11-26"
+    },
+    {
       "id": "jarrett",
       "name": "NE MLK Jr Blvd at NE Jarrett St",
       "url": "/hq1/?stop=jarrett",
@@ -43,6 +53,62 @@
       "representation": "original_virtual_interpretation",
       "source": "https://www.javan-imports.com/contact",
       "checkedAt": "2026-11-25"
+    },
+    {
+      "id": "killingsworth",
+      "name": "NE MLK Jr Blvd at NE Killingsworth St",
+      "url": "/hq1/?stop=killingsworth",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/bicycle-committee/documents/regional-flexible-funds-allocation-bac-november/download"
+    },
+    {
+      "id": "church",
+      "name": "NE MLK Jr Blvd at NE Church St",
+      "url": "/hq1/?stop=church",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/bicycle-committee/documents/regional-flexible-funds-allocation-bac-november/download"
+    },
+    {
+      "id": "jessup",
+      "name": "NE MLK Jr Blvd at NE Jessup St",
+      "url": "/hq1/?stop=jessup",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/bicycle-committee/documents/regional-flexible-funds-allocation-bac-november/download"
+    },
+    {
+      "id": "webster",
+      "name": "NE MLK Jr Blvd at NE Webster St",
+      "url": "/hq1/?stop=webster",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
+    },
+    {
+      "id": "sumner",
+      "name": "NE MLK Jr Blvd at NE Sumner St",
+      "url": "/hq1/?stop=sumner",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
+    },
+    {
+      "id": "roselawn",
+      "name": "NE MLK Jr Blvd at NE Roselawn St",
+      "url": "/hq1/?stop=roselawn",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
+    },
+    {
+      "id": "emerson",
+      "name": "NE MLK Jr Blvd at NE Emerson St",
+      "url": "/hq1/?stop=emerson",
+      "representation": "approximate",
+      "source": "https://www.portland.gov/transportation/pbot-projects/documents/ne-mlk-jr-blvd-crossing-improvement-plans-revised/download"
+    },
+    {
+      "id": "kenton-denver",
+      "name": "Downtown Kenton \u00b7 N Denver Avenue",
+      "url": "/hq1/?rail=yellow&station=kenton-n-denver-ave",
+      "representation": "approximate",
+      "source": "https://www.portlandoregon.gov/shared/cfm/image.cfm?id=327295"
     }
   ],
   "propertyConnections": [
@@ -57,6 +123,25 @@
       "occupancyEvidence": "operator_published_location",
       "source": "https://www.openhauspdx.com/",
       "checkedAt": "2026-11-25"
+    }
+  ],
+  "transit": [
+    {
+      "id": "trimet-max-yellow",
+      "url": "/hq1/?rail=yellow",
+      "entryStation": "N Killingsworth St",
+      "stations": [
+        "Overlook Park",
+        "N Prescott St",
+        "N Killingsworth St",
+        "Rosa Parks",
+        "N Lombard TC",
+        "Kenton/N Denver Ave",
+        "Delta Park/Vanport",
+        "Expo Center"
+      ],
+      "service": "simulated",
+      "source": "https://trimet.org/max/"
     }
   ]
 }

@@ -27,8 +27,12 @@ export function buildNorthLeftChefSite({ box, sign, scene, material }) {
   const concrete=material('paving','#c7beb1',7,10);
   box(0,.017,-94,12,.035,44,asphalt); // Continue MLK without moving earlier streets.
   for (const side of [-1,1]) {
-    box(side*8.9,.039,-94,5.8,.08,44,concrete);
-    box(side*6,.08,-94,.18,.13,44,'#a6a197');
+    // Open the east curb at Church and the existing west curb at Jessup.
+    const segments=side>0 ? [[-116,-90.7],[-83.3,-72]] : [[-110,-72]];
+    for(const [from,to] of segments){
+      box(side*8.9,.039,(from+to)/2,5.8,.08,to-from,concrete);
+      box(side*6,.08,(from+to)/2,.18,.13,to-from,'#a6a197');
+    }
   }
   for (let at=-73;at>-111;at-=7) {
     for (const lane of [-.11,.11]) box(lane,.041,at,.075,.011,5.25,'#ccab57');
