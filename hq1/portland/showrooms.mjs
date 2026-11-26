@@ -1,3 +1,4 @@
+import {javanLot} from './javan-lot.mjs';
 import {albertaBlocks} from './alberta-blocks.mjs';
 import * as T from '../../space/shared/three.module.js';
 
@@ -8,6 +9,7 @@ export const stops = {
   jessup:{x:-8.4,z:-106.7,heading:.82},
   killingsworth:{x:-9.7,z:-51,heading:-.46},
   javan:{x:7.1,z:84,heading:Math.PI/2},
+  'javan-lot':{x:-16,z:104,heading:Math.PI/2},
   retro:{x:9.1,z:-228,heading:-Math.PI/2}
 };
 export function buildShowrooms({box,sign,scene,material},blockers) {
@@ -17,8 +19,8 @@ export function buildShowrooms({box,sign,scene,material},blockers) {
     box(0,-.36,z,78,.56,length,'#716d5a');
     box(0,.018,z,12,.035,length,road);
     for(const side of [-1,1]) {
-      box(side*8.9,.04,z,5.8,.08,length,walk);
-      box(side*6,.08,z,.16,.13,length,'#b0a89b');
+      const runs=side<0&&begin===26?[[begin,javanLot.gateMinZ],[javanLot.gateMaxZ,end]]:[[begin,end]];
+      for(const [a,b] of runs){box(side*8.9,.04,(a+b)/2,5.8,.08,b-a,walk);box(side*6,.08,(a+b)/2,.16,.13,b-a,'#b0a89b');}
       for(let at=begin+3;at<end-2;at+=6)box(side*.11,.041,at,.075,.009,4.6,'#cfa651');
     }
   }
@@ -47,6 +49,28 @@ export function buildShowrooms({box,sign,scene,material},blockers) {
   }
   shop('JAVAN IMPORTS',-17,84,'#bbbaac','#304f50');
   shop('RETRO GAME BAR',17,-228,'#604f63','#34213f');
+  const {minX,maxX,minZ,maxZ,gateMinZ,gateMaxZ}=javanLot;
+  box((minX+maxX)/2,.027,(minZ+maxZ)/2,maxX-minX,.05,maxZ-minZ,road);
+  box((maxX-5.9)/2,.027,(gateMinZ+gateMaxZ)/2,-5.9-maxX,.05,gateMaxZ-gateMinZ,road);
+  function fence(x1,z1,x2,z2){
+    const length=Math.hypot(x2-x1,z2-z1),vertical=x1===x2;
+    const x=(x1+x2)/2,z=(z1+z2)/2;
+    blockers.push({x:x-(vertical?.07:length/2),z:z-(vertical?length/2:.07),w:vertical?.14:length,d:vertical?length:.14});
+    const n=Math.ceil(length/1.9);
+    for(let i=0;i<=n;i++)box(x1+(x2-x1)*i/n,.9,z1+(z2-z1)*i/n,.08,1.8,.08,'#596563');
+    for(const y of [.17,1.66])box(x,y,z,vertical?.045:length,.045,vertical?length:.045,'#89918c');
+    for(let i=0;i<Math.ceil(length/.28);i++){
+      const t=(i+.5)/Math.ceil(length/.28);
+      box(x1+(x2-x1)*t,.9,z1+(z2-z1)*t,.018,1.48,.018,'#7a8580');
+    }
+    for(const y of [.49,.92,1.34])box(x,y,z,vertical?.02:length,.018,vertical?length:.02,'#7a8580');
+  }
+  fence(minX,minZ,minX,maxZ);fence(minX,maxZ,maxX,maxZ);
+  fence(minX,minZ,maxX,minZ);
+  fence(maxX,minZ,maxX,gateMinZ);fence(maxX,gateMaxZ,maxX,maxZ);
+  for(const zz of [gateMinZ,gateMaxZ])box(maxX,.97,zz,.13,1.94,.13,'#414d49');
+  for(const zz of [96,99,110,113])box(-21.7,.059,zz,3.8,.012,.065,'#c9c9b8');
+  // This is an original virtual test-drive lot, not a surveyed dealership floor plan.
   for(const z of [51,68,99,111,-193,-208,-249]){
     for(const side of [-1,1]){
       const x=side*7.15;
