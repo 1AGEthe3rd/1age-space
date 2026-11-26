@@ -101,7 +101,6 @@ export function enterAirport(origin){
   const status=document.createElement('output');status.setAttribute('aria-live','polite');panel.append(status);
   const action=document.createElement('button');action.type='button';panel.append(action);
   const view=document.createElement('button');view.type='button';view.textContent='◉';view.setAttribute('aria-label','Switch passenger view');view.hidden=true;panel.append(view);
-  const exit=document.createElement('a');exit.hidden=true;panel.append(exit);
   const groundLink=document.createElement('a');panel.append(groundLink);
   document.body.append(panel);
   const title=document.querySelector('h1'),back=document.querySelector('header a');
@@ -161,11 +160,11 @@ export function enterAirport(origin){
     terrain.visible=phase.altitude>120;terrain.position.z=(trip.elapsed*45)%320-160;
     ground.visible=phase.altitude<180;
     clouds.visible=phase.altitude>150;clouds.position.z=(trip.elapsed*19)%240-120;
-    status.textContent=trip.status==='terminal'?'Demo departure · '+airports[trip.destination].code:trip.status==='boarded'?'Ready · simulated flight':phase.name+' · '+airports[trip.destination].code+' · '+Math.round(trip.progress*100)+'%';
+    const nextStatus=trip.status==='terminal'?'Demo departure · '+airports[trip.destination].code:trip.status==='boarded'?'Ready · simulated flight':phase.name+' · '+airports[trip.destination].code+' · '+Math.round(trip.progress*100)+'%';
+    if(status.textContent!==nextStatus)status.textContent=nextStatus;
     action.textContent=trip.status==='terminal'?'Board free demo':trip.status==='boarded'?'Depart':trip.status==='arrived'?'Leave aircraft':'In flight';
     action.disabled=flying||(trip.status==='terminal'&&!nearGate());
     view.hidden=!aboard||trip.status==='arrived';
-    exit.hidden=trip.status!=='arrived';exit.href=airports[trip.destination].hq;exit.textContent='Continue to '+airports[trip.destination].city;
     groundLink.hidden=aboard;groundLink.href=origin==='pdx'?'?rail=red&station=portland-international-airport':'../hq2/';groundLink.textContent=origin==='pdx'?'MAX Red Line':'HQ2 city transfer';
     back.hidden=aboard;
     renderer.render(scene,camera);
