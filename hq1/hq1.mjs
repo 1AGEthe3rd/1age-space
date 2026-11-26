@@ -1,3 +1,4 @@
+import { buildOpenhaus } from './portland/openhaus.mjs';
 import {portlandSky} from './portland/weather.mjs';
 import {buildAlbertaBlocks} from './portland/alberta-blocks.mjs';
 import {buildChurch,churchFrontages} from './portland/church.mjs';
@@ -126,6 +127,8 @@ function renderDistrict() {
     for (const building of [...neighboringBuildings, ...jarrettBlock, ...churchFrontages, ...neighborhood.venues]) {
       if (building.appearance.style === 'nlc') {
         doorTargets.set(building.id, buildNorthLeftChefSite(builder));
+      } else if (building.appearance.style === 'openhaus') {
+        buildOpenhaus(builder, building, blockers);
       } else {
         const door = buildFacade(builder, building);
         if (building.id) doorTargets.set(building.id, [door]);

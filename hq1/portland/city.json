@@ -21,6 +21,16 @@
   },
   "stops": [
     {
+      "id": "openhaus",
+      "name": "openHAUS and Harry Jackson Plaza",
+      "address": "5020 NE Martin Luther King Jr Blvd",
+      "url": "/hq1/?stop=openhaus",
+      "propertyId": "place-us-portland-openhaus-5020",
+      "representation": "partially_reconstructed",
+      "source": "https://www.openhauspdx.com/",
+      "checkedAt": "2026-11-26"
+    },
+    {
       "id": "jarrett",
       "name": "NE MLK Jr Blvd at NE Jarrett St",
       "url": "/hq1/?stop=jarrett",

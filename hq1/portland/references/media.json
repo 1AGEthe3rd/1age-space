@@ -1,0 +1,400 @@
+{
+  "source": "Founder-uploaded files. Original capture and third-party authorship may differ.",
+  "use": "Private visual study for visually matched firsthand footage. No redistribution permissions recorded. Screen captures excluded.",
+  "sites": {
+    "openhaus-plaza": {
+      "street": "NE Martin Luther King Jr Boulevard",
+      "segment": "NE Alberta Street to NE Webster Street",
+      "intersection": "NE Alberta Street",
+      "addressId": 889233,
+      "buildingId": "1N1E23BB-22600-B1",
+      "business": "openHAUS",
+      "place": "Harry Jackson Plaza"
+    },
+    "skidmore-4300": {
+      "street": "NE Skidmore Street",
+      "intersection": null,
+      "addressId": null,
+      "buildingId": null,
+      "business": null,
+      "evidence": "Readable NE Skidmore St blade and 4300 block number. Cross-street blade and property identity unresolved."
+    }
+  },
+  "defaults": {
+    "captureDate": null,
+    "viewBearing": null
+  },
+  "files": [
+    {
+      "file": "IMG_1704.jpeg",
+      "sha256": "c7f9f3e15c59647f447ffe8526d8c364dbb649bb7edb4b8516e00b8c96b1ee73",
+      "status": "unrelated_screen",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1705.jpeg",
+      "sha256": "1a47b2da5d75143702cbf28238c68fc63a5bd64eb78ca6d544d2569577f83d4d",
+      "status": "unrelated_screen",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1706.jpeg",
+      "sha256": "0591407058b105b20eeba860cf3424250cd595ae7a3e50f0d754125b56f5dc6a",
+      "status": "unrelated_screen",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1707.jpeg",
+      "sha256": "46064d08673d0b32e0b2155e0b9706bc9147bcfc4e61743ecb3709ffb36e0294",
+      "status": "unrelated_screen",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1723.jpeg",
+      "sha256": "a0b89e2a97a88e8ff79afb61ccf4372b6ba251946505d00b3c22d2c813746b7f",
+      "status": "unrelated_screen",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1724.jpeg",
+      "sha256": "732b2e7fad73587e492a298a47477d04faaa7112be9b4424283c050e71ae0067",
+      "status": "unrelated_screen",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1753.jpeg",
+      "sha256": "170c391449abb53930f53894c5204ee684bfa4ebb0fc6ec72d6060f569610da1",
+      "status": "unrelated_screen",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1699.mp4",
+      "sha256": "e2017843049e93ae0ad519b92b26e195db2aaaa265a7ae93b8c9fea3ade6f708",
+      "status": "visually_matched",
+      "site": "openhaus-plaza",
+      "subject": "storefront and plaza"
+    },
+    {
+      "file": "IMG_1700.mp4",
+      "sha256": "259cd50037252c75a885dcd381b792c39f12df4405265afe428bf85eb0a0f965",
+      "status": "visually_matched",
+      "site": "openhaus-plaza",
+      "subject": "memorial and planting"
+    },
+    {
+      "file": "IMG_1701(1).mp4",
+      "sha256": "760c2dab89d53a6c994fae729ad1ce943f6964dfe1bea8783b22a8e0c8b18871",
+      "status": "visually_matched",
+      "site": "openhaus-plaza",
+      "subject": "memorial and planting"
+    },
+    {
+      "file": "IMG_1702.mp4",
+      "sha256": "a7a69e668b4d1f60083f4e4bbe776fa6fa1de6cefcf20d0101df0f3aa826d22f",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1708.jpeg",
+      "sha256": "8a18abbf116ebcdfde60d32950383b9f2f1e2dddc30b586747b7ad7c527952ac",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1709.jpeg",
+      "sha256": "0e310e32336729823dbe767aeb5cfae1197f527b3450637881c016f9f082623b",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1710.jpeg",
+      "sha256": "2f8b2f8fc19d58584142411dd46e45e43c7f3552ff34dce3d4f708fd3ac5def5",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1711.jpeg",
+      "sha256": "534dc2514a8cd5e74b6165fc237997bcd13bc97d93b0c4b15596147834deec45",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1712.jpeg",
+      "sha256": "482aab7f11a8dd263b183bf62bbf639c95085c6a830774422d6846ac69026e9a",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1713.jpeg",
+      "sha256": "51f1b5e6b9657477c56084c2f69dc22c1809a8862bbfc0ec421ab8831098ad6c",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1714.jpeg",
+      "sha256": "e9b72236675f5373a5331e3e19ac416c9979ee84933aed2b31de1761811df22a",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1715.jpeg",
+      "sha256": "35e6a5d4fca0ebbf7362dc4b99145a5fa794c1fddd84d1a16c65d8f863a78098",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1716.jpeg",
+      "sha256": "e644c94fe6cdfd98c0404b1a58ed4788da8f1cf386cc7527a4e3bbee607115c3",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1717.jpeg",
+      "sha256": "6042d3cf0f7a4f4cfb1fe4c0189c8424da455ef98c2d1927eee60ce542df1c17",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1718.jpeg",
+      "sha256": "ffc0350b28c170ed7321540ebf138b447b8d869b6c7a8f890a714fb6116e5c3e",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1719.jpeg",
+      "sha256": "19ff96b0e419e19113832b0f259c2ae359c6e5a08ca38d8c0a2e8674cda9f7bd",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1720.jpeg",
+      "sha256": "37cfbe54bac6df0d845b70ea3d472efebbb2bf753d16ac4786aee6093648c71e",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1721.jpeg",
+      "sha256": "288012899c8cba577237f3381ca087942f148463d986af13106cce7f5a6b8fd8",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1722.jpeg",
+      "sha256": "1e424413b7d4aabc84d7515e06742bf451f3db311e8b7fa0c81335b1d9a12fa4",
+      "status": "third_party_screen_capture",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1726.mp4",
+      "sha256": "fb8bcf0ebab4f774a3f557bcdf1d738cff8ce05af996a3f4c781edf6359e2bc1",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1727.mp4",
+      "sha256": "472d9c7801a54932635f95a32ae12b78eb326c7a2dff8f3d68dabacc455ab741",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1728.mp4",
+      "sha256": "e897dce5af2ee7cbe2e4cb1b6401c1f383db2dd1eda08feca882dde56af32a37",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1730.mp4",
+      "sha256": "735119ce3bc61523a2d98a08d29e53057907a5817d665f46f56f6a807d292856",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1731.mp4",
+      "sha256": "8ce816d1418c65d5a2d2e6df26258a18b1b28d250f30b409710b287d908d5f8f",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1732.mp4",
+      "sha256": "50214ef3de42bed39306816ca3ebed6fe42c1191a18a1e1e5f6b7af405ebd209",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1733.mp4",
+      "sha256": "7121627cb08d685925fe8a88f1cfe60442709a02e147d253608770a2e60a2b36",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1734.mp4",
+      "sha256": "6d923923d8bf82315a33b6cc70453c5fb954015823999f6435bb86d4e340f209",
+      "status": "street_sign_matched",
+      "site": "skidmore-4300",
+      "subject": "NE Skidmore Street signal and blue corner building"
+    },
+    {
+      "file": "IMG_1735.mp4",
+      "sha256": "cb31f9271b023be85951d2982068a7c03063addd76792f1137da6dedea72a319",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1736.mp4",
+      "sha256": "3efbe24479ec45cb851a609947f924d6b6e9107683f4fc665f8fb6875b01eb2f",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1737.mp4",
+      "sha256": "82d04ec0740e9b0793273148a7c2a31ec8a7e6dee2071655454f5ef9122f5c73",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1738.mp4",
+      "sha256": "452120d4142ad258d4fe1711ae961be01cd4ad94d5d07eda6406825d2cb6c94c",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1739.mp4",
+      "sha256": "94843e7fa8c487155cbf5bce2f5088df0623d971cf1962ae0c683c65744ce3dc",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1740.mp4",
+      "sha256": "aa8e032054d0c1a11a61e07344834f47fc2d1eae7c6ecb471d261c4526b82297",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1741(1).jpeg",
+      "sha256": "e42a79a3230229dd2a40d83d33b50f81b0975b1b4a20d9a7c3a54c6bb79a876f",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1741.jpeg",
+      "sha256": "e42a79a3230229dd2a40d83d33b50f81b0975b1b4a20d9a7c3a54c6bb79a876f",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1742.mp4",
+      "sha256": "3900fa71380e73ae235e40a8399657aa8eab31c7c4326293169ad8895b3fe386",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1743.mp4",
+      "sha256": "f9f75b4eb37c482bb114c466f5bd8c839b4808888aa178828dc7d2f70e6c6bb4",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1744.mp4",
+      "sha256": "13d1c336c2a7e923f1227a2a06a69918c0fa6bf73894157af34100a70563a60f",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1745.mp4",
+      "sha256": "151efde118587486011e02674a6c4a69df05faa5797052c9d84dd4cbce4a657e",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1746.mp4",
+      "sha256": "fdec64b549e5f74e70fa2859fba7d1762d06c66e0bc6ee84b77ef97ad5dfcb7a",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1747.mp4",
+      "sha256": "54852954c30eeccdfe35325a75d5b17fa3e1dcf864603046a8179063cc194bba",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1754.jpeg",
+      "sha256": "b1d6243690d9426b4f117a23157e3b20d9c402ae90012154246d518349b7a801",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1755.mp4",
+      "sha256": "9f8817ec09db000c178f3e0ec6c2ddc7cd3574c5849e1053f260a4113fee3c74",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1756.mp4",
+      "sha256": "e018641cd687b7502fc6e17bdc94c446da2aed2c8472529cff3a726be0d1dd72",
+      "status": "unlocated_exterior",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1759.jpeg",
+      "sha256": "7222a840df47ea6e6029cbedc71a8640ea8f1ff5c3e9c48fbf1fc8cda32463a9",
+      "status": "unrelated_screen",
+      "site": null,
+      "subject": null
+    },
+    {
+      "file": "IMG_1698.mp4",
+      "sha256": "cb847a7d4e171f83c3fc7b41424accf58e11738cd85ec6a3f5e9e08fb4392a8a",
+      "status": "visually_matched",
+      "site": "openhaus-plaza",
+      "subject": "storefront and plaza"
+    }
+  ]
+}
