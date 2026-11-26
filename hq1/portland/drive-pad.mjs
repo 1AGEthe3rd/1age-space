@@ -22,7 +22,7 @@ export function createDrivePad(activate,toggle){
   panel.className='hq1-drive-pad';panel.setAttribute('role','group');panel.setAttribute('aria-label','1AGE driving gamepad');panel.hidden=true;
   const controls=document.createElement('div');controls.className='hq1-drive-actions';controls.hidden=true;
   const pedalsRow=document.createElement('div');pedalsRow.className='hq1-drive-pedals';pedalsRow.hidden=true;
-  const pedals={gas:0,brake:0};
+  const pedals={gas:0,brake:0},releases=[];
   function button(name,label,fn,host){
     const el=document.createElement('button');el.type='button';el.setAttribute('aria-label',label);icon(el,name);
     el.onclick=()=>{fn();el.blur();};host.append(el);return el;
@@ -38,13 +38,14 @@ export function createDrivePad(activate,toggle){
     let owner=null;
     el.onpointerdown=e=>{if(e.button!==0||owner!==null)return;e.preventDefault();e.stopPropagation();owner=e.pointerId;el.setPointerCapture(e.pointerId);pedals[name]=1;};
     const release=e=>{if(e&&owner!==e.pointerId)return;owner=null;pedals[name]=0;};
+    releases.push(()=>release());
     el.onpointerup=el.onpointercancel=el.onlostpointercapture=release;
-    el.onkeydown=e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();pedals[name]=1;}};
-    el.onkeyup=e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();pedals[name]=0;}};
+    el.onkeydown=e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();e.stopPropagation();pedals[name]=1;}};
+    el.onkeyup=e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();e.stopPropagation();pedals[name]=0;}};
     el.addEventListener('blur',()=>release());
   }
   panel.append(controls,pedalsRow);document.body.append(panel);
-  function reset(){pedals.gas=pedals.brake=0;}
+  function reset(){for(const release of releases)release();pedals.gas=pedals.brake=0;}
   for(const event of ['blur','pagehide','orientationchange','gamepaddisconnected'])addEventListener(event,reset);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
   let last='';
