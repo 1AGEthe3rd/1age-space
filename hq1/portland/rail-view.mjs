@@ -2,6 +2,7 @@ import {insideKentonStudio,kentonStation} from './kenton.mjs';
 import * as T from '../../space/shared/three.module.js';
 import {subscribeInput} from '../../space/shared/gamepad.mjs';
 import {createYellowLine} from './yellow-line.mjs';
+import {platformConnection} from './rail-network.mjs';
 import {portlandSky} from './weather.mjs';
 
 export function enterRail(line='yellow'){
@@ -62,7 +63,7 @@ export function enterRail(line='yellow'){
       b.hidden=!rail.aboard;b.disabled=rail.riding||!rail.adjacent(d);
       b.textContent=(line==='red'?(d===1?'Airport':'City'):(d===1?'North':'South'))+(rail.adjacent(d)?' · '+rail.adjacent(d):'');
     }
-    const destination=!rail.aboard&&!rail.riding?(line==='red'?(rail.name==='Portland International Airport'?['?airport=pdx','Enter PDX']:rail.name==='Rose Quarter TC'?['?rail=yellow&station=interstate-rose-quarter','Transfer to Yellow Line']:null):rail.name==='Interstate/Rose Quarter'?['?rail=red&station=rose-quarter-tc','Transfer to Red Line']:null):null;
+    const destination=platformConnection(line,rail.name,rail.aboard,rail.riding);
     transfer.hidden=!destination;if(destination){transfer.href=destination[0];transfer.textContent=destination[1];}
     r.render(rail.scene,camera);
   });
