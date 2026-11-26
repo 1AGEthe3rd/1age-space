@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {ownershipCandidate} from './ownership.mjs';
+const now=new Date('2026-11-26T00:00:00Z');
+const property={physical:{status:'available',listingId:'example',sourceIds:['source'],verifiedAt:'2026-11-25',expiresAt:'2026-11-27',vacancyVerified:true},virtual:{status:'available',spaceIds:[]}};
+test('unknown, occupied, assigned and protected places fail closed',()=>{assert.equal(ownershipCandidate({...property,physical:{status:'unknown'}},now),false);assert.equal(ownershipCandidate({...property,physical:{...property.physical,status:'occupied'}},now),false);assert.equal(ownershipCandidate({...property,virtual:{status:'available',spaceIds:['assigned']}},now),false);assert.equal(ownershipCandidate({...property,protection:{claimEligible:false}},now),false);});
+test('explicit unexpired vacancy and unassigned offering are needed',()=>{assert.equal(ownershipCandidate(property,now),true);assert.equal(ownershipCandidate({...property,physical:{...property.physical,vacancyVerified:false}},now),false);assert.equal(ownershipCandidate(property,new Date('2026-11-28')),false);});
