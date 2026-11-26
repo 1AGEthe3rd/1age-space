@@ -63,7 +63,6 @@ export function buildingFootprint({ position, orientation, appearance }) {
 
 export const neighboringBuildings = [
   { x:-17.3, z:1.3, width:13, depth:9, height:6.2, color:'#9e7557', accent:'#343d35', style:'workshop' },
-  { x:18, z:1.4, width:8.2, depth:9, height:8.2, color:'#b1866f', accent:'#414744', style:'brick' },
   { x:18, z:-15, width:9.4, depth:9, height:5.6, color:'#c27a63', accent:'#483f3a', style:'brick' },
   { x:-17.3, z:-48, width:14, depth:9, height:9.1, color:'#ad8f71', accent:'#45534d', style:'brick' },
   { x:18, z:-34, width:10.4, depth:9, height:7.4, color:'#d8c5a1', accent:'#435452', style:'stucco' },
@@ -72,7 +71,7 @@ export const neighboringBuildings = [
   position:{ x,z }, orientation:x < 0 ? Math.PI/2 : -Math.PI/2, appearance,
 })).concat([
   { position:{ x:26.4,z:26.4 }, orientation:Math.PI, appearance:{ width:15.6,depth:8.2,height:6.2,color:'#b7846c',accent:'#3e4a45',style:'brick' } },
-  { position:{ x:28.2,z:1.9 }, orientation:0, appearance:{ width:12.6,depth:8.5,height:7.8,color:'#ccc2a0',accent:'#4e554d',style:'stucco' } },
+  { position:{ x:22.5,z:.35 }, orientation:0, appearance:{ width:19.5,depth:5.8,height:4.8,style:'openhaus' } },
   { position:{ x:-28.2,z:1.3 }, orientation:0, appearance:{ width:10.4,depth:8.4,height:5.8,color:'#a08161',accent:'#474d44',style:'workshop' } },
 ]);
 
