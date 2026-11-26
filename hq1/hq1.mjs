@@ -54,7 +54,13 @@ function renderDistrict() {
   const materials = new Map();
   const boxBatches = new Map();
   const unit = new THREE.BoxGeometry(1, 1, 1);
-  const material = streetscapeMaterials();
+  const surfaceMaterial = streetscapeMaterials();
+  const roadMaterials = new Set();
+  const material = (kind,...args) => {
+    const value=surfaceMaterial(kind,...args);
+    if(kind==='asphalt')roadMaterials.add(value);
+    return value;
+  };
   let interiorDoor, signals, activities;
 
   function box(x, y, z, w, h, d, color, { glow = false, parent = scene, unbatched = false } = {}) {
@@ -153,7 +159,7 @@ function renderDistrict() {
   const sun = new THREE.DirectionalLight('#fff0d9',2.35);
   sun.position.set(18,14,11);
   scene.add(sun);
-  const weather=!interior && !preview ? portlandSky(scene,sun,ambient) : null;
+  const weather=!interior && !preview ? portlandSky(scene,sun,ambient,roadMaterials) : null;
 
   const keys = new Set();
   const canvas = renderer.domElement;
