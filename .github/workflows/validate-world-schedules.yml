@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'world/gameplay/schedule*.mjs'
+      - 'world/gameplay/travel*.mjs'
       - 'world/gameplay/rail-stations.mjs'
       - 'world/gameplay/arrival-board.mjs'
       - 'world/schedule-service/**'
@@ -18,4 +19,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test world/gameplay/schedules.test.mjs world/schedule-service/providers.test.mjs
+      - run: node --test world/gameplay/schedules.test.mjs world/schedule-service/providers.test.mjs world/gameplay/travel.test.mjs
