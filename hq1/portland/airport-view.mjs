@@ -42,7 +42,7 @@ export function enterAirport(origin){
     box(ground,x,5,z,28,10,30,'#b0b7b3');
     box(ground,x,10.2,z,31,.4,32,'#687a80');
   }
-  const dcaLife=origin==='dca'?createDcaLife(T,terminal,ground,box,sign,{low:matchMedia('(pointer:coarse)').matches||Boolean(navigator.deviceMemory&&navigator.deviceMemory<=4)}):null;
+  const dcaLife=origin==='dca'?createDcaLife(T,terminal,ground,box,sign):null;
   const terrain=new T.Group();world.add(terrain);
   for(let i=0;i<42;i++){
     const x=(i%7-3)*155,z=Math.floor(i/7)*160-480;
