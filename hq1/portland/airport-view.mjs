@@ -158,7 +158,7 @@ export function enterAirport(origin){
     action.textContent=trip.status==='terminal'?'Board free demo':trip.status==='boarded'?'Depart':trip.status==='arrived'?'Leave aircraft':'In flight';
     action.disabled=flying||(trip.status==='terminal'&&!nearGate());
     view.hidden=!aboard||trip.status==='arrived';
-    groundLink.hidden=aboard;groundLink.href=origin==='pdx'?'?rail=red&station=portland-international-airport':'../hq2/';groundLink.textContent=origin==='pdx'?'MAX Red Line':'HQ2 city transfer';
+    groundLink.hidden=aboard;groundLink.href=origin==='pdx'?'?rail=red&station=portland-international-airport':'../hq2/?destination=dca-metro';groundLink.textContent=origin==='pdx'?'MAX Red Line':'Yellow Line · Metro';
     back.hidden=aboard;
     renderer.render(scene,camera);
   });
