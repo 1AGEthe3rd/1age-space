@@ -1,41 +1,55 @@
 import {createVan} from './van.mjs';
 import {playCabinet} from './arcade.mjs';
+import {createDrivePad} from './drive-pad.mjs';
+import {javanLot} from './javan-lot.mjs';
+
 export function createActivities(scene,camera,clear) {
-  const fleet=[createVan(scene,4.3,84,0,'#48756c'),createVan(scene,-4.3,78,Math.PI,'#905d46')];
-  let selected=fleet[0], car=selected.car;
-  const panel=document.createElement('section');
-  panel.className='drive-panel';document.body.append(panel);
-  const button=(label,action)=>{
-    const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=()=>{action();b.blur();};return b;
-  };
-  const action=button('Enter van',activate), tools=document.createElement('div'),speed=document.createElement('output');
-  const gear=button('D / R',()=>toggle('KeyR')),headlights=button('Lights',()=>toggle('KeyH'));
-  tools.append(speed,gear,headlights,button('◀ Signal',()=>toggle('KeyQ')),button('Signal ▶',()=>toggle('KeyC')));
-  const pedals={gas:0,brake:0};
-  for(const [name,label] of [['brake','Brake'],['gas','Gas']]){
-    const b=button(label,()=>{});b.onpointerdown=e=>{e.preventDefault();b.setPointerCapture(e.pointerId);pedals[name]=1;};
-    b.onpointerup=b.onpointercancel=b.onlostpointercapture=()=>pedals[name]=0;tools.append(b);
+  const fleet=[createVan(scene,4.3,84,0,'#48756c'),createVan(scene,-4.3,78,Math.PI,'#905d46'),
+    createVan(scene,javanLot.spawnX,javanLot.spawnZ,javanLot.spawnHeading,'#6d777e')];
+  let selected=fleet[0],car=selected.car;
+  let driving=false,near='',lastExitYaw=null,view=0,lookYaw=0,lookPitch=0;
+  const views=['chase','bonnet','cockpit'];
+  const ui=createDrivePad(activate,toggle),pedals=ui.pedals;
+  const clamp=(v,min=-1,max=1)=>Math.max(min,Math.min(max,v));
+  function cameraMode(){
+    view=(view+1)%views.length;lookYaw=lookPitch=0;
+    selected.setCockpit(view===2);
   }
-  panel.append(action,tools);panel.hidden=true;tools.hidden=true;
-  let driving=false,near='',lastExitYaw=null;
   function activate(){
     if(document.querySelector('dialog[open]'))return;
     if(driving){
       if(Math.abs(car.speed)>.15)return;
       for(const side of [1,-1]){
         const x=car.x+side*1.65*Math.cos(car.heading),z=car.z-side*1.65*Math.sin(car.heading);
-        if(clear(x,z)){driving=false;car.speed=0;car.reverse=false;car.signal=0;camera.position.set(x,1.75,z);lastExitYaw=car.heading;break;}
+        if(clear(x,z)){driving=false;car.speed=0;car.reverse=false;car.signal=0;selected.setCockpit(false);camera.position.set(x,1.75,z);lastExitYaw=car.heading;ui.reset();break;}
       }
-    }else if(near==='van'){driving=true;car.speed=0;}
+    }else if(near==='van'){driving=true;car.speed=0;view=0;lookYaw=lookPitch=0;ui.reset();}
     else if(near==='game')playCabinet();
   }
   function toggle(code){
     if(!driving)return;
-    if(code==='KeyR' && Math.abs(car.speed)<.15)car.reverse=!car.reverse;
+    if(code==='KeyV')cameraMode();
+    if(code==='KeyR'&&Math.abs(car.speed)<.15)car.reverse=!car.reverse;
     if(code==='KeyH')car.lights=!car.lights;
     if(code==='KeyQ'||code==='KeyC'){const side=code==='KeyQ'?-1:1;car.signal=car.signal===side?0:side;}
   }
-  addEventListener('blur',()=>{pedals.gas=pedals.brake=0;if(driving)car.speed=0;});
+  function reset(){ui.reset();if(driving)car.speed=0;}
+  for(const event of ['blur','orientationchange','gamepaddisconnected','pagehide'])addEventListener(event,reset);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
+  function placeCamera(dt,controls){
+    lookYaw=clamp(lookYaw-controls.look.x*dt*1.65,view===0?-Math.PI:-1.25,view===0?Math.PI:1.25);
+    lookPitch=clamp(lookPitch-controls.look.y*dt*1.1,-.45,.45);
+    const h=car.heading+lookYaw;
+    if(view===0){
+      camera.position.set(car.x+Math.sin(h)*6.3,3.5+lookPitch*3,car.z+Math.cos(h)*6.3);
+      camera.lookAt(car.x,1.05,car.z);
+    }else{
+      const x=view===2?.48:0,z=view===2?-.88:-2.16,y=view===2?1.65:1.52;
+      const c=Math.cos(car.heading),s=Math.sin(car.heading);
+      camera.position.set(car.x+x*c+z*s,y,car.z-x*s+z*c);
+      camera.lookAt(camera.position.x-Math.sin(h)*10,y+Math.tan(lookPitch)*10,camera.position.z-Math.cos(h)*10);
+    }
+  }
   return {
     interact(){if(driving||near){activate();return true;}return false;},
     toggle,
@@ -44,33 +58,27 @@ export function createActivities(scene,camera,clear) {
       if(document.querySelector('dialog[open]'))return true;
       if(!driving){
         const distance=v=>Math.hypot(camera.position.x-v.car.x,camera.position.z-v.car.z);
-        selected=distance(fleet[0])<=distance(fleet[1])?fleet[0]:fleet[1];
-        car=selected.car;
+        selected=fleet.reduce((best,v)=>distance(v)<distance(best)?v:best,fleet[0]);car=selected.car;
       }
       near=Math.hypot(camera.position.x-car.x,camera.position.z-car.z)<3.5?'van':
-        (Math.abs(camera.position.x-18.65)<1.75 && [-233,-228,-223].some(z=>Math.abs(camera.position.z-z)<1.65)?'game':'');
+        (Math.abs(camera.position.x-18.65)<1.75&&[-233,-228,-223].some(z=>Math.abs(camera.position.z-z)<1.65)?'game':'');
       if(driving){
         if(edges.includes(3))toggle('KeyR');
         if(edges.includes(2))toggle('KeyH');
         if(edges.includes(4))toggle('KeyQ');
         if(edges.includes(5))toggle('KeyC');
+        if(edges.includes(10)||edges.includes(11))toggle('KeyV');
       }
-      const clamp=v=>Math.max(-1,Math.min(1,v));
       const steer=clamp(controls.move.x+Number(keys.has('KeyD')||keys.has('ArrowRight'))-Number(keys.has('KeyA')||keys.has('ArrowLeft')));
       const gas=Math.max(pedals.gas,Number(keys.has('KeyW')||keys.has('ArrowUp')),pad?.buttons[7]?.value||0);
       const brake=Math.max(pedals.brake,Number(keys.has('KeyS')||keys.has('ArrowDown')||keys.has('Space')),pad?.buttons[6]?.value||0);
       for(const van of fleet){
         const input=driving&&van===selected?{steer,gas,brake}:{steer:0,gas:0,brake:0};
-        van.update(dt,input,seconds,fleet.find(other=>other!==van).car);
+        van.update(dt,input,seconds,fleet.filter(other=>other!==van).map(other=>other.car));
       }
-      panel.hidden=!(driving||near);tools.hidden=!driving;
-      action.textContent=driving?'Exit van':near==='game'?'Play Orbit Rally':'Enter van';
-      action.disabled=driving&&Math.abs(car.speed)>.15;
+      ui.render(driving,near,car,views[view]);
       if(!driving)return false;
-      gear.disabled=Math.abs(car.speed)>.15;
-      speed.textContent=Math.round(Math.abs(car.speed)*2.237)+' mph · '+(car.reverse?'R':'D')+(car.lights?' · Lamps':'')+(car.signal===-1?' · ◀':car.signal===1?' · ▶':'');
-      camera.position.set(car.x+Math.sin(car.heading)*6.3,3.5,car.z+Math.cos(car.heading)*6.3);
-      camera.lookAt(car.x-Math.sin(car.heading)*3,1,car.z-Math.cos(car.heading)*3);
+      placeCamera(dt,controls);
       return true;
     }
   };

@@ -13,12 +13,13 @@ export function stepVan(car, input, dt, parked) {
   const x=car.x-Math.sin(heading)*car.speed*dt;
   const z=car.z-Math.cos(heading)*car.speed*dt;
   if(!fitsRoad(x,z,heading)){car.speed=0;return;}
-  if(parked && Math.hypot(x-parked.x,z-parked.z)<4.6){
+  for(const other of (Array.isArray(parked)?parked:[parked])){
+    if(!other||Math.hypot(x-other.x,z-other.z)>=4.6)continue;
     // Separating axes of both oriented vehicle footprints.
     const axes=h=>[[Math.cos(h),-Math.sin(h)],[Math.sin(h),Math.cos(h)]];
-    const a=axes(heading),b=axes(parked.heading);
+    const a=axes(heading),b=axes(other.heading);
     const span=(basis,u,v)=>.92*Math.abs(basis[0][0]*u+basis[0][1]*v)+2.05*Math.abs(basis[1][0]*u+basis[1][1]*v);
-    if([...a,...b].every(([u,v])=>Math.abs((x-parked.x)*u+(z-parked.z)*v)<span(a,u,v)+span(b,u,v))){
+    if([...a,...b].every(([u,v])=>Math.abs((x-other.x)*u+(z-other.z)*v)<span(a,u,v)+span(b,u,v))){
       car.speed=0;return;
     }
   }
