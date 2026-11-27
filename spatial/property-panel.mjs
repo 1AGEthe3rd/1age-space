@@ -1,3 +1,4 @@
+import {isReservedVirtual} from '../space/reserved-virtual.mjs';
 import {searchProperties,countryNames} from '../space/catalog.mjs';
 import {ownershipCandidate} from './ownership.mjs';
 export function mountPropertyPanel(host,section){
@@ -20,7 +21,7 @@ export function mountPropertyPanel(host,section){
  if(data.schemaVersion!==1||!Array.isArray(data.properties))throw Error();
  for(const code of [...new Set(data.properties.map(p=>p.address.countryCode))].sort())country.add(new Option(countryNames[code]||code,code));
  const render=()=>{results.replaceChildren();const found=searchProperties(data.properties,{q:query.value,country:country.value,businesses:data.businessProfiles||[]}).filter(p=>!own||ownershipCandidate(p));el('p',found.length+' matching records'+(found.length>20?' · first 20 shown':''),results);
- for(const p of found.slice(0,20)){const c=el('article','',results);el('strong',p.name,c);el('p',[p.address.line1,p.address.city,p.address.region].filter(Boolean).join(', '),c);el('p','Physical: '+p.physical.status+' · Virtual: '+p.virtual.status,c);const u=new URL('../catalog.html',import.meta.url);u.searchParams.set('property',p.id);link('Inspect property',u.href,c);}
+ for(const p of found.slice(0,20)){const c=el('article','',results);el('strong',p.name,c);el('p',[p.address.line1,p.address.city,p.address.region].filter(Boolean).join(', '),c);el('p','Physical: '+p.physical.status+' · Virtual: '+(isReservedVirtual(p)?'Reserved — not offered':p.virtual.status),c);const u=new URL('../catalog.html',import.meta.url);u.searchParams.set('property',p.id);link('Inspect property',u.href,c);}
  if(!found.length)el('p',own?'No eligible ownership candidates in this index. You may still create a separate virtual design.':'No matching records.',results);};query.oninput=country.onchange=render;render();
  }).catch(()=>el('p','Property index unavailable. Try the existing catalog.',results));
 }
