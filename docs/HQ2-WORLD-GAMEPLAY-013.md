@@ -1,0 +1,11 @@
+# World Gameplay Engine 001 — Washington adapter (HQ2 Build 013)
+Base: HQ2 Build 012, a0cc9664521234e2ac4c6b1ff42b56751d7effc5 (PR #17, validation 45684755937 succeeded). Preserve all earlier HQ2 work, Anacostia and Navy Yard geometry, Metro, storefront interiors, age restrictions, Treasury and reserved property protections. No World/Space migration, payment, property claims or deployment.
+
+## Shared mechanics
+Uses the exact same twelve world/gameplay/ files as Portland adapter review, including tests and CSS. KDCA weather and Eastern local time remain; shared streak rain, weather test modes, road splash sampling from mapped road geometry, and reversible pavement tint. Road meshes have a separate Lambert material to avoid darkening buildings/parks; true reflective surfaces are not implemented. Existing sky dome and indoor shelter behavior preserved.
+
+## Driving preview
+Opt in with /hq2/?drivePreview=1 on a development preview after hosting approval. The original left-hand-drive demo van appears only when the local gateway road and full footprint are loaded and valid. It is not real inventory. Uses common vehicle physics, three cameras, touchscreen icons and joysticks, keyboard/controller mappings, headlights, indicators, windshield wipers, audio and wet braking. The local adapter checks loaded flat paved road segments and building/water collision; bridges and unstreamed roads are excluded. No guarantee of citywide drivability; map/Metro/interior flows remain local. Add weatherPreview=rain for manual testing. No preview deployed.
+
+## Verification
+Four shared model tests passed; four actual gateway-area geographic tiles supplied 459 flat paved segments to an isolated JS check. Demo spawn footprint fit, short forward drive (~1.95 m), braking to a stop and final footprint fit passed, using mapped building and water polygons. Shared files identical across both reviews. No actual browser or device tests yet; check tile transitions, walking/entry/exit, dialogs, Metro, weather, performance and controller in preview. Review both adapter branches together and integrate shared files only once. No merge or deployment.
