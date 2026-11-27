@@ -3,6 +3,7 @@ import {subscribeInput} from '../../space/shared/gamepad.mjs';
 import {PadReader} from '../../space/shared/gamepad-model.mjs';
 import {airports,createJourney} from './flight-model.mjs';
 import {buildPdxTerminal,pdxSpawn,pdxWalkable,nearPdxGate} from './pdx-terminal.mjs';
+import {buildDcaTerminal,dcaSpawn,dcaWalkable,nearDcaGate} from './dca-terminal.mjs';
 import {detailPassengerCabin} from './passenger-cabin.mjs';
 
 export function enterAirport(origin){
@@ -28,31 +29,7 @@ export function enterAirport(origin){
   }
   const terminal=new T.Group();scene.add(terminal);
   if(origin==='pdx')buildPdxTerminal(T,terminal,box,sign,airports[trip.destination].code);
-  else {
-  box(terminal,0,-.12,0,22,.24,38,'#b0b5aa');
-  box(terminal,0,5.2,0,22,.32,38,'#c3b292');
-  box(terminal,0,2.5,18.9,22,5,.2,'#d0d6d2');
-  box(terminal,-10.9,2.5,0,.2,5,38,'#c9d4d2');
-  box(terminal,10.9,2.5,0,.2,5,38,'#c9d4d2');
-  for(let z=-15;z<17;z+=4){
-    box(terminal,0,4.85,z,19,.18,.3,'#8f7759');
-    for(const x of [-8.8,8.8]){
-      box(terminal,x,2.5,z,.2,5,.2,'#657573');
-      box(terminal,x,.4,z,1.6,.8,1.8,'#4b7774');
-    }
-  }
-  for(let x=-10;x<=10;x+=2.5){
-    box(terminal,x,2.5,-18.9,.14,5,.14,'#78918f');
-    box(terminal,x,.27,-18.9,2.5,.54,.12,'#59716f');
-  }
-  // Original terminal concept, no claim of a surveyed airport interior.
-  box(terminal,0,.011,-7,6,.022,18,'#487c75');
-  const airportSign=new T.Group();terminal.add(airportSign);
-  const updateSign=code=>{
-    airportSign.clear();sign(airportSign,airports[code].code+' · '+airports[code].city,0,3.8,-8,10);
-    sign(airportSign,'GATE 01',0,3.1,-15,5);
-  };updateSign(origin);
-  }
+  else buildDcaTerminal(T,terminal,box,sign,airports[trip.destination].code);
   const world=new T.Group();scene.add(world);
   const ground=new T.Group();world.add(ground);
   box(ground,0,-.6,0,1000,1,1600,'#82937b');
@@ -115,10 +92,10 @@ export function enterAirport(origin){
   const weather=document.querySelector('#weather');if(weather)weather.textContent='Simulation · no real ticket or fare';
   let yaw=0,pitch=0,last=0,windowView=false;
   if(origin==='pdx')camera.position.set(pdxSpawn.x,pdxSpawn.y,pdxSpawn.z);
-  else camera.position.set(0,1.65,13);
+  else camera.position.set(dcaSpawn.x,dcaSpawn.y,dcaSpawn.z);
   const keys=new Set(),reader=new PadReader();let input={move:{x:0,y:0},look:{x:0,y:0}};
   subscribeInput(v=>input=v);
-  function nearGate(){return origin==='pdx'?nearPdxGate(camera.position.x,camera.position.z):Math.abs(camera.position.x)<3&&camera.position.z< -10;}
+  function nearGate(){return origin==='pdx'?nearPdxGate(camera.position.x,camera.position.z):nearDcaGate(camera.position.x,camera.position.z);}
   function board(){
     if(trip.status==='terminal'&&nearGate()&&trip.board()){
       terminal.visible=false;plane.visible=true;camera.position.set(0,1.45,2);yaw=0;pitch=0;windowView=false;
@@ -159,9 +136,12 @@ export function enterAirport(origin){
       if(inTerminal&&origin==='pdx'){
         if(pdxWalkable(nx,camera.position.z))camera.position.x=nx;
         if(pdxWalkable(camera.position.x,nz))camera.position.z=nz;
+      }else if(inTerminal){
+        if(dcaWalkable(nx,camera.position.z))camera.position.x=nx;
+        if(dcaWalkable(camera.position.x,nz))camera.position.z=nz;
       }else{
-        camera.position.x=T.MathUtils.clamp(nx,inTerminal?-7:-.38,inTerminal?7:.38);
-        camera.position.z=T.MathUtils.clamp(nz,inTerminal?-17:-9,inTerminal?17:9);
+        camera.position.x=T.MathUtils.clamp(nx,-.38,.38);
+        camera.position.z=T.MathUtils.clamp(nz,-9,9);
       }
     }
     yaw-=input.look.x*dt*1.65;pitch=T.MathUtils.clamp(pitch-input.look.y*dt*1.3,-.8,.8);
