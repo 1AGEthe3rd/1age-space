@@ -4,6 +4,7 @@ const wallTones = ['#ad735b', '#947365', '#ba8d6d', '#c1ac8b', '#9e6752', '#aa8b
 const pavement = ['motorway','trunk','primary','secondary','tertiary','residential','unclassified','living_street','service'];
 const materials = {
   opaque: new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}),
+  road: new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}),
   window: new THREE.MeshBasicMaterial({vertexColors:true, side:THREE.DoubleSide}),
   facade: new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}),
   water: new THREE.MeshLambertMaterial({color:'#536f76', side:THREE.DoubleSide}),
@@ -195,7 +196,8 @@ function crosswalk(batch,rings) {
   }
 }
 
-function road(batch,kind,width,bridge,points,fixtures,decks) {
+export const cityRoadMaterials=new Set([materials.road]);
+function road(batch,roadBatch,kind,width,bridge,points,fixtures,decks,driveSegments) {
   const lane = pavement.includes(kind);
   const height = bridge ? (lane ? 2.8 : 2.9) : .025;
   for (let i=1;i<points.length;i++) {
@@ -205,7 +207,8 @@ function road(batch,kind,width,bridge,points,fixtures,decks) {
     const direction=[(b[0]-a[0])/length,(b[1]-a[1])/length];
     const offset=(distance,side=0)=>[a[0]+direction[0]*distance+direction[1]*side,a[1]+direction[1]*distance-direction[0]*side];
     if (lane && !bridge && kind!=='motorway' && kind!=='service') strip(batch,a,b,width+1.0,.013,'#878078');
-    strip(batch,a,b,width,height, lane ? (kind==='service' ? '#5b5956' : '#484944') : '#9a9383');
+    if(lane&&!bridge)driveSegments.push({a,b,width,kind});
+    strip(lane?roadBatch:batch,a,b,width,height, lane ? (kind==='service' ? '#5b5956' : '#484944') : '#9a9383');
     if (bridge) {
       decks.push([a,b,width*.56,height,kind]);
       for (const side of [-1,1]) {
@@ -232,8 +235,8 @@ function road(batch,kind,width,bridge,points,fixtures,decks) {
 
 export function makeTile(data,designs,detailed) {
   const group=new THREE.Group();
-  const ground=new Batch(), markings=new Batch(), shell=new Batch(), details=new Batch(), river=new Batch();
-  const fixtures=[], foliage=[], blockers=[], water=[], decks=[];
+  const ground=new Batch(), roadBatch=new Batch(), markings=new Batch(), shell=new Batch(), details=new Batch(), river=new Batch();
+  const fixtures=[], foliage=[], blockers=[], water=[], decks=[],driveSegments=[];
   for (const rings of data.osm.parks) ground.polygon(rings,.007,'#788053');
   for (const [kind,rings] of data.dc.surfaces) {
     if (kind==='water') {
@@ -246,7 +249,7 @@ export function makeTile(data,designs,detailed) {
       ground.polygon(rings,.063,'#a59e90');
     }
   }
-  for (const [kind,width,bridge,points] of data.osm.roads) road(ground,kind,width,bridge,points,fixtures,decks);
+  for (const [kind,width,bridge,points] of data.osm.roads) road(ground,roadBatch,kind,width,bridge,points,fixtures,decks,driveSegments);
   for (const [id,rings] of data.dc.buildings) {
     const design=designs[id];
     if (!design?.open) blockers.push(collider(rings));
@@ -271,12 +274,13 @@ export function makeTile(data,designs,detailed) {
   const waterMesh=river.mesh(materials.water,group);
   if (waterMesh) waterMesh.renderOrder=1;
   ground.mesh(materials.opaque,group);
+  roadBatch.mesh(materials.road,group);
   markings.mesh(materials.opaque,group);
   shell.mesh(materials.facade,group);
   const trim = detailed ? details.mesh(materials.window,group) : null;
   instances(group,box,fixtures);
   instances(group,crown,foliage);
-  return {group,trim,blockers,water,decks};
+  return {group,trim,blockers,water,decks,driveSegments};
 }
 
 export function updateWater(seconds) {
