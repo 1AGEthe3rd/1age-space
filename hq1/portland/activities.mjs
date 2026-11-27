@@ -2,6 +2,8 @@ import {createVan} from './van.mjs';
 import {playCabinet} from './arcade.mjs';
 import {createDrivePad} from './drive-pad.mjs';
 import {javanLot} from './javan-lot.mjs';
+import {nextWiperMode} from './windshield-model.mjs';
+import {createDriveAudio} from './drive-audio.mjs';
 
 export function createActivities(scene,camera,clear) {
   const fleet=[createVan(scene,4.3,84,0,'#48756c'),createVan(scene,-4.3,78,Math.PI,'#905d46'),
@@ -9,6 +11,7 @@ export function createActivities(scene,camera,clear) {
   let selected=fleet[0],car=selected.car;
   let driving=false,near='',lastExitYaw=null,view=0,lookYaw=0,lookPitch=0;
   const views=['chase','bonnet','cockpit'];
+  const audio=createDriveAudio();
   const ui=createDrivePad(activate,toggle),pedals=ui.pedals;
   const clamp=(v,min=-1,max=1)=>Math.max(min,Math.min(max,v));
   function cameraMode(){
@@ -21,7 +24,7 @@ export function createActivities(scene,camera,clear) {
       if(Math.abs(car.speed)>.15)return;
       for(const side of [1,-1]){
         const x=car.x+side*1.65*Math.cos(car.heading),z=car.z-side*1.65*Math.sin(car.heading);
-        if(clear(x,z)){driving=false;car.speed=0;car.reverse=false;car.signal=0;selected.setCockpit(false);camera.position.set(x,1.75,z);lastExitYaw=car.heading;ui.reset();break;}
+        if(clear(x,z)){driving=false;car.speed=0;car.reverse=false;car.signal=0;selected.setCockpit(false);audio.silence();camera.position.set(x,1.75,z);lastExitYaw=car.heading;ui.reset();break;}
       }
     }else if(near==='van'){driving=true;car.speed=0;view=0;lookYaw=lookPitch=0;ui.reset();}
     else if(near==='game')playCabinet();
@@ -29,13 +32,16 @@ export function createActivities(scene,camera,clear) {
   function toggle(code){
     if(!driving)return;
     if(code==='KeyV')cameraMode();
+    if(code==='KeyT')car.wiperMode=nextWiperMode(car.wiperMode);
+    if(code==='KeyM')audio.toggle();
     if(code==='KeyR'&&Math.abs(car.speed)<.15)car.reverse=!car.reverse;
     if(code==='KeyH')car.lights=!car.lights;
     if(code==='KeyQ'||code==='KeyC'){const side=code==='KeyQ'?-1:1;car.signal=car.signal===side?0:side;}
   }
-  function reset(){ui.reset();if(driving)car.speed=0;}
+  function reset(){ui.reset();audio.silence();if(driving)car.speed=0;}
   for(const event of ['blur','orientationchange','gamepaddisconnected','pagehide'])addEventListener(event,reset);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
+  addEventListener('pagehide',event=>{if(!event.persisted)audio.dispose();});
   function placeCamera(dt,controls){
     lookYaw=clamp(lookYaw-controls.look.x*dt*1.65,view===0?-Math.PI:-1.25,view===0?Math.PI:1.25);
     lookPitch=clamp(lookPitch-controls.look.y*dt*1.1,-.45,.45);
@@ -55,8 +61,8 @@ export function createActivities(scene,camera,clear) {
     toggle,
     isCockpit(){return driving&&view===2;},
     takeExitYaw(){const value=lastExitYaw;lastExitYaw=null;return value;},
-    frame(dt,keys,controls,pad,edges,seconds){
-      if(document.querySelector('dialog[open]'))return true;
+    frame(dt,keys,controls,pad,edges,seconds,wet=false){
+      if(document.querySelector('dialog[open]')){audio.silence();return true;}
       if(!driving){
         const distance=v=>Math.hypot(camera.position.x-v.car.x,camera.position.z-v.car.z);
         selected=fleet.reduce((best,v)=>distance(v)<distance(best)?v:best,fleet[0]);car=selected.car;
@@ -69,15 +75,17 @@ export function createActivities(scene,camera,clear) {
         if(edges.includes(4))toggle('KeyQ');
         if(edges.includes(5))toggle('KeyC');
         if(edges.includes(10)||edges.includes(11))toggle('KeyV');
+        if(edges.includes(8))toggle('KeyT');
       }
       const steer=clamp(controls.move.x+Number(keys.has('KeyD')||keys.has('ArrowRight'))-Number(keys.has('KeyA')||keys.has('ArrowLeft')));
       const gas=Math.max(pedals.gas,Number(keys.has('KeyW')||keys.has('ArrowUp')),pad?.buttons[7]?.value||0);
       const brake=Math.max(pedals.brake,Number(keys.has('KeyS')||keys.has('ArrowDown')||keys.has('Space')),pad?.buttons[6]?.value||0);
       for(const van of fleet){
-        const input=driving&&van===selected?{steer,gas,brake}:{steer:0,gas:0,brake:0};
+        const input=driving&&van===selected?{steer,gas,brake,wet}:{steer:0,gas:0,brake:0,wet};
         van.update(dt,input,seconds,fleet.filter(other=>other!==van).map(other=>other.car));
       }
-      ui.render(driving,near,car,views[view]);
+      audio.frame(driving&&!document.hidden&&document.hasFocus(),car.speed,gas,wet,view===2);
+      ui.render(driving,near,car,views[view],audio.enabled);
       if(!driving)return false;
       placeCamera(dt,controls);
       return true;
