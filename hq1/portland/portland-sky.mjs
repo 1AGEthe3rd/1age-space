@@ -47,9 +47,9 @@ export function attachPortlandSky({scene,sun,ambient,station,latitude,longitude,
     if(e.persisted)return;
     disposed=true;clearInterval(timer);request?.abort();geometry.dispose();paint.dispose();rain.dispose();
   });
-  return (dt,camera,sheltered=false)=>{
+  return (dt,camera,sheltered=false,cockpit=false)=>{
     if(Date.now()-lastPaint>60000){sky();lastPaint=Date.now();}
-    rain.frame(dt,camera,!sheltered&&kind==='rain');
+    rain.frame(dt,camera,!sheltered&&kind==='rain',cockpit);
     drops.visible=!sheltered&&kind==='snow';
     if(!drops.visible)return;
     drops.position.set(camera.position.x,0,camera.position.z);
