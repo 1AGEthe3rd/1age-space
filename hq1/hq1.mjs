@@ -244,14 +244,16 @@ function renderDistrict() {
     last = now;
     const pads=readGamepads();
     const pad=gamepad.sample(pads,document.hasFocus() && !document.hidden);
-    const {x:wx,z:wz}=camera.position;
-    weather?.(dt,camera,(Math.abs(wx+17)<5 && Math.abs(wz-84)<9)||(Math.abs(wx-17)<5 && Math.abs(wz+228)<9));
+    const updateWeather=()=>{
+      const {x:wx,z:wz}=camera.position;
+      weather?.(dt,camera,(Math.abs(wx+17)<5 && Math.abs(wz-84)<9)||(Math.abs(wx-17)<5 && Math.abs(wz+228)<9),activities?.isCockpit()??false);
+    };
     signals?.(now/1000);
     if (pad.edges.includes(0) && !document.activeElement?.matches('a,button') && !document.querySelector('dialog[open]')) useEntrance();
     const exitYaw=activities?.takeExitYaw();
     if (exitYaw!=null) {yaw=exitYaw;pitch=0;}
     if (activities?.frame(dt,keys,controls,gamepad.armed?Array.from(pads).find(p=>p?.connected&&p.mapping==='standard'&&p.index===gamepad.index):null,pad.edges,now/1000)) {
-      current=null;entry.hidden=true;renderer.render(scene,camera);return;
+      current=null;entry.hidden=true;updateWeather();renderer.render(scene,camera);return;
     }
     const x = Number(keys.has('KeyD') || keys.has('ArrowRight')) - Number(keys.has('KeyA') || keys.has('ArrowLeft')) + controls.move.x;
     const z = Number(keys.has('KeyS') || keys.has('ArrowDown')) - Number(keys.has('KeyW') || keys.has('ArrowUp')) + controls.move.y;
@@ -281,7 +283,7 @@ function renderDistrict() {
         ? near.status + ' · E, A, or select the door'
         : interior?.status ?? defaultHint;
     }
-    renderer.render(scene,camera);
+    updateWeather();renderer.render(scene,camera);
   });
 }
 
