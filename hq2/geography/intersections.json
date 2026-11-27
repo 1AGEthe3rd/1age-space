@@ -561,5 +561,34 @@
       -261.06,
       -809.01
     ]
+  },
+  {
+    "osmNode": "11198264296",
+    "intersection": [
+      -1633.3,
+      -1012.86
+    ],
+    "post": [
+      -1640.28,
+      -1002.19
+    ],
+    "arrival": [
+      -1640.28,
+      -1002.19
+    ],
+    "blades": [
+      {
+        "name": "M Street SE",
+        "label": "M St SE",
+        "angle": 0,
+        "osmWay": "1248740417"
+      },
+      {
+        "name": "Half Street SE",
+        "label": "Half St SE",
+        "angle": 1.5708,
+        "osmWay": "1315350430"
+      }
+    ]
   }
 ]

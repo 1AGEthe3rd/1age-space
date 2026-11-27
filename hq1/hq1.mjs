@@ -54,7 +54,13 @@ function renderDistrict() {
   const materials = new Map();
   const boxBatches = new Map();
   const unit = new THREE.BoxGeometry(1, 1, 1);
-  const material = streetscapeMaterials();
+  const surfaceMaterial = streetscapeMaterials();
+  const roadMaterials = new Set();
+  const material = (kind,...args) => {
+    const value=surfaceMaterial(kind,...args);
+    if(kind==='asphalt')roadMaterials.add(value);
+    return value;
+  };
   let interiorDoor, signals, activities;
 
   function box(x, y, z, w, h, d, color, { glow = false, parent = scene, unbatched = false } = {}) {
@@ -153,7 +159,7 @@ function renderDistrict() {
   const sun = new THREE.DirectionalLight('#fff0d9',2.35);
   sun.position.set(18,14,11);
   scene.add(sun);
-  const weather=!interior && !preview ? portlandSky(scene,sun,ambient) : null;
+  const weather=!interior && !preview ? portlandSky(scene,sun,ambient,roadMaterials) : null;
 
   const keys = new Set();
   const canvas = renderer.domElement;
@@ -238,14 +244,16 @@ function renderDistrict() {
     last = now;
     const pads=readGamepads();
     const pad=gamepad.sample(pads,document.hasFocus() && !document.hidden);
-    const {x:wx,z:wz}=camera.position;
-    weather?.(dt,camera,(Math.abs(wx+17)<5 && Math.abs(wz-84)<9)||(Math.abs(wx-17)<5 && Math.abs(wz+228)<9));
+    const updateWeather=()=>{
+      const {x:wx,z:wz}=camera.position;
+      weather?.(dt,camera,(Math.abs(wx+17)<5 && Math.abs(wz-84)<9)||(Math.abs(wx-17)<5 && Math.abs(wz+228)<9),activities?.isCockpit()??false);
+    };
     signals?.(now/1000);
     if (pad.edges.includes(0) && !document.activeElement?.matches('a,button') && !document.querySelector('dialog[open]')) useEntrance();
     const exitYaw=activities?.takeExitYaw();
     if (exitYaw!=null) {yaw=exitYaw;pitch=0;}
-    if (activities?.frame(dt,keys,controls,Array.from(pads).find(Boolean),pad.edges,now/1000)) {
-      current=null;entry.hidden=true;renderer.render(scene,camera);return;
+    if (activities?.frame(dt,keys,controls,gamepad.armed?Array.from(pads).find(p=>p?.connected&&p.mapping==='standard'&&p.index===gamepad.index):null,pad.edges,now/1000,weather?.isRaining()??false)) {
+      current=null;entry.hidden=true;updateWeather();renderer.render(scene,camera);return;
     }
     const x = Number(keys.has('KeyD') || keys.has('ArrowRight')) - Number(keys.has('KeyA') || keys.has('ArrowLeft')) + controls.move.x;
     const z = Number(keys.has('KeyS') || keys.has('ArrowDown')) - Number(keys.has('KeyW') || keys.has('ArrowUp')) + controls.move.y;
@@ -253,8 +261,8 @@ function renderDistrict() {
     const bounds = interior ? roomBounds : districtBounds;
     const nextX = THREE.MathUtils.clamp(camera.position.x+(Math.cos(yaw)*x + Math.sin(yaw)*z)*d,bounds.minX,bounds.maxX);
     const nextZ = THREE.MathUtils.clamp(camera.position.z+(-Math.sin(yaw)*x + Math.cos(yaw)*z)*d,bounds.minZ,bounds.maxZ);
-    if (clear(nextX,camera.position.z)) camera.position.x = nextX;
-    if (clear(camera.position.x,nextZ)) camera.position.z = nextZ;
+    if (clear(nextX,camera.position.z)&&(activities?.clearWalk(nextX,camera.position.z)??true)) camera.position.x = nextX;
+    if (clear(camera.position.x,nextZ)&&(activities?.clearWalk(camera.position.x,nextZ)??true)) camera.position.z = nextZ;
     yaw -= controls.look.x * dt * 1.65;
     pitch = THREE.MathUtils.clamp(pitch - controls.look.y * dt * 1.3, -.75,.75);
     camera.rotation.set(pitch,yaw,0,'YXZ');
@@ -275,12 +283,13 @@ function renderDistrict() {
         ? near.status + ' · E, A, or select the door'
         : interior?.status ?? defaultHint;
     }
-    renderer.render(scene,camera);
+    updateWeather();renderer.render(scene,camera);
   });
 }
 
 try {
-  if(search.get('rail')==='yellow'){const {enterRail}=await import('./portland/rail-view.mjs');enterRail();}
+  if(['pdx','dca'].includes(search.get('airport'))){const {enterAirport}=await import('./portland/airport-view.mjs');enterAirport(search.get('airport'));}
+  else if(['yellow','red'].includes(search.get('rail'))){const {enterRail}=await import('./portland/rail-view.mjs');enterRail(search.get('rail'));}
   else renderDistrict();
 } catch (error) {
   if (!(error instanceof Error) || !error.message.includes('WebGL')) throw error;

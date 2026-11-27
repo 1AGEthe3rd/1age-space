@@ -1,3 +1,4 @@
+@import url('../world/gameplay/drive-pad.css');
 :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#091016;color:#e2ffdc}
 *{box-sizing:border-box}
 body{margin:0;overflow:hidden;overscroll-behavior:none}
@@ -28,3 +29,18 @@ footer p{margin:0 0 7px;background:#061311d9;border-radius:9px;padding:6px;font-
 header #rail-link{order:1;margin-left:auto}header a:first-of-type{order:2}
 .rail-panel{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}.rail-panel button{pointer-events:auto}
 @media(max-width:550px){header{flex-wrap:wrap;gap:4px}header a{font-size:12px;min-height:36px;padding:6px 9px}}
+
+
+.hq1-driving header,.hq1-driving footer{visibility:hidden}
+
+.world-travel-counter{width:min(92vw,480px);max-height:85dvh;overflow:auto;border:1px solid #68847d;border-radius:12px;padding:18px;background:#16262c;color:#e8f3ef;font:15px/1.45 system-ui;box-sizing:border-box}
+.world-travel-counter::backdrop{background:#0009}
+.world-travel-counter h2,.world-travel-counter h3{margin:.25rem 0 .65rem}
+.world-travel-counter p{margin:.5rem 0;color:#bfcfca}
+.world-travel-counter section{border-top:1px solid #38544e;padding:12px 0}
+.world-travel-counter form{display:grid;gap:8px}
+.world-travel-counter label{display:grid;gap:4px}
+.world-travel-counter input,.world-travel-counter select,.world-travel-counter button{font:inherit;min-height:40px;padding:7px;border-radius:6px;color:inherit;background:#20383d;border:1px solid #607e76;box-sizing:border-box;max-width:100%}
+.world-travel-counter a{color:#b3e4d2}
+body:has(.world-travel-counter[open]) #oneage-controller{visibility:hidden}
+.rail-panel [hidden]{display:none!important}

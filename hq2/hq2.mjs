@@ -1,8 +1,13 @@
+import {attachWorldSky} from '../world/gameplay/city-sky.mjs';
+import {roadContains} from '../world/gameplay/road-geometry.mjs';
+import {createDCDriver,fitsCityRoad,gatewayDemo} from './world-driving.mjs';
+import {createMetro} from './metro.mjs';
+import {exitDestination,airportUrl,TRANSFER} from './metro-network.mjs';
 import {suites,createInterior} from './interiors.mjs';
 import * as THREE from '../space/shared/three.module.js';
 import {subscribeInput} from '../space/shared/gamepad.mjs';
-import {emptyInput} from '../space/shared/gamepad-model.mjs';
-import {makeTile,segmentDistance,updateWater} from './streets.mjs';
+import {emptyInput,PadReader} from '../space/shared/gamepad-model.mjs';
+import {makeTile,segmentDistance,updateWater,cityRoadMaterials} from './streets.mjs';
 import {intersectionSigns,nearestIntersection} from './signs.mjs';
 
 const $ = selector => document.querySelector(selector);
@@ -17,7 +22,11 @@ let geography, designs, intersections, signposts, destinations, properties, sour
 let pointer, current, tileCenter, travel=0, last=0, lastNearby=0, moving=false;
 
 const markers=[];
+const doorSuites=new Map();
 const failures = new Map();
+let driver;
+const drivePadReader=new PadReader();
+const drivePreview=new URLSearchParams(location.search).get('drivePreview')==='1';
 
 async function json(path) {
   const result=await fetch(new URL(path,import.meta.url));
@@ -107,8 +116,9 @@ function collisionTiles(x,z) {
 }
 function surface(x,z) {
   if(indoor) return indoor.clear(x,z)?0:null;
-  const [minX,minZ,maxX,maxZ]=geography.bounds;
-  if(x<minX+.5||x>maxX-.5||z<minZ+.5||z>maxZ-.5) return null;
+  const withinDistrict=geography.districtBounds.some(([left,top,right,bottom])=>
+    x>=left+.5&&x<=right-.5&&z>=top+.5&&z<=bottom-.5);
+  if(!withinDistrict) return null;
   const nearbyTiles=collisionTiles(x,z);
   if(!nearbyTiles) return null;
   let blocked=false, river=false, deck=0, onFootpath=false;
@@ -123,6 +133,17 @@ function surface(x,z) {
   }
   if(blocked||(river&&!onFootpath)) return null;
   return deck;
+}
+function citySegments(x,z){return (collisionTiles(x,z)||[]).flatMap(tile=>tile.driveSegments||[]);}
+function flatRoad(x,z){return surface(x,z)===0;}
+function fitsRoad(x,z,h){return fitsCityRoad(x,z,h,citySegments(x,z),flatRoad);}
+function rainSplash(cx,cz){
+  const x=cx+Math.random()*18-9,z=cz+Math.random()*18-9;
+  return flatRoad(x,z)&&roadContains(citySegments(x,z),x,z)?{x,y:.105,z}:null;
+}
+function prepareDrive(){
+  if(!drivePreview||driver||indoor||!fitsRoad(gatewayDemo.x,gatewayDemo.z,gatewayDemo.heading))return;
+  driver=createDCDriver({scene,camera,clear:(x,z)=>surface(x,z)!==null,fitsRoad,onExit:h=>{yaw=h;pitch=0;}});
 }
 function intersectionRecord(corner) {
   return {
@@ -158,12 +179,12 @@ function populateList() {
   rows.push(...[...destinations.values()].filter(row=>!row.arrival));
   for(const row of rows) {
     const subtitle=row.property ? row.property.address.line1 : row.address ? row.kind+' · '+row.address : row.district;
-    if(!`${row.name} ${row.shortName||''} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
+    if(!`${row.name} ${row.shortName||''} ${row.railStop?railName(row)+' platform':''} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
     const button=label('button',row.name,list);
-    label('small',subtitle+(row.arrival?'':' · '+(row.property || row.address ? 'Catalog only' : 'Planned')),button);
+    label('small',subtitle+(row.railStop?' · '+railName(row)+' platform':row.arrival?'':' · '+(row.property || row.address ? 'Catalog only' : 'Planned')),button);
     button.addEventListener('click',()=>{
       places.close();
-      if(row.arrival && !row.property && !row.address && row.kind!=='intersection') arrive(row);
+      if(row.arrival && !row.property && !row.address && row.kind!=='intersection'&&row.id!=='anacostia-metro') arrive(row);
       else showPlace(row);
     });
   }
@@ -198,8 +219,67 @@ function pickupPreview() {
   };
   details.showModal();
 }
+let metro;
+const metroScenes=new Map();
+const railName=row=>row.railLine==='yellow'?'Yellow Line':'Green Line';
+function enterMetro(row) {
+  driver?.suspend();
+  details.close();
+  ++travel;
+  status.hidden=true;
+  const line=row.railLine||'green';
+  if(!metroScenes.has(line))metroScenes.set(line,createMetro(line));
+  metro=metroScenes.get(line);
+  metro.reset(row.railStop);railDisplay='';
+  indoor=metro;
+  moving=true;current=null;nearby.hidden=true;
+  $('#map-button').hidden=true;
+  $('#current-street').hidden=false;
+  camera.position.set(-3.5,1.68,3);yaw=-.72;pitch=0;
+  renderer.domElement.focus();
+  updateMetro();
+}
+function leaveMetro() {
+  const exit=metro&&exitDestination(metro.line,metro.name);
+  if(!metro?.atStreet||!exit)return;
+  if(exit==='airport'){location.assign(airportUrl);return;}
+  indoor=null;current=null;nearby.hidden=true;
+  $('#rail-actions').hidden=true;
+  $('#map-button').hidden=false;
+  $('#exit-suite').hidden=true;
+  $('h1').textContent='Historic Anacostia';
+  arrive(record(exit));
+}
+let railDisplay='';
+function updateMetro() {
+  const display=[metro.line,metro.name,metro.next,metro.aboard,metro.riding,Math.abs(camera.position.z)>3].join('|');
+  if(display===railDisplay) return;
+  railDisplay=display;
+  $('h1').textContent=metro.riding?'Next · '+metro.next:metro.name;
+  $('#current-street').textContent=metro.lineName+' · Virtual service';
+  $('#exit-suite').hidden=!metro.atStreet;
+  $('#exit-suite').textContent=exitDestination(metro.line,metro.name)==='airport'?'Enter virtual airport':'Return to street';
+  $('#rail-transfer').hidden=!metro.transfer;
+  if(metro.transfer)$('#rail-transfer').textContent='Transfer to '+(metro.transfer==='yellow'?'Yellow':'Green')+' Line';
+  $('#rail-actions').hidden=false;
+  for(const [id,dir] of [['rail-north',-1],['rail-south',1]]) {
+    const button=$('#'+id), next=metro.adjacent(dir);
+    button.hidden=!metro.aboard||metro.riding||!next;
+    if(next) button.textContent='Ride to '+next;
+  }
+  nearby.hidden=metro.riding||(!metro.aboard&&Math.abs(camera.position.z)>3);
+  nearby.textContent=metro.aboard?'Step onto platform':'Board train';
+}
+function boardMetro() {
+  if(nearby.hidden||metro.riding) return;
+  metro.toggle();
+  camera.position.set(metro.aboard?0:-3.5,1.68,metro.aboard?2:1);
+  yaw=metro.aboard?0:-.72;pitch=0;
+  renderer.domElement.focus();updateMetro();
+}
 function enterSuite(suite) {
   if(suite.type==='dispensary'&&!adultConfirmed) return requestDispensaryEntry(suite);
+  driver?.suspend();
   details.close();
   streetPose={position:camera.position.clone(),yaw,pitch,moving};
   if(!rooms.has(suite)) rooms.set(suite,createInterior(suite));
@@ -211,10 +291,12 @@ function enterSuite(suite) {
   $('h1').textContent=suite.title;
   $('#map-button').hidden=true;
   $('#exit-suite').hidden=false;
+  $('#exit-suite').textContent='Return to street';
   renderer.domElement.focus();
 }
 function exitSuite() {
   if(!indoor) return;
+  if(indoor===metro) return leaveMetro();
   indoor=null; current=null; nearby.hidden=true;
   camera.position.copy(streetPose.position);
   ({yaw,pitch,moving}=streetPose);
@@ -226,7 +308,7 @@ function exitSuite() {
 }
 function activate(target) {
   if(!target) return;
-  if(target==='showroom-entry') return enterSuite(suites.find(suite=>suite.type==='apps'));
+  if(doorSuites.has(target)) return enterSuite(doorSuites.get(target));
   if(!indoor) return showPlace(record(target));
   if(target.userData.pickup) return pickupPreview();
   const app=target.userData.application;
@@ -237,8 +319,9 @@ function activate(target) {
   link('Open 1AGE '+app.name,app.url,body);
   details.showModal();
 }
-function showroomDoor() {
-  const sign=Object.values(designs).flatMap(d=>d.signs).find(s=>s.propertyId==='place-us-washington-mlk-gateway-phase-2');
+function storefrontDoor(sign,suite) {
+  const id='entry-'+suite.parent;
+  doorSuites.set(id,suite);
   const normal=new THREE.Vector2(sign.arrival[0]-sign.face[0],sign.arrival[1]-sign.face[1]).normalize();
   const door=new THREE.Group();
   door.rotation.y=Math.atan2(normal.x,normal.y);
@@ -246,7 +329,7 @@ function showroomDoor() {
   function piece(w,h,d,x,y,z,color) {
     const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color}));
     mesh.position.set(x,y,z);door.add(mesh);
-    mesh.userData.id='showroom-entry';
+    mesh.userData.id=id;
     return mesh;
   }
   piece(1.55,2.48,.12,0,1.24,0,'#383c38');
@@ -285,12 +368,15 @@ function showPlace(row) {
     }
     link('Shared catalog record','../catalog.html?property='+encodeURIComponent(property.id),body);
   } else {
-    label('p',row.address ? row.kind+' · '+row.address : row.district + (row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
-    const dispensary=suites.find(suite=>suite.type==='dispensary'&&suite.parent===row.id);
-    if(dispensary) {
-      const entry=label('button','Enter virtual dispensary',body);
+    label('p',row.address ? row.kind+' · '+row.address : row.district + (row.railStop ? ' · '+railName(row)+' platform' : row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
+    if(row.railStop) label('button','Enter '+railName(row)+' platform',body).onclick=()=>enterMetro(row);
+    if(row.id==='navy-yard-half-street') label('button','Enter Green Line platform',body).onclick=()=>enterMetro(record('navy-yard-ballpark'));
+    const suite=suites.find(item=>item.parent===row.id);
+    if(suite) {
+      if(suite.type==='grocery') label('p','Original virtual interior. Layout, dimensions and stock are illustrative.',body);
+      const entry=label('button',suite.type==='dispensary'?'Enter virtual dispensary':'Enter virtual corner store',body);
       entry.className='detail-button';
-      entry.onclick=()=>requestDispensaryEntry(dispensary);
+      entry.onclick=()=>enterSuite(suite);
     }
     if(row.statusNote) label('p',row.statusNote,body);
     if(row.protectionZoneId) label('p','Public exploration in designated areas. Reserved from acquisition in 1AGE Space.',body);
@@ -310,6 +396,7 @@ function showPlace(row) {
   details.showModal();
 }
 async function arrive(row,{historyMode=true,focus=true}={}) {
+  driver?.suspend();
   const request=++travel;
   moving=false;
   status.hidden=false;
@@ -331,6 +418,7 @@ async function arrive(row,{historyMode=true,focus=true}={}) {
     position=candidates.map(([dx,dz])=>[x+dx,z+dz]).find(([a,b])=>surface(a,b)!==null);
     if(!position) {status.textContent='This arrival is temporarily unavailable.';return;}
   }
+  $('h1').textContent=position[0]<geography.bounds[0]?'Navy Yard':'Historic Anacostia';
   camera.position.set(position[0],1.68+(surface(...position)||0),position[1]);
   const [tx,tz]=row.lookAt;
   yaw=Math.atan2(position[0]-tx,position[1]-tz);
@@ -344,6 +432,7 @@ async function arrive(row,{historyMode=true,focus=true}={}) {
   moving=true;
   if(focus) renderer.domElement.focus({preventScroll:true});
   refreshTiles(...position);
+  prepareDrive();
 }
 function makeStorefrontSign(sign) {
   const canvas=document.createElement('canvas');
@@ -368,6 +457,9 @@ function makeStorefrontSign(sign) {
   mesh.userData.id=sign.propertyId||sign.destinationId;
   scene.add(mesh);
   if(mesh.userData.id) markers.push(mesh);
+  // The creator hall shares the Gateway registry record and has a separate street address.
+  const suite=suites.find(item=>item.parent===mesh.userData.id&&item.type!=='market');
+  if(suite) storefrontDoor(sign,suite);
 }
 function streetscape() {
   const postGeometry=new THREE.CylinderGeometry(.055,.079,5.3,8);
@@ -386,15 +478,28 @@ function streetscape() {
 function skyDome() {
   const material=new THREE.ShaderMaterial({
     side:THREE.BackSide,depthWrite:false,
+    uniforms:{skyColor:{value:new THREE.Color()},cover:{value:0},sunGlow:{value:0},clock:{value:0}},
     vertexShader:`varying vec3 direction;
       void main(){ direction=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
     fragmentShader:`varying vec3 direction;
+      uniform vec3 skyColor;
+      uniform float cover,sunGlow,clock;
+      float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+      float noise(vec2 p){
+        vec2 i=floor(p),f=fract(p);
+        f=f*f*(3.-2.*f);
+        return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);
+      }
       void main(){
         vec3 ray=normalize(direction);
         float height=smoothstep(-.06,.63,ray.y);
-        vec3 color=mix(vec3(.70,.77,.79),vec3(.31,.55,.69),height);
+        vec3 color=skyColor*mix(1.14,.82,height);
+        vec2 p=ray.xz*3./max(.18,ray.y+.18)+vec2(clock*.008,0.);
+        float cloud=smoothstep(.27,.70,.68*noise(p)+.32*noise(2.3*p));
+        color=mix(color,skyColor*mix(.69,1.30,cloud),cover*smoothstep(-.04,.18,ray.y));
         float sun=pow(max(0.,dot(ray,normalize(vec3(-.52,.42,.50)))),29.);
-        gl_FragColor=vec4(mix(color,vec3(.94,.84,.68),sun*.35),1.);
+        gl_FragColor=vec4(mix(color,vec3(.94,.84,.68),sun*sunGlow),1.);
+        #include <colorspace_fragment>
       }`,
   });
   const dome=new THREE.Mesh(new THREE.SphereGeometry(610,24,12),material);
@@ -402,11 +507,20 @@ function skyDome() {
   scene.add(dome);
   return dome;
 }
-let skyMesh;
+let skyMesh,weatherTick,daylight,lastWeatherLabel;
+const weatherLabel=$('#weather');
 function frame(now) {
   const dt=Math.min(.05,(now-(last||now))/1000);
+  const railDt=(now-(last||now))/1000;
   last=now;
-  if(moving&&!places.open&&!details.open) {
+  const active=moving&&!indoor&&!places.open&&!details.open;
+  let pads=[];try{pads=navigator.getGamepads?.()||[];}catch{}
+  const sampled=drivePadReader.sample(pads,active&&!document.hidden&&document.hasFocus());
+  const physical=drivePadReader.armed?Array.from(pads).find(p=>p?.connected&&p.mapping==='standard'&&p.index===drivePadReader.index):null;
+  if(active&&sampled.edges.includes(0)&&!document.activeElement?.matches('button,a,input'))driver?.activate();
+  const driving=driver?.frame(dt,keys,input,physical,sampled.edges,now/1000,weatherTick.isRaining(),active)??false;
+  if(driving){nearby.hidden=true;refreshTiles(camera.position.x,camera.position.z);}
+  else if(moving&&!places.open&&!details.open) {
     const x=Number(keys.has('KeyD')||keys.has('ArrowRight'))-Number(keys.has('KeyA')||keys.has('ArrowLeft'))+input.move.x;
     const z=Number(keys.has('KeyS')||keys.has('ArrowDown'))-Number(keys.has('KeyW')||keys.has('ArrowUp'))+input.move.y;
     yaw-=input.look.x*2*dt;
@@ -414,13 +528,15 @@ function frame(now) {
     const factor=5.8*dt/Math.max(1,Math.hypot(x,z));
     const px=camera.position.x+(Math.cos(yaw)*x+Math.sin(yaw)*z)*factor;
     const pz=camera.position.z+(-Math.sin(yaw)*x+Math.cos(yaw)*z)*factor;
-    if(surface(px,camera.position.z)!==null) camera.position.x=px;
-    if(surface(camera.position.x,pz)!==null) camera.position.z=pz;
+    if(surface(px,camera.position.z)!==null&&(indoor||!driver||driver.clearWalk(px,camera.position.z))) camera.position.x=px;
+    if(surface(camera.position.x,pz)!==null&&(indoor||!driver||driver.clearWalk(camera.position.x,pz))) camera.position.z=pz;
     const floor=surface(camera.position.x,camera.position.z)||0;
     camera.position.y=THREE.MathUtils.lerp(camera.position.y,1.68+floor,Math.min(1,12*dt));
     camera.rotation.set(pitch,yaw,0,'YXZ');
     if(!indoor) refreshTiles(camera.position.x,camera.position.z);
-    if(indoor) {
+    if(metro&&indoor===metro) {
+      metro.tick(Math.min(.25,railDt));updateMetro();
+    } else if(indoor) {
       current=indoor.stations.filter(screen=>screen.position.distanceTo(camera.position)<3.4)
         .sort((a,b)=>a.position.distanceTo(camera.position)-b.position.distanceTo(camera.position))[0];
       nearby.hidden=!current;
@@ -428,9 +544,9 @@ function frame(now) {
     }
     if(!indoor&&now-lastNearby>150) {
       current=markers.map(marker=>{const p=marker.userData.streetPosition||marker.position;return {id:marker.userData.id,distance:Math.hypot(p.x-camera.position.x,p.z-camera.position.z)};})
-        .filter(marker=>marker.distance<(marker.id==='showroom-entry'?3:21)).sort((a,b)=>Number(b.id==='showroom-entry')-Number(a.id==='showroom-entry')||a.distance-b.distance)[0]?.id;
+        .filter(marker=>marker.distance<(doorSuites.has(marker.id)?3:21)).sort((a,b)=>Number(doorSuites.has(b.id))-Number(doorSuites.has(a.id))||a.distance-b.distance)[0]?.id;
       nearby.hidden=!current;
-      if(current) nearby.textContent=current==='showroom-entry'?'Enter HQ2 showroom':record(current)?.name||'Place details';
+      if(current) nearby.textContent=doorSuites.has(current)?'Enter '+doorSuites.get(current).title:record(current)?.name||'Place details';
       const corner=nearestIntersection(intersections,camera.position.x,camera.position.z);
       const name=corner?.blades.map(blade=>blade.label).join(' / ')||'';
       const street=$('#current-street');
@@ -441,6 +557,19 @@ function frame(now) {
     }
   }
   for(const marker of markers) marker.visible=(marker.userData.streetPosition||marker.position).distanceTo(camera.position)<115;
+  weatherTick(dt,camera,Boolean(indoor),driver?.cockpit??false);
+  if(!indoor){
+    const uniforms=skyMesh.material.uniforms;
+    uniforms.skyColor.value.copy(scene.background);
+    uniforms.sunGlow.value=Math.max(0,(daylight.intensity-.12)/2.35)*.42;
+    if(lastWeatherLabel!==weatherLabel.textContent){
+      lastWeatherLabel=weatherLabel.textContent;
+      uniforms.cover.value=/partly|few clouds/i.test(lastWeatherLabel) ? .48 :
+        /cloud|overcast|rain|snow|storm|fog|mist|drizzle|haze/i.test(lastWeatherLabel) ? .9 : .06;
+    }
+    uniforms.clock.value=now/1000;
+    scene.fog.density=(low?.006:.0047)*180/scene.fog.far;
+  }
   skyMesh.position.copy(camera.position);
   updateWater(now/1000);
   renderer.render(indoor?.scene||scene,camera);
@@ -449,8 +578,13 @@ function bind(canvas) {
   const movementKeys=new Set(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowLeft','ArrowDown','ArrowRight']);
   addEventListener('keydown',event=>{
     if(places.open||details.open||event.target.closest?.('button,input,a')) return;
-    if(movementKeys.has(event.code)) {event.preventDefault();keys.add(event.code);}
-    if(event.code==='KeyE'&&current&&!event.repeat) activate(current);
+    if(movementKeys.has(event.code)||(driver?.driving&&event.code==='Space')) {event.preventDefault();keys.add(event.code);}
+    if(!event.repeat&&!indoor)driver?.toggle(event.code);
+    if(event.code==='KeyE'&&!event.repeat) {
+      if(moving&&!indoor&&driver?.activate())return;
+      if(metro&&indoor===metro) boardMetro();
+      else if(current) activate(current);
+    }
   });
   addEventListener('keyup',event=>keys.delete(event.code));
   addEventListener('blur',()=>{keys.clear();pointer=null;input=emptyInput();});
@@ -471,7 +605,7 @@ function bind(canvas) {
   });
   for(const name of ['pointerup','pointercancel','lostpointercapture']) canvas.addEventListener(name,event=>{
     if(pointer?.id!==event.pointerId) return;
-    if(name==='pointerup'&&pointer.distance<7) {
+    if(name==='pointerup'&&pointer.distance<7&&!driver?.driving) {
       const bounds=canvas.getBoundingClientRect();
       ray.setFromCamera(new THREE.Vector2(2*(event.clientX-bounds.left)/bounds.width-1,1-2*(event.clientY-bounds.top)/bounds.height),camera);
       const hit=ray.intersectObjects(indoor?indoor.stations:markers).find(item=>item.object.visible&&item.distance<(indoor?4:24));
@@ -480,7 +614,9 @@ function bind(canvas) {
     pointer=null;
   });
   $('#map-button').addEventListener('click',()=>{keys.clear();populateList();places.showModal();});
-  nearby.addEventListener('click',()=>activate(current));
+  nearby.addEventListener('click',()=>metro&&indoor===metro?boardMetro():activate(current));
+  for(const [id,dir] of [['rail-north',-1],['rail-south',1]]) $('#'+id).onclick=()=>{metro.depart(dir);updateMetro();renderer.domElement.focus();};
+  $('#rail-transfer').onclick=()=>{if(metro?.transfer)enterMetro({railStop:TRANSFER,railLine:metro.transfer});};
   $('#place-search').addEventListener('input',populateList);
   for(const dialog of [places,details]) dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
   addEventListener('resize',()=>{
@@ -521,22 +657,42 @@ async function start() {
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(5000,5000),new THREE.MeshLambertMaterial({color:'#77765d'}));
   ground.rotation.x=-Math.PI/2;
   ground.position.y=-.013;
-  scene.add(ground,new THREE.HemisphereLight('#f2f7ff','#9b9281',2.25));
+  const ambient=new THREE.HemisphereLight('#f2f7ff','#9b9281',2.25);
+  scene.add(ground,ambient);
   const light=new THREE.DirectionalLight('#ffe7bc',2.15);
   light.position.set(-90,80,110);
   scene.add(light);
   skyMesh=skyDome();
+  daylight=light;
+  const requestedWeather=new URLSearchParams(location.search).get('weatherPreview');
+  const preview=['rain','clear','snow','cloud'].includes(requestedWeather)?requestedWeather:null;
+  weatherTick=attachWorldSky({scene,sun:light,ambient,station:'KDCA',latitude:38.86,longitude:-76.99,
+    timeZone:'America/New_York',status:weatherLabel,roadMaterials:cityRoadMaterials,sampleSplash:rainSplash,preview});
   streetscape();
+  const station=record('anacostia-metro');
+  const [sx,sz]=station.arrival;
+  makeStorefrontSign({text:'ANACOSTIA · GREEN LINE',destinationId:station.id,arrival:station.arrival,face:[sx-3,sz+2]});
+  const west=record('navy-yard-half-street');
+  const [wx,wz]=west.arrival;
+  const pylon=new THREE.Mesh(new THREE.BoxGeometry(.62,3.7,.64),new THREE.MeshLambertMaterial({color:'#413c35'}));
+  pylon.position.set(wx,1.85,wz-3.5);
+  scene.add(pylon);
+  makeStorefrontSign({text:'NAVY YARD–BALLPARK',destinationId:west.id,arrival:west.arrival,face:[wx,wz-3.5]});
   signposts=intersectionSigns(intersections);
   scene.add(signposts);
   Object.values(designs).forEach(design=>design.signs.forEach(makeStorefrontSign));
-  showroomDoor();
+
   ray=new THREE.Raycaster();
   bind(renderer.domElement);
   $('#exit-suite').onclick=exitSuite;
   const enter=()=>{
-    exitSuite();
+    if(indoor===metro&&metro){
+      indoor=null;current=null;nearby.hidden=true;
+      $('#rail-actions').hidden=true;$('#exit-suite').hidden=true;$('#map-button').hidden=false;
+      $('h1').textContent='Historic Anacostia';
+    }else exitSuite();
     const target=record(new URL(location.href).searchParams.get('destination'));
+    if(target?.railStop&&!target.arrival){enterMetro(target);return;}
     arrive(target?.arrival ? target : record('hq2-gateway'),{historyMode:false,focus:false});
     if(target&&!target.arrival) showPlace(target);
   };

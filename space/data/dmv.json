@@ -79,7 +79,10 @@
     "anacostia-organics": "https://abca.dc.gov/service/find-medical-cannabis-retailer",
     "second-chance-market": "https://www.openstreetmap.org/way/151561217",
     "nams-market": "https://www.openstreetmap.org/way/295276792",
-    "therapy-mlk": "https://abca.dc.gov/service/find-medical-cannabis-retailer"
+    "therapy-mlk": "https://abca.dc.gov/service/find-medical-cannabis-retailer",
+    "green-line": "https://www.wmata.com/content/dam/wmata-com/maps/system-map-rail.pdf",
+    "navy-yard-west": "https://www.wmata.com/initiatives/plans/upload/Navy-Yard-Final_Report_Memo_2016-04-07.pdf",
+    "yellow-line": "https://www.wmata.com/ridertools/line/yellow"
   },
   "destinations": [
     {
@@ -131,7 +134,8 @@
         -560,
         574
       ],
-      "protectionZoneId": "dc-southeast"
+      "protectionZoneId": "dc-southeast",
+      "railStop": "Anacostia"
     },
     {
       "id": "11th-street-bridge",
@@ -262,7 +266,9 @@
       "name": "Southern Avenue Metro",
       "district": "Prince George’s County",
       "cityId": "us-md-prince-georges",
-      "kind": "station"
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Southern Avenue"
     },
     {
       "id": "national-harbor",
@@ -376,6 +382,139 @@
       "source": "therapy-mlk",
       "protectionZoneId": "dc-southeast",
       "statusNote": "Listed in the DC ABCA medical cannabis retailer directory. Current opening hours unverified."
+    },
+    {
+      "id": "navy-yard-ballpark",
+      "name": "Navy Yard–Ballpark Metro",
+      "district": "Capitol Riverfront",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Navy Yard–Ballpark"
+    },
+    {
+      "id": "congress-heights-metro",
+      "name": "Congress Heights Metro",
+      "district": "Southeast Washington, D.C.",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Congress Heights"
+    },
+    {
+      "id": "naylor-road",
+      "name": "Naylor Road Metro",
+      "district": "Prince George’s County",
+      "cityId": "us-md-prince-georges",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Naylor Road"
+    },
+    {
+      "id": "suitland-metro",
+      "name": "Suitland Metro",
+      "district": "Prince George’s County",
+      "cityId": "us-md-prince-georges",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Suitland"
+    },
+    {
+      "id": "branch-avenue",
+      "name": "Branch Avenue Metro",
+      "district": "Prince George’s County",
+      "cityId": "us-md-prince-georges",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Branch Avenue"
+    },
+    {
+      "id": "navy-yard-half-street",
+      "name": "Navy Yard–Ballpark · Half Street entrance",
+      "address": "55 M Street SE",
+      "district": "Capitol Riverfront",
+      "cityId": "us-dc-washington",
+      "kind": "station entrance",
+      "source": "navy-yard-west",
+      "arrival": [
+        -1623.54,
+        -970.41
+      ],
+      "lookAt": [
+        -1624.34,
+        -982.41
+      ],
+      "protectionZoneId": "dc-southeast"
+    },
+    {
+      "id": "lenfant-green",
+      "name": "L'Enfant Plaza · Green Line",
+      "district": "Southwest Washington",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "L'Enfant Plaza",
+      "railLine": "green"
+    },
+    {
+      "id": "waterfront-metro",
+      "name": "Waterfront · Green Line",
+      "district": "Southwest Washington",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Waterfront",
+      "railLine": "green"
+    },
+    {
+      "id": "lenfant-yellow",
+      "name": "L'Enfant Plaza · Yellow Line",
+      "district": "Southwest Washington",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "L'Enfant Plaza",
+      "railLine": "yellow"
+    },
+    {
+      "id": "pentagon-metro",
+      "name": "Pentagon · Yellow Line",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "Pentagon",
+      "railLine": "yellow"
+    },
+    {
+      "id": "pentagon-city-metro",
+      "name": "Pentagon City · Yellow Line",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "Pentagon City",
+      "railLine": "yellow"
+    },
+    {
+      "id": "crystal-city-metro",
+      "name": "Crystal City · Yellow Line",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "Crystal City",
+      "railLine": "yellow"
+    },
+    {
+      "id": "dca-metro",
+      "name": "Ronald Reagan Washington National Airport · Yellow Line",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "Ronald Reagan Washington National Airport",
+      "railLine": "yellow"
     }
   ],
   "connections": [
