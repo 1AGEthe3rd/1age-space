@@ -8,6 +8,8 @@ const icons={
   right:'M4 12h16m-7-7 7 7-7 7',
   gas:'M8 3h8l2 18H6L8 3z M10 7h4m-4 4h4m-4 4h4',
   brake:'M4 7h16v11H4z M7 10h10m-10 4h10',
+  wiper:'M3 18L6 5h12l3 13H3m9 0 5-9m-10 3 10-4',
+  audio:'M3 9h4l5-5v16l-5-5H3zm12 0a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12',
   play:'M8 4l12 8-12 8z'
 };
 function icon(button,name){
@@ -33,6 +35,8 @@ export function createDrivePad(activate,toggle){
   const lights=button('lights','Headlights',()=>toggle('KeyH'),controls);
   const left=button('left','Left indicator',()=>toggle('KeyQ'),controls);
   const right=button('right','Right indicator',()=>toggle('KeyC'),controls);
+  const wiper=button('wiper','Cycle windshield wipers',()=>toggle('KeyT'),controls);
+  const audio=button('audio','Enable or mute driving sound',()=>toggle('KeyM'),controls);
   for(const [name,label] of [['brake','Brake pedal'],['gas','Accelerator pedal']]){
     const el=button(name,label,()=>{},pedalsRow);
     let owner=null;
@@ -49,7 +53,7 @@ export function createDrivePad(activate,toggle){
   for(const event of ['blur','pagehide','orientationchange','gamepaddisconnected'])addEventListener(event,reset);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
   let last='';
-  function render(driving,near,car,view){
+  function render(driving,near,car,view,audioEnabled=false){
     const state=driving?'exit':near==='game'?'play':'enter';
     if(last!==state){icon(action,state);action.setAttribute('aria-label',driving?'Exit vehicle':near==='game'?'Play arcade':'Enter vehicle');last=state;}
     document.body.classList.toggle('hq1-driving',driving);
@@ -59,6 +63,9 @@ export function createDrivePad(activate,toggle){
     gear.setAttribute('aria-pressed',String(car.reverse));lights.setAttribute('aria-pressed',String(car.lights));
     left.setAttribute('aria-pressed',String(car.signal===-1));right.setAttribute('aria-pressed',String(car.signal===1));
     camera.setAttribute('aria-label','Change camera; current '+view);
+    wiper.setAttribute('aria-pressed',String(car.wiperMode!==0));
+    wiper.setAttribute('aria-label','Cycle windshield wipers; '+(['off','slow','fast'][car.wiperMode]||'off'));
+    audio.setAttribute('aria-pressed',String(audioEnabled));
   }
   return {pedals,render,reset};
 }

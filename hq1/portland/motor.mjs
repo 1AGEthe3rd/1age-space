@@ -2,12 +2,14 @@ import {fitsRoad} from './crossings.mjs';
 // Metres, seconds and radians. Positive speed points down the vehicle's local -Z.
 export function stepVan(car, input, dt, parked) {
   const approach = (value,target,step) => value + Math.sign(target-value)*Math.min(step,Math.abs(target-value));
-  const steerLimit=.53/(1+Math.abs(car.speed)*.065);
+  // Conservative wet-road grip approximation; preserve dry handling and collision geometry.
+  const grip=input.wet?.78:1;
+  const steerLimit=.53/(1+Math.abs(car.speed)*.065)*(input.wet?.90:1);
   car.steer=approach(car.steer,-input.steer*steerLimit,1.9*dt);
-  const acceleration=car.reverse ? 1.35 : 2.1;
+  const acceleration=(car.reverse ? 1.35 : 2.1)*(input.wet?.90:1);
   const limit=car.reverse ? 2.8 : 10.7;
   const drag=.22+.013*car.speed**2;
-  car.speed=approach(car.speed,0,(drag+input.brake*5.6)*dt);
+  car.speed=approach(car.speed,0,(drag+input.brake*5.6*grip)*dt);
   if(!input.brake) car.speed=approach(car.speed,(car.reverse?-1:1)*limit,input.gas*acceleration*dt);
   const heading=car.heading+car.speed*Math.tan(car.steer)/2.6*dt;
   const x=car.x-Math.sin(heading)*car.speed*dt;
