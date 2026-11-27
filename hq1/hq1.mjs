@@ -261,8 +261,8 @@ function renderDistrict() {
     const bounds = interior ? roomBounds : districtBounds;
     const nextX = THREE.MathUtils.clamp(camera.position.x+(Math.cos(yaw)*x + Math.sin(yaw)*z)*d,bounds.minX,bounds.maxX);
     const nextZ = THREE.MathUtils.clamp(camera.position.z+(-Math.sin(yaw)*x + Math.cos(yaw)*z)*d,bounds.minZ,bounds.maxZ);
-    if (clear(nextX,camera.position.z)) camera.position.x = nextX;
-    if (clear(camera.position.x,nextZ)) camera.position.z = nextZ;
+    if (clear(nextX,camera.position.z)&&(activities?.clearWalk(nextX,camera.position.z)??true)) camera.position.x = nextX;
+    if (clear(camera.position.x,nextZ)&&(activities?.clearWalk(camera.position.x,nextZ)??true)) camera.position.z = nextZ;
     yaw -= controls.look.x * dt * 1.65;
     pitch = THREE.MathUtils.clamp(pitch - controls.look.y * dt * 1.3, -.75,.75);
     camera.rotation.set(pitch,yaw,0,'YXZ');
