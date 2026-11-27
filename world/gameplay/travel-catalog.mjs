@@ -7,7 +7,7 @@ const codePattern=/^[A-Z]{3}$/;
 export function createAirportCatalog(records=initialAirports){
   const airports=new Map();
   for(const r of records){
-    if(!codePattern.test(r.code)||airports.has(r.code)||!r.cityId||!r.name||!r.timeZone)throw new TypeError('Invalid or duplicate airport');
+    if(typeof r.code!=='string'||!codePattern.test(r.code)||airports.has(r.code)||!r.cityId||!r.name||!r.timeZone)throw new TypeError('Invalid or duplicate airport');
     new Intl.DateTimeFormat('en-US',{timeZone:r.timeZone}).format(0);
     airports.set(r.code,Object.freeze({...r}));
   }
