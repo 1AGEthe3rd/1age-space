@@ -1,13 +1,13 @@
 import {createVan} from './van.mjs';
 import {playCabinet} from './arcade.mjs';
 import {createDrivePad} from './drive-pad.mjs';
-import {javanLot} from './javan-lot.mjs';
+import {demoFleet,nearestAccessibleVehicle,vehicleWalkable} from './demo-fleet.mjs';
 import {nextWiperMode} from './windshield-model.mjs';
 import {createDriveAudio} from './drive-audio.mjs';
 
 export function createActivities(scene,camera,clear) {
   const fleet=[createVan(scene,4.3,84,0,'#48756c'),createVan(scene,-4.3,78,Math.PI,'#905d46'),
-    createVan(scene,javanLot.spawnX,javanLot.spawnZ,javanLot.spawnHeading,'#6d777e')];
+    ...demoFleet.map(p=>createVan(scene,p.x,p.z,p.heading,p.color,p))];
   let selected=fleet[0],car=selected.car;
   let driving=false,near='',lastExitYaw=null,view=0,lookYaw=0,lookPitch=0;
   const views=['chase','bonnet','cockpit'];
@@ -24,9 +24,13 @@ export function createActivities(scene,camera,clear) {
       if(Math.abs(car.speed)>.15)return;
       for(const side of [1,-1]){
         const x=car.x+side*1.65*Math.cos(car.heading),z=car.z-side*1.65*Math.sin(car.heading);
-        if(clear(x,z)){driving=false;car.speed=0;car.reverse=false;car.signal=0;selected.setCockpit(false);audio.silence();camera.position.set(x,1.75,z);lastExitYaw=car.heading;ui.reset();break;}
+        if(clear(x,z)&&vehicleWalkable(fleet,x,z)){driving=false;car.speed=0;car.reverse=false;car.signal=0;selected.setCockpit(false);audio.silence();camera.position.set(x,1.75,z);lastExitYaw=car.heading;ui.reset();break;}
       }
-    }else if(near==='van'){driving=true;car.speed=0;view=0;lookYaw=lookPitch=0;ui.reset();}
+    }else if(near==='van'){
+      const target=nearestAccessibleVehicle(fleet,camera.position.x,camera.position.z,clear);
+      if(!target)return;
+      selected=target;car=target.car;driving=true;car.speed=0;view=0;lookYaw=lookPitch=0;ui.reset();
+    }
     else if(near==='game')playCabinet();
   }
   function toggle(code){
@@ -60,14 +64,13 @@ export function createActivities(scene,camera,clear) {
     interact(){if(driving||near){activate();return true;}return false;},
     toggle,
     isCockpit(){return driving&&view===2;},
+    clearWalk(x,z){return vehicleWalkable(fleet,x,z);},
     takeExitYaw(){const value=lastExitYaw;lastExitYaw=null;return value;},
     frame(dt,keys,controls,pad,edges,seconds,wet=false){
       if(document.querySelector('dialog[open]')){audio.silence();return true;}
-      if(!driving){
-        const distance=v=>Math.hypot(camera.position.x-v.car.x,camera.position.z-v.car.z);
-        selected=fleet.reduce((best,v)=>distance(v)<distance(best)?v:best,fleet[0]);car=selected.car;
-      }
-      near=Math.hypot(camera.position.x-car.x,camera.position.z-car.z)<3.5?'van':
+      const candidate=driving?null:nearestAccessibleVehicle(fleet,camera.position.x,camera.position.z,clear);
+      if(candidate){selected=candidate;car=selected.car;}
+      near=candidate?'van':
         (Math.abs(camera.position.x-18.65)<1.75&&[-233,-228,-223].some(z=>Math.abs(camera.position.z-z)<1.65)?'game':'');
       if(driving){
         if(edges.includes(3))toggle('KeyR');
@@ -85,7 +88,7 @@ export function createActivities(scene,camera,clear) {
         van.update(dt,input,seconds,fleet.filter(other=>other!==van).map(other=>other.car));
       }
       audio.frame(driving&&!document.hidden&&document.hasFocus(),car.speed,gas,wet,view===2);
-      ui.render(driving,near,car,views[view],audio.enabled);
+      ui.render(driving,near,car,views[view],audio.enabled,selected.profile?.reference);
       if(!driving)return false;
       placeCamera(dt,controls);
       return true;

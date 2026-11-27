@@ -53,9 +53,10 @@ export function createDrivePad(activate,toggle){
   for(const event of ['blur','pagehide','orientationchange','gamepaddisconnected'])addEventListener(event,reset);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
   let last='';
-  function render(driving,near,car,view,audioEnabled=false){
+  function render(driving,near,car,view,audioEnabled=false,vehicleName){
     const state=driving?'exit':near==='game'?'play':'enter';
-    if(last!==state){icon(action,state);action.setAttribute('aria-label',driving?'Exit vehicle':near==='game'?'Play arcade':'Enter vehicle');last=state;}
+    if(last!==state){icon(action,state);last=state;}
+    action.setAttribute('aria-label',driving?'Exit vehicle':near==='game'?'Play arcade':vehicleName?'Enter '+vehicleName+' virtual demo':'Enter vehicle');
     document.body.classList.toggle('hq1-driving',driving);
     panel.hidden=!(driving||near);controls.hidden=pedalsRow.hidden=!driving;
     action.disabled=driving&&Math.abs(car.speed)>.15;gear.disabled=action.disabled;

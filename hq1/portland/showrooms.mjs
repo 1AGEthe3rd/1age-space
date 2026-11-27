@@ -1,4 +1,5 @@
 import {javanLot} from './javan-lot.mjs';
+import {demoFleet} from './demo-fleet.mjs';
 import {albertaBlocks} from './alberta-blocks.mjs';
 import * as T from '../../space/shared/three.module.js';
 
@@ -69,7 +70,18 @@ export function buildShowrooms({box,sign,scene,material},blockers) {
   fence(minX,minZ,maxX,minZ);
   fence(maxX,minZ,maxX,gateMinZ);fence(maxX,gateMaxZ,maxX,maxZ);
   for(const zz of [gateMinZ,gateMaxZ])box(maxX,.97,zz,.13,1.94,.13,'#414d49');
-  for(const zz of [96,99,110,113])box(-21.7,.059,zz,3.8,.012,.065,'#c9c9b8');
+  // Parking bay stripes align with the three demo poses; keep the open driveway unobstructed.
+  for(const zz of [99.05,102.35,105.65,108.95])box(-18.5,.059,zz,4.8,.012,.055,'#c9c9b8');
+  for(const p of demoFleet){
+    box(-21.1,.06,p.z,.075,.015,2.55,'#c9c9b8');
+  }
+  // Original virtual demonstration placard, not an assertion of real dealer authorization.
+  const placard=sign('VIRTUAL DEMO VEHICLES',scene,-11.55,1.35,95.8,2.7,{background:'#263c38'});
+  placard.rotation.y=Math.PI/2;
+  box(-11.72,1.02,95.8,.08,2.04,.08,'#465753');
+  // Modest frontage accents remain in the existing building envelope.
+  for(const z of [77,91])box(-11.81,2.88,z,.08,.09,1.1,'#d0c8ac',{glow:true});
+  box(-11.82,1.03,84,.07,.09,.55,'#a8b5af');
   // This is an original virtual test-drive lot, not a surveyed dealership floor plan.
   for(const z of [51,68,99,111,-193,-208,-249]){
     for(const side of [-1,1]){
