@@ -18,7 +18,13 @@ export function nearPdxGate(x,z){
   return pdxWalkable(x,z)&&Math.abs(x-pdxGate.x)<pdxGate.halfWidth
     &&Math.abs(z-pdxGate.z)<pdxGate.depth;
 }
-export function buildPdxTerminal(T,terminal,box,sign,destination){
+export function buildPdxTerminal(T,terminal,createBox,sign,destination){
+  const batches=new Map();
+  function box(...args){
+    const mesh=createBox(...args);
+    if(!batches.has(mesh.material))batches.set(mesh.material,[]);
+    batches.get(mesh.material).push(mesh);return mesh;
+  }
   const wood='#b99362',woodDark='#8c6948',woodLight='#d0b58d';
   const concrete='#e0ded2',metal='#50605e';
   box(terminal,0,-.14,0,27,.28,51,concrete);
@@ -43,6 +49,11 @@ export function buildPdxTerminal(T,terminal,box,sign,destination){
   const panel=new T.BoxGeometry(1,1,1);
   function glazing(x,y,z,w,h,d){
     const mesh=new T.Mesh(panel,glass);mesh.position.set(x,y,z);mesh.scale.set(w,h,d);terminal.add(mesh);
+  }
+  // The deck gaps are glazed rather than open to the sky.
+  for(let i=0;i<24;i++){
+    const x=-12.65+i*1.1,y=7.2+1.15*Math.cos(x*.23);
+    for(const z of [-8.5,8.5])glazing(x,y+.03,z,1.1,.12,3.4);
   }
   for(const side of [-1,1]){
     glazing(side*13.35,3.65,0,.1,7.3,50);
@@ -98,5 +109,13 @@ export function buildPdxTerminal(T,terminal,box,sign,destination){
   sign(terminal,'World Flight · '+destination,0,3.65,-22,8);
   box(terminal,0,1.5,-24.9,5.2,3,.18,'#425b60');
   for(const x of [-2.7,2.7])box(terminal,x,1.7,-24.6,.28,3.4,.28,wood);
-  // Single scene: low-cost decorative forms only, no imported textures.
+  // Batch opaque architectural boxes by material for mobile draw-call reduction.
+  for(const [material,meshes] of batches){
+    const batch=new T.InstancedMesh(meshes[0].geometry,material,meshes.length);
+    for(let i=0;i<meshes.length;i++){
+      meshes[i].updateMatrix();batch.setMatrixAt(i,meshes[i].matrix);terminal.remove(meshes[i]);
+    }
+    batch.instanceMatrix.needsUpdate=true;terminal.add(batch);
+  }
+  // Single scene: original decorative forms only, no imported textures.
 }
