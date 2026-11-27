@@ -1,7 +1,7 @@
 import * as T from '../../space/shared/three.module.js';
 import {stepVan} from './motor.mjs';
 import {attachWindshield} from './windshield.mjs';
-export function createVan(scene,x,z,heading,bodyColor) {
+export function createVan(scene,x,z,heading,bodyColor,profile=null) {
   const group=new T.Group();
   scene.add(group);
   function part(x,y,z,w,h,d,color,parent=group) {
@@ -10,10 +10,35 @@ export function createVan(scene,x,z,heading,bodyColor) {
   }
   part(0,.74,0,1.82,.76,4.1,bodyColor);
   const shell=[];
+  const style=profile?.style||'original';
+  const roofColor=style==='highroof'?'#b9c3ab':style==='compact'?'#d7d2c3':'#d6cfb2';
   shell.push(part(0,1.46,.14,1.77,.81,3.78,'#e2d7af'));
   shell.push(part(0,1.54,-1.77,1.56,.55,.04,'#465e67'));
   shell.push(part(0,1.55,2.05,1.43,.51,.04,'#435963'));
-  part(0,1.91,.14,1.85,.10,3.87,'#d6cfb2');
+  part(0,1.91,.14,1.85,.10,3.87,roofColor);
+  if(style==='highroof'){
+    part(0,2.08,.27,1.67,.28,3.12,roofColor);
+    for(const side of [-1,1]){part(side*.76,2.26,.18,.07,.07,3.05,'#303b39');for(const z of [-.9,.9])part(side*.84,1.99,z,.035,.12,.48,'#52676d');}
+  }else if(style==='compact'){
+    part(0,1.99,.45,1.70,.12,2.65,'#d8d5c5');
+    part(0,1.51,2.09,.54,.45,.07,'#c7c0b0');
+  }else if(style==='touring'){
+    part(0,1.96,-.22,1.36,.035,1.16,'#41585d');
+  }
+  // Original era-inspired trim details; the original physics envelope is unchanged.
+  if(profile){
+    part(0,.84,-2.09,1.04,.18,.06,'#303b3b');
+    for(let y=.78;y<=.9;y+=.06)part(0,y,-2.13,.98,.016,.024,'#b0b7b5');
+    for(const side of [-1,1]){
+      part(side*.925,1.13,-.66,.027,.035,.21,'#333d3b');
+      part(side*.925,1.13,.68,.027,.035,.21,'#333d3b');
+      part(side*.926,.69,.20,.028,.075,3.24,style==='highroof'?'#c9b98a':'#383f42');
+      for(const z of [-.52,1.70])part(side*.926,.85,z,.027,.52,.024,'#414a49');
+    }
+    part(0,.63,2.155,.34,.15,.025,'#d4dad6');
+    if(style==='highroof'){part(0,.58,-2.17,1.6,.11,.13,'#293333');for(const x of [-.63,.63])part(x,.73,-2.18,.19,.18,.08,'#c8d1c8');}
+    if(style==='compact')part(0,.64,-2.15,1.55,.085,.09,'#a7aaa0');
+  }
   part(0,.48,-2.08,1.84,.16,.13,'#454d49');
   part(0,.48,2.08,1.84,.16,.13,'#454d49');
   const wheels=[], lamps=[];
@@ -26,7 +51,10 @@ export function createVan(scene,x,z,heading,bodyColor) {
       part(side*.12,0,0,.035,.32,.11,'#c5c6bb',wheel);part(side*.12,0,0,.035,.11,.32,'#c5c6bb',wheel);
       wheels.push({pivot,wheel,front:z<0});
     }
-    for(const z of [-1.12,.03,1.28])shell.push(part(side*.90,1.52,z,.035,.53,.92,'#435c62'));
+    for(const z of [-1.12,.03,1.28]){
+      const tint=style==='compact'&&z===1.28?'#c2b8a8':style==='highroof'?'#344b54':'#435c62';
+      shell.push(part(side*.90,1.52,z,.035,.53,.92,tint));
+    }
     part(side,1.28,-1.53,.2,.15,.21,'#384543');
     function lamp(z,y,color,w){return part(side*.67,y,z,w,.15,.06,color).material}
     lamps.push({side,front:lamp(-2.07,.86,'#fff0bb',.35),stop:lamp(2.08,.91,'#951f25',.28),back:lamp(2.08,.71,'#a7abad',.17),turn:[lamp(-2.08,.65,'#9b6229',.18),lamp(2.08,1.09,'#9b6229',.18)]});
@@ -59,6 +87,7 @@ export function createVan(scene,x,z,heading,bodyColor) {
   const beam=new T.SpotLight(0xffedc7,0,24,.48,.55,1);
   beam.position.set(0,.9,-1.9);beam.target.position.set(0,.02,-13);group.add(beam,beam.target);
   const car={x,z,heading,speed:0,steer:0,reverse:false,lights:false,signal:0,wiperMode:0};
+  if(profile)car.demoId=profile.id;
   function paint(mat,color,on){mat.emissive.set(on?color:0x000000);}
   function update(dt,input,now,parked) {
     stepVan(car,input,dt,parked);
@@ -76,5 +105,5 @@ export function createVan(scene,x,z,heading,bodyColor) {
     windshield.frame(dt,cabin.visible,!!input.wet,car.wiperMode,car.speed,car.lights);
   }
   group.position.set(car.x,0,car.z);group.rotation.y=heading;
-  return {car,update,setCockpit};
+  return {car,update,setCockpit,profile};
 }
