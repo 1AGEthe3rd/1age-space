@@ -22,7 +22,11 @@ export function nearestAccessibleVehicle(fleet,x,z,clear=()=>true){
       const door=doorPoint(car,side),d=Math.hypot(x-door.x,z-door.z);
       if(d>3.6||distance>=best)continue;
       let accessible=true;
-      for(let i=1;i<=8;i++)if(!clear(x+(door.x-x)*i/8,z+(door.z-z)*i/8)){accessible=false;break;}
+      const others=fleet.filter(other=>other!==item);
+      for(let i=1;i<=8;i++){
+        const px=x+(door.x-x)*i/8,pz=z+(door.z-z)*i/8;
+        if(!clear(px,pz)||!vehicleWalkable(others,px,pz)){accessible=false;break;}
+      }
       if(accessible){selected=item;best=distance;break;}
     }
   }
