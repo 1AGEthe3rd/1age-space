@@ -81,7 +81,8 @@
     "nams-market": "https://www.openstreetmap.org/way/295276792",
     "therapy-mlk": "https://abca.dc.gov/service/find-medical-cannabis-retailer",
     "green-line": "https://www.wmata.com/content/dam/wmata-com/maps/system-map-rail.pdf",
-    "navy-yard-west": "https://www.wmata.com/initiatives/plans/upload/Navy-Yard-Final_Report_Memo_2016-04-07.pdf"
+    "navy-yard-west": "https://www.wmata.com/initiatives/plans/upload/Navy-Yard-Final_Report_Memo_2016-04-07.pdf",
+    "yellow-line": "https://www.wmata.com/ridertools/line/yellow"
   },
   "destinations": [
     {
@@ -444,6 +445,76 @@
         -982.41
       ],
       "protectionZoneId": "dc-southeast"
+    },
+    {
+      "id": "lenfant-green",
+      "name": "L'Enfant Plaza · Green Line",
+      "district": "Southwest Washington",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "L'Enfant Plaza",
+      "railLine": "green"
+    },
+    {
+      "id": "waterfront-metro",
+      "name": "Waterfront · Green Line",
+      "district": "Southwest Washington",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "green-line",
+      "railStop": "Waterfront",
+      "railLine": "green"
+    },
+    {
+      "id": "lenfant-yellow",
+      "name": "L'Enfant Plaza · Yellow Line",
+      "district": "Southwest Washington",
+      "cityId": "us-dc-washington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "L'Enfant Plaza",
+      "railLine": "yellow"
+    },
+    {
+      "id": "pentagon-metro",
+      "name": "Pentagon · Yellow Line",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "Pentagon",
+      "railLine": "yellow"
+    },
+    {
+      "id": "pentagon-city-metro",
+      "name": "Pentagon City · Yellow Line",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "Pentagon City",
+      "railLine": "yellow"
+    },
+    {
+      "id": "crystal-city-metro",
+      "name": "Crystal City · Yellow Line",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "Crystal City",
+      "railLine": "yellow"
+    },
+    {
+      "id": "dca-metro",
+      "name": "Ronald Reagan Washington National Airport · Yellow Line",
+      "district": "Arlington",
+      "cityId": "us-va-arlington",
+      "kind": "station",
+      "source": "yellow-line",
+      "railStop": "Ronald Reagan Washington National Airport",
+      "railLine": "yellow"
     }
   ],
   "connections": [

@@ -1,11 +1,13 @@
 // Stop order from WMATA's public rail system map. Scene distances and times are compressed.
 import * as T from '../space/shared/three.module.js';
 
-export const stops=['Navy Yard–Ballpark','Anacostia','Congress Heights','Southern Avenue','Naylor Road','Suitland','Branch Avenue'];
+import {GREEN,lineStops,exitDestination,otherLine} from './metro-network.mjs';
+export const stops=GREEN;
 const spacing=100;
 const boxGeometry=new T.BoxGeometry();
 
-export function createMetro() {
+export function createMetro(line='green') {
+  const stops=lineStops(line), lineName=line==='yellow'?'Yellow Line':'Green Line';
   const scene=new T.Scene(), materials=new Map(), doors=[];
   scene.background=new T.Color('#25292b');
   scene.fog=new T.FogExp2('#25292b',.025);
@@ -18,7 +20,7 @@ export function createMetro() {
   function sign(parent,text,x,y,z) {
     const canvas=document.createElement('canvas');canvas.width=768;canvas.height=96;
     const ctx=canvas.getContext('2d');ctx.fillStyle='#292821';ctx.fillRect(0,0,768,96);
-    ctx.fillStyle='#309445';ctx.fillRect(0,0,18,96);ctx.fillStyle='#fff';
+    ctx.fillStyle=line==='yellow'?'#d9b836':'#309445';ctx.fillRect(0,0,18,96);ctx.fillStyle='#fff';
     ctx.font='bold 50px system-ui';ctx.fillText(text,35,67,700);
     const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;
     const face=new T.Mesh(new T.PlaneGeometry(6,.75),new T.MeshBasicMaterial({map:texture,side:T.DoubleSide}));
@@ -60,20 +62,23 @@ export function createMetro() {
       doors.push({leaf,dir,platform:x<0});
     }
   }
-  sign(car,'Green Line',0,1.84,-6.34);
+  sign(car,lineName,0,1.84,-6.34);
   scene.add(new T.HemisphereLight('#fff3d8','#87858a',2.1));
   const light=new T.DirectionalLight('#fff4df',2);light.position.set(-4,8,5);scene.add(light);
-  let stop=1,target=1,progress=1,aboard=false;
+  const defaultStop=line==='yellow'?0:stops.indexOf('Anacostia');
+  let stop=defaultStop,target=defaultStop,progress=1,aboard=false;
   function position(offset,open){
     tunnel.position.z=-offset*spacing;
     for(const {leaf,dir,platform} of doors) leaf.position.z=dir*(.49+(platform?open:0));
   }
   position(stop,1);
   return {scene,stations:[],get name(){return stops[stop]},get aboard(){return aboard},
-    get riding(){return progress<1},get atStreet(){return (stop===0||stop===1)&&!aboard},
+    get line(){return line},get lineName(){return lineName},
+    get riding(){return progress<1},get atStreet(){return !aboard&&progress===1&&Boolean(exitDestination(line,stops[stop]))},
+    get transfer(){return !aboard&&progress===1?otherLine(line,stops[stop]):null},
     get next(){return stops[target]},
     reset(name='Anacostia'){stop=stops.indexOf(name);
-      if(stop<0) stop=1;
+      if(stop<0) stop=defaultStop;
       target=stop;progress=1;aboard=false;position(stop,1)},
     adjacent(dir){return stops[stop+dir]},
     toggle(){if(progress===1) aboard=!aboard},
