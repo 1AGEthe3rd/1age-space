@@ -117,9 +117,12 @@ function building(shell,details,glass,rings,id,design) {
         if(to<=from||top<=bottom) return;
         const a=point(from,bottom,offset),b=point(to,bottom,offset),c=point(to,top,offset),d=point(from,top,offset);
         // Keep normals toward the exterior for realistic lighting.
+        if(normalSign>0) batch.quad(a,b,c,d,paint); else batch.quad(d,c,b,a,paint);
+      };
+      const sill=(batch,from,to,y,back,front,paint)=>{
+        const a=point(from,y,back),b=point(to,y,back),c=point(to,y,front),d=point(from,y,front);
         if(normalSign<0) batch.quad(a,b,c,d,paint); else batch.quad(d,c,b,a,paint);
       };
-      const sill=(batch,from,to,y,back,front,paint)=>batch.quad(point(from,y,back),point(to,y,back),point(to,y,front),point(from,y,front),paint);
       wall(shell,0,length,0,height,0,color);
       wall(shell,0,length,0,.42,.012,'#6c6861');
       wall(shell,0,length,height-.34,height+.03,.04,design?.trim || '#c4b6a4');
