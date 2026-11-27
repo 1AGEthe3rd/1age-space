@@ -22,7 +22,7 @@ jobs:
           node-version: '22'
       - run: node --test tests/*.test.mjs hq1/portland/*.test.mjs hq2/*.test.mjs world/gameplay/*.test.mjs world/schedule-service/*.test.mjs
   browser-smoke:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +36,7 @@ jobs:
       - name: Run local browser smoke
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > "$RUNNER_TEMP/world-http.log" 2>&1 &
+          for attempt in {1..20}; do curl -fsS http://127.0.0.1:8765/hq1/ >/dev/null && break; sleep 1; done
           export PLAYWRIGHT_ROOT="$RUNNER_TEMP/world-smoke"
           node scripts/world-release-smoke.mjs
       - uses: actions/upload-artifact@v4
