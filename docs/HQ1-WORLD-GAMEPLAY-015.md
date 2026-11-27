@@ -1,0 +1,11 @@
+# World Gameplay Engine 001 — Portland adapter (HQ1 Build 015)
+Base: HQ1 Build 014, f93ba1f0cd2676b67eee657d3c4d6b4713bbedf1 (PR #27, validation 45933544925 succeeded). Founder authorized sharing non-city gameplay across HQ1 and HQ2. This phase supersedes the prior planned traffic-only Build 015; traffic and pedestrians remain upcoming.
+
+## Shared layer
+Canonical source path within current hosting repository: world/gameplay/. Twelve identical files (including CSS and tests) are also present in the separately based Washington adapter review. Shared modules own wet/dry vehicle dynamics with injected road predicate, vehicle/cockpit rendering (both driving sides), driving camera and input mapping, gamepad icons/style, windshield and wiper simulation, audio, city weather rendering, rain, and road geometry helpers. City adapters own roads, spawning, local weather station/time, materials, venue interactions and collision data. No relocation of existing city hosting, DNS changes, ownership or payment changes. This is a reusable browser gameplay layer, not a replacement for the protected cosmic World or Godot source.
+
+## Portland
+Local module paths remain as compatibility adapters. Existing Javan models, positions, MAX/airport, venues and Portland geometry are untouched. Existing rain splash bounds remain supplied by Portland. Controls and cockpit mechanics use the shared source. Washington is based on its own latest HQ2 Build 012 and uses separate mapped roads. Do not merge redundant old branches or allow the shared engine to fork: coordinate one integration of the identical shared files and each city's adapter; review later head changes first.
+
+## Verification
+Four shared model tests passed in isolated JS; nine existing Portland fleet/lot/windshield tests passed against extracted modules. Shared files compared byte-identical across city branches (12/12). Syntax of shared JS and HQ1 activities checked with module declarations stripped. Full CI, browser rendering, sound, iPhone and F310 testing still pending. No merge or deployment. Next: coordinated preview, both-city control regression checks, shared passenger transport, traffic and pedestrians, then city-specific expansion.
