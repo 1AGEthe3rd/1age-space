@@ -60,7 +60,7 @@ export function createDCDriver({scene,camera,clear,fitsRoad,onExit}){
     activate,toggle,suspend,pause,get driving(){return driving},get cockpit(){return driving&&view===2},
     clearWalk(x,z){return !occupiedVehicle(car,x,z);},
     frame(dt,keys,controls,pad,edges,seconds,wet,enabled){
-      if(!enabled){suspend();return false;}
+      if(!enabled){pause();ui.render(false,'',car,views[view],audio.enabled);return false;}
       near=!driving&&nearDoor();
       if(driving)for(const code of controllerDriveCodes(edges))toggle(code);
       const input=driving?drivingInput(keys,controls,ui.pedals,pad,wet):{gas:0,brake:0,steer:0,wet};
