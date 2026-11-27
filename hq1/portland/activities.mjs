@@ -53,6 +53,7 @@ export function createActivities(scene,camera,clear) {
   return {
     interact(){if(driving||near){activate();return true;}return false;},
     toggle,
+    isCockpit(){return driving&&view===2;},
     takeExitYaw(){const value=lastExitYaw;lastExitYaw=null;return value;},
     frame(dt,keys,controls,pad,edges,seconds){
       if(document.querySelector('dialog[open]'))return true;
