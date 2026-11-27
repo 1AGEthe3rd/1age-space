@@ -1,10 +1,12 @@
-import {attachCitySky} from '../space/shared/weather/city-sky.mjs';
+import {attachWorldSky} from '../world/gameplay/city-sky.mjs';
+import {roadContains} from '../world/gameplay/road-geometry.mjs';
+import {createDCDriver,fitsCityRoad,gatewayDemo} from './world-driving.mjs';
 import {createMetro} from './metro.mjs';
 import {suites,createInterior} from './interiors.mjs';
 import * as THREE from '../space/shared/three.module.js';
 import {subscribeInput} from '../space/shared/gamepad.mjs';
-import {emptyInput} from '../space/shared/gamepad-model.mjs';
-import {makeTile,segmentDistance,updateWater} from './streets.mjs';
+import {emptyInput,PadReader} from '../space/shared/gamepad-model.mjs';
+import {makeTile,segmentDistance,updateWater,cityRoadMaterials} from './streets.mjs';
 import {intersectionSigns,nearestIntersection} from './signs.mjs';
 
 const $ = selector => document.querySelector(selector);
@@ -21,6 +23,9 @@ let pointer, current, tileCenter, travel=0, last=0, lastNearby=0, moving=false;
 const markers=[];
 const doorSuites=new Map();
 const failures = new Map();
+let driver;
+const drivePadReader=new PadReader();
+const drivePreview=new URLSearchParams(location.search).get('drivePreview')==='1';
 
 async function json(path) {
   const result=await fetch(new URL(path,import.meta.url));
@@ -128,6 +133,17 @@ function surface(x,z) {
   if(blocked||(river&&!onFootpath)) return null;
   return deck;
 }
+function citySegments(x,z){return (collisionTiles(x,z)||[]).flatMap(tile=>tile.driveSegments||[]);}
+function flatRoad(x,z){return surface(x,z)===0;}
+function fitsRoad(x,z,h){return fitsCityRoad(x,z,h,citySegments(x,z),flatRoad);}
+function rainSplash(cx,cz){
+  const x=cx+Math.random()*18-9,z=cz+Math.random()*18-9;
+  return flatRoad(x,z)&&roadContains(citySegments(x,z),x,z)?{x,y:.105,z}:null;
+}
+function prepareDrive(){
+  if(!drivePreview||driver||indoor||!fitsRoad(gatewayDemo.x,gatewayDemo.z,gatewayDemo.heading))return;
+  driver=createDCDriver({scene,camera,clear:(x,z)=>surface(x,z)!==null,fitsRoad,onExit:h=>{yaw=h;pitch=0;}});
+}
 function intersectionRecord(corner) {
   return {
     id:'intersection-'+corner.osmNode,
@@ -204,6 +220,7 @@ function pickupPreview() {
 }
 let metro;
 function enterMetro(row) {
+  driver?.suspend();
   details.close();
   ++travel;
   status.hidden=true;
@@ -251,6 +268,7 @@ function boardMetro() {
 }
 function enterSuite(suite) {
   if(suite.type==='dispensary'&&!adultConfirmed) return requestDispensaryEntry(suite);
+  driver?.suspend();
   details.close();
   streetPose={position:camera.position.clone(),yaw,pitch,moving};
   if(!rooms.has(suite)) rooms.set(suite,createInterior(suite));
@@ -366,6 +384,7 @@ function showPlace(row) {
   details.showModal();
 }
 async function arrive(row,{historyMode=true,focus=true}={}) {
+  driver?.suspend();
   const request=++travel;
   moving=false;
   status.hidden=false;
@@ -401,6 +420,7 @@ async function arrive(row,{historyMode=true,focus=true}={}) {
   moving=true;
   if(focus) renderer.domElement.focus({preventScroll:true});
   refreshTiles(...position);
+  prepareDrive();
 }
 function makeStorefrontSign(sign) {
   const canvas=document.createElement('canvas');
@@ -481,7 +501,14 @@ function frame(now) {
   const dt=Math.min(.05,(now-(last||now))/1000);
   const railDt=(now-(last||now))/1000;
   last=now;
-  if(moving&&!places.open&&!details.open) {
+  const active=moving&&!indoor&&!places.open&&!details.open;
+  let pads=[];try{pads=navigator.getGamepads?.()||[];}catch{}
+  const sampled=drivePadReader.sample(pads,active&&!document.hidden&&document.hasFocus());
+  const physical=drivePadReader.armed?Array.from(pads).find(p=>p?.connected&&p.mapping==='standard'&&p.index===drivePadReader.index):null;
+  if(active&&sampled.edges.includes(0)&&!document.activeElement?.matches('button,a,input'))driver?.activate();
+  const driving=driver?.frame(dt,keys,input,physical,sampled.edges,now/1000,weatherTick.isRaining(),active)??false;
+  if(driving){nearby.hidden=true;refreshTiles(camera.position.x,camera.position.z);}
+  else if(moving&&!places.open&&!details.open) {
     const x=Number(keys.has('KeyD')||keys.has('ArrowRight'))-Number(keys.has('KeyA')||keys.has('ArrowLeft'))+input.move.x;
     const z=Number(keys.has('KeyS')||keys.has('ArrowDown'))-Number(keys.has('KeyW')||keys.has('ArrowUp'))+input.move.y;
     yaw-=input.look.x*2*dt;
@@ -489,8 +516,8 @@ function frame(now) {
     const factor=5.8*dt/Math.max(1,Math.hypot(x,z));
     const px=camera.position.x+(Math.cos(yaw)*x+Math.sin(yaw)*z)*factor;
     const pz=camera.position.z+(-Math.sin(yaw)*x+Math.cos(yaw)*z)*factor;
-    if(surface(px,camera.position.z)!==null) camera.position.x=px;
-    if(surface(camera.position.x,pz)!==null) camera.position.z=pz;
+    if(surface(px,camera.position.z)!==null&&(indoor||!driver||driver.clearWalk(px,camera.position.z))) camera.position.x=px;
+    if(surface(camera.position.x,pz)!==null&&(indoor||!driver||driver.clearWalk(camera.position.x,pz))) camera.position.z=pz;
     const floor=surface(camera.position.x,camera.position.z)||0;
     camera.position.y=THREE.MathUtils.lerp(camera.position.y,1.68+floor,Math.min(1,12*dt));
     camera.rotation.set(pitch,yaw,0,'YXZ');
@@ -518,7 +545,7 @@ function frame(now) {
     }
   }
   for(const marker of markers) marker.visible=(marker.userData.streetPosition||marker.position).distanceTo(camera.position)<115;
-  weatherTick(dt,camera,Boolean(indoor));
+  weatherTick(dt,camera,Boolean(indoor),driver?.cockpit??false);
   if(!indoor){
     const uniforms=skyMesh.material.uniforms;
     uniforms.skyColor.value.copy(scene.background);
@@ -539,8 +566,10 @@ function bind(canvas) {
   const movementKeys=new Set(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowLeft','ArrowDown','ArrowRight']);
   addEventListener('keydown',event=>{
     if(places.open||details.open||event.target.closest?.('button,input,a')) return;
-    if(movementKeys.has(event.code)) {event.preventDefault();keys.add(event.code);}
+    if(movementKeys.has(event.code)||(driver?.driving&&event.code==='Space')) {event.preventDefault();keys.add(event.code);}
+    if(!event.repeat&&!indoor)driver?.toggle(event.code);
     if(event.code==='KeyE'&&!event.repeat) {
+      if(!indoor&&driver?.activate())return;
       if(metro&&indoor===metro) boardMetro();
       else if(current) activate(current);
     }
@@ -564,7 +593,7 @@ function bind(canvas) {
   });
   for(const name of ['pointerup','pointercancel','lostpointercapture']) canvas.addEventListener(name,event=>{
     if(pointer?.id!==event.pointerId) return;
-    if(name==='pointerup'&&pointer.distance<7) {
+    if(name==='pointerup'&&pointer.distance<7&&!driver?.driving) {
       const bounds=canvas.getBoundingClientRect();
       ray.setFromCamera(new THREE.Vector2(2*(event.clientX-bounds.left)/bounds.width-1,1-2*(event.clientY-bounds.top)/bounds.height),camera);
       const hit=ray.intersectObjects(indoor?indoor.stations:markers).find(item=>item.object.visible&&item.distance<(indoor?4:24));
@@ -622,8 +651,10 @@ async function start() {
   scene.add(light);
   skyMesh=skyDome();
   daylight=light;
-  weatherTick=attachCitySky({scene,sun:light,ambient,station:'KDCA',latitude:38.86,longitude:-76.99,
-    timeZone:'America/New_York',status:weatherLabel});
+  const requestedWeather=new URLSearchParams(location.search).get('weatherPreview');
+  const preview=['rain','clear','snow','cloud'].includes(requestedWeather)?requestedWeather:null;
+  weatherTick=attachWorldSky({scene,sun:light,ambient,station:'KDCA',latitude:38.86,longitude:-76.99,
+    timeZone:'America/New_York',status:weatherLabel,roadMaterials:cityRoadMaterials,sampleSplash:rainSplash,preview});
   streetscape();
   const station=record('anacostia-metro');
   const [sx,sz]=station.arrival;
