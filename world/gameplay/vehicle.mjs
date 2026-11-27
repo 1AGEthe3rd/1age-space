@@ -60,11 +60,12 @@ export function createWorldVehicle(scene,x,z,heading,bodyColor,profile=null,fits
     function lamp(z,y,color,w){return part(side*.67,y,z,w,.15,.06,color).material}
     lamps.push({side,front:lamp(-2.07,.86,'#fff0bb',.35),stop:lamp(2.08,.91,'#951f25',.28),back:lamp(2.08,.71,'#a7abad',.17),turn:[lamp(-2.08,.65,'#9b6229',.18),lamp(2.08,1.09,'#9b6229',.18)]});
   }
+  const driverSide=profile?.rightHandDrive===false?-1:1;
   const cabin=new T.Group();group.add(cabin);cabin.visible=false;
   part(0,1.18,-1.56,1.73,.19,.43,'#343a39',cabin);
-  part(.49,1.31,-1.49,.43,.13,.10,'#202727',cabin);
+  part(driverSide*.49,1.31,-1.49,.43,.13,.10,'#202727',cabin);
   const gauges=[];
-  for(const x of [.39,.59]){
+  for(const x of [driverSide*.39,driverSide*.59]){
     const gauge=new T.Mesh(new T.CircleGeometry(.065,16),new T.MeshBasicMaterial({color:'#b1c2ad'}));
     gauge.position.set(x,1.37,-1.43);cabin.add(gauge);
     const dial=new T.Group();dial.position.set(x,1.37,-1.422);cabin.add(dial);
@@ -76,7 +77,7 @@ export function createWorldVehicle(scene,x,z,heading,bodyColor,profile=null,fits
     for(const z of [-1.76,.11,1.87])part(side*.82,1.52,z,.10,.76,.12,'#303633',cabin);
     part(side*.86,1.20,0,.08,.19,3.5,'#353d39',cabin);
   }
-  const wheel=new T.Group();wheel.position.set(.48,1.37,-1.31);wheel.rotation.x=-.26;cabin.add(wheel);
+  const wheel=new T.Group();wheel.position.set(driverSide*.48,1.37,-1.31);wheel.rotation.x=-.26;cabin.add(wheel);
   const rim=new T.Mesh(new T.TorusGeometry(.19,.025,8,28),new T.MeshStandardMaterial({color:'#222826'}));wheel.add(rim);
   const spokes=new T.Group();wheel.add(spokes);
   part(0,0,0,.32,.038,.032,'#292d2b',spokes);part(0,-.08,0,.038,.15,.032,'#292d2b',spokes);
@@ -89,6 +90,7 @@ export function createWorldVehicle(scene,x,z,heading,bodyColor,profile=null,fits
   beam.position.set(0,.9,-1.9);beam.target.position.set(0,.02,-13);group.add(beam,beam.target);
   const car={x,z,heading,speed:0,steer:0,reverse:false,lights:false,signal:0,wiperMode:0};
   if(profile)car.demoId=profile.id;
+  car.driverSide=driverSide;
   function paint(mat,color,on){mat.emissive.set(on?color:0x000000);}
   function update(dt,input,now,parked) {
     stepVehicle(car,input,dt,parked,fitsRoad);
