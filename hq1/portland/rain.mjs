@@ -40,7 +40,7 @@ export function createPortlandRain(T,scene,roadMaterials=new Set()){
       material.roughness=wet?.38:dry.roughness;
     }
   }
-  function frame(dt,camera,active){
+  function frame(dt,camera,active,cockpit=false){
     dt=Math.max(0,Math.min(.05,Number.isFinite(dt)?dt:0));
     streaks.visible=active&&count>0;
     if(!active){
@@ -55,7 +55,10 @@ export function createPortlandRain(T,scene,roadMaterials=new Set()){
       if(p.y<0||p.x< -13){
         p.y=14;p.x=Math.random()*26-13;p.z=Math.random()*26-13;
       }
-      positions.set([p.x+.13*p.length,p.y+p.length,p.z,p.x,p.y,p.z],i*6);
+      // Exclude the immediate passenger camera area; keep distant rain visible.
+      const outsideCockpit=!cockpit||p.x*p.x+p.z*p.z>6.25;
+      if(outsideCockpit)positions.set([p.x+.13*p.length,p.y+p.length,p.z,p.x,p.y,p.z],i*6);
+      else positions.set([p.x,p.y,p.z,p.x,p.y,p.z],i*6);
     }
     attribute.needsUpdate=true;
     // Splash rings are restricted to the known central MLK roadway.
