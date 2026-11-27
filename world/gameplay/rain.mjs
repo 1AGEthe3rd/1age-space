@@ -37,7 +37,7 @@ export function createWorldRain(T,scene,roadMaterials=new Set(),sampleSplash=()=
     for(const [material,dry] of surfaces){
       material.color.copy(dry.color);
       if(wet)material.color.multiplyScalar(.73);
-      material.roughness=wet?.38:dry.roughness;
+      if(typeof dry.roughness==='number')material.roughness=wet?.38:dry.roughness;
     }
   }
   function frame(dt,camera,active,cockpit=false){
