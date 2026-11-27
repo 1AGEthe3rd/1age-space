@@ -1,5 +1,6 @@
 import {attachCitySky} from '../space/shared/weather/city-sky.mjs';
 import {createMetro} from './metro.mjs';
+import {exitDestination,airportUrl,TRANSFER} from './metro-network.mjs';
 import {suites,createInterior} from './interiors.mjs';
 import * as THREE from '../space/shared/three.module.js';
 import {subscribeInput} from '../space/shared/gamepad.mjs';
@@ -162,9 +163,9 @@ function populateList() {
   rows.push(...[...destinations.values()].filter(row=>!row.arrival));
   for(const row of rows) {
     const subtitle=row.property ? row.property.address.line1 : row.address ? row.kind+' · '+row.address : row.district;
-    if(!`${row.name} ${row.shortName||''} ${row.railStop?'Green Line platform':''} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
+    if(!`${row.name} ${row.shortName||''} ${row.railStop?railName(row)+' platform':''} ${subtitle} ${row.property?.description||''}`.toLowerCase().includes(needle)) continue;
     const button=label('button',row.name,list);
-    label('small',subtitle+(row.railStop?' · Green Line platform':row.arrival?'':' · '+(row.property || row.address ? 'Catalog only' : 'Planned')),button);
+    label('small',subtitle+(row.railStop?' · '+railName(row)+' platform':row.arrival?'':' · '+(row.property || row.address ? 'Catalog only' : 'Planned')),button);
     button.addEventListener('click',()=>{
       places.close();
       if(row.arrival && !row.property && !row.address && row.kind!=='intersection'&&row.id!=='anacostia-metro') arrive(row);
@@ -203,11 +204,15 @@ function pickupPreview() {
   details.showModal();
 }
 let metro;
+const metroScenes=new Map();
+const railName=row=>row.railLine==='yellow'?'Yellow Line':'Green Line';
 function enterMetro(row) {
   details.close();
   ++travel;
   status.hidden=true;
-  metro??=createMetro();
+  const line=row.railLine||'green';
+  if(!metroScenes.has(line))metroScenes.set(line,createMetro(line));
+  metro=metroScenes.get(line);
   metro.reset(row.railStop);railDisplay='';
   indoor=metro;
   moving=true;current=null;nearby.hidden=true;
@@ -218,21 +223,27 @@ function enterMetro(row) {
   updateMetro();
 }
 function leaveMetro() {
+  const exit=metro&&exitDestination(metro.line,metro.name);
+  if(!metro?.atStreet||!exit)return;
+  if(exit==='airport'){location.assign(airportUrl);return;}
   indoor=null;current=null;nearby.hidden=true;
   $('#rail-actions').hidden=true;
   $('#map-button').hidden=false;
   $('#exit-suite').hidden=true;
   $('h1').textContent='Historic Anacostia';
-  arrive(record(metro.name==='Navy Yard–Ballpark'?'navy-yard-half-street':'anacostia-metro'));
+  arrive(record(exit));
 }
 let railDisplay='';
 function updateMetro() {
-  const display=[metro.name,metro.next,metro.aboard,metro.riding,Math.abs(camera.position.z)>3].join('|');
+  const display=[metro.line,metro.name,metro.next,metro.aboard,metro.riding,Math.abs(camera.position.z)>3].join('|');
   if(display===railDisplay) return;
   railDisplay=display;
   $('h1').textContent=metro.riding?'Next · '+metro.next:metro.name;
-  $('#current-street').textContent='Green Line · Virtual service';
+  $('#current-street').textContent=metro.lineName+' · Virtual service';
   $('#exit-suite').hidden=!metro.atStreet;
+  $('#exit-suite').textContent=exitDestination(metro.line,metro.name)==='airport'?'Enter virtual airport':'Return to street';
+  $('#rail-transfer').hidden=!metro.transfer;
+  if(metro.transfer)$('#rail-transfer').textContent='Transfer to '+(metro.transfer==='yellow'?'Yellow':'Green')+' Line';
   $('#rail-actions').hidden=false;
   for(const [id,dir] of [['rail-north',-1],['rail-south',1]]) {
     const button=$('#'+id), next=metro.adjacent(dir);
@@ -262,6 +273,7 @@ function enterSuite(suite) {
   $('h1').textContent=suite.title;
   $('#map-button').hidden=true;
   $('#exit-suite').hidden=false;
+  $('#exit-suite').textContent='Return to street';
   renderer.domElement.focus();
 }
 function exitSuite() {
@@ -338,8 +350,8 @@ function showPlace(row) {
     }
     link('Shared catalog record','../catalog.html?property='+encodeURIComponent(property.id),body);
   } else {
-    label('p',row.address ? row.kind+' · '+row.address : row.district + (row.railStop ? ' · Green Line platform' : row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
-    if(row.railStop) label('button','Enter Green Line platform',body).onclick=()=>enterMetro(row);
+    label('p',row.address ? row.kind+' · '+row.address : row.district + (row.railStop ? ' · '+railName(row)+' platform' : row.arrival ? ' · Public exterior' : ' · Planned destination'),body);
+    if(row.railStop) label('button','Enter '+railName(row)+' platform',body).onclick=()=>enterMetro(row);
     if(row.id==='navy-yard-half-street') label('button','Enter Green Line platform',body).onclick=()=>enterMetro(record('navy-yard-ballpark'));
     const suite=suites.find(item=>item.parent===row.id);
     if(suite) {
@@ -575,6 +587,7 @@ function bind(canvas) {
   $('#map-button').addEventListener('click',()=>{keys.clear();populateList();places.showModal();});
   nearby.addEventListener('click',()=>metro&&indoor===metro?boardMetro():activate(current));
   for(const [id,dir] of [['rail-north',-1],['rail-south',1]]) $('#'+id).onclick=()=>{metro.depart(dir);updateMetro();renderer.domElement.focus();};
+  $('#rail-transfer').onclick=()=>{if(metro?.transfer)enterMetro({railStop:TRANSFER,railLine:metro.transfer});};
   $('#place-search').addEventListener('input',populateList);
   for(const dialog of [places,details]) dialog.querySelector('.close').addEventListener('click',()=>dialog.close());
   addEventListener('resize',()=>{
