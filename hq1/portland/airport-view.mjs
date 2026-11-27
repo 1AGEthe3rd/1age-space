@@ -5,6 +5,7 @@ import {airports,createJourney} from './flight-model.mjs';
 import {buildPdxTerminal,pdxSpawn,pdxWalkable,nearPdxGate} from './pdx-terminal.mjs';
 import {buildDcaTerminal,dcaSpawn,dcaWalkable,nearDcaGate} from './dca-terminal.mjs';
 import {detailPassengerCabin} from './passenger-cabin.mjs';
+import {createDcaLife} from './dca-life.mjs';
 
 export function enterAirport(origin){
   const trip=createJourney(origin),scene=new T.Scene(),camera=new T.PerspectiveCamera(68,1,.08,1600);
@@ -41,6 +42,7 @@ export function enterAirport(origin){
     box(ground,x,5,z,28,10,30,'#b0b7b3');
     box(ground,x,10.2,z,31,.4,32,'#687a80');
   }
+  const dcaLife=origin==='dca'?createDcaLife(T,terminal,ground,box,sign,{low:matchMedia('(pointer:coarse)').matches||Boolean(navigator.deviceMemory&&navigator.deviceMemory<=4)}):null;
   const terrain=new T.Group();world.add(terrain);
   for(let i=0;i<42;i++){
     const x=(i%7-3)*155,z=Math.floor(i/7)*160-480;
@@ -147,6 +149,7 @@ export function enterAirport(origin){
     yaw-=input.look.x*dt*1.65;pitch=T.MathUtils.clamp(pitch-input.look.y*dt*1.3,-.8,.8);
     camera.rotation.set(pitch,yaw,0,'YXZ');
     const flying=trip.status==='flying',aboard=trip.status!=='terminal';
+    dcaLife?.update(dt,!aboard);
     world.position.y=-phase.altitude;
     // Keep ground motion continuous through the visible takeoff and landing phases.
     ground.position.z=flying?(trip.elapsed<22?trip.elapsed*18:trip.elapsed<57?396:(80-trip.elapsed)*17.2):0;
