@@ -10,7 +10,7 @@ export const stops = {
   jessup:{x:-8.4,z:-106.7,heading:.82},
   killingsworth:{x:-9.7,z:-51,heading:-.46},
   javan:{x:7.1,z:84,heading:Math.PI/2},
-  'javan-lot':{x:-16,z:104,heading:Math.PI/2},
+  'javan-lot':{x:-14.2,z:104,heading:Math.PI/2},
   retro:{x:9.1,z:-228,heading:-Math.PI/2}
 };
 export function buildShowrooms({box,sign,scene,material},blockers) {
