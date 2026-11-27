@@ -34,9 +34,12 @@ export function createVan(scene,x,z,heading,bodyColor) {
   const cabin=new T.Group();group.add(cabin);cabin.visible=false;
   part(0,1.18,-1.56,1.73,.19,.43,'#343a39',cabin);
   part(.49,1.31,-1.49,.43,.13,.10,'#202727',cabin);
+  const gauges=[];
   for(const x of [.39,.59]){
     const gauge=new T.Mesh(new T.CircleGeometry(.065,16),new T.MeshBasicMaterial({color:'#b1c2ad'}));
     gauge.position.set(x,1.37,-1.43);cabin.add(gauge);
+    const dial=new T.Group();dial.position.set(x,1.37,-1.422);cabin.add(dial);
+    part(0,.023,0,.008,.049,.008,'#e3a363',dial);gauges.push({gauge,dial});
   }
   for(const side of [-1,1]){
     part(side*.45,1.13,-.48,.62,.14,.53,'#525753',cabin);
@@ -67,6 +70,9 @@ export function createVan(scene,x,z,heading,bodyColor) {
     }
     beam.intensity=car.lights?36:0;
     spokes.rotation.z=car.steer*2.4;rim.rotation.z=car.steer*2.4;
+    gauges[0].dial.rotation.z=1.9-Math.min(1,Math.abs(car.speed)/10.7)*3.8;
+    gauges[1].dial.rotation.z=1.9-Math.min(1,.15+Math.abs(car.speed)/15+input.gas*.28)*3.8;
+    for(const {gauge} of gauges)gauge.material.color.set(car.lights?'#c0e6a9':'#68796b');
     windshield.frame(dt,cabin.visible,!!input.wet,car.wiperMode,car.speed,car.lights);
   }
   group.position.set(car.x,0,car.z);group.rotation.y=heading;
