@@ -2,7 +2,7 @@ import {createAirportCatalog,virtualRoutesFrom,travelPolicy} from './travel-cata
 import {createPublicHandoff,localDate} from './travel-request.mjs';
 // Optional accessible interaction for a physical 3D airport counter. City owns mesh,
 // trigger, focus and destination routing; this module does not change any city scene.
-export function createTravelCounter({origin,catalog=createAirportCatalog(),onVirtualRoute=()=>{},host=document.body,clock=Date.now}={}){
+export function createTravelCounter({origin,catalog=createAirportCatalog(),routes:routeCatalog,onVirtualRoute=null,host=document.body,clock=Date.now}={}){
   const airport=catalog.get(origin);
   if(!airport)throw Error('Unknown departure airport');
   const dialog=document.createElement('dialog');dialog.className='world-travel-counter';
@@ -13,9 +13,9 @@ export function createTravelCounter({origin,catalog=createAirportCatalog(),onVir
   element('p','Virtual trips and real-world airline searches are separate.');
   const virtual=element('section','');
   element('h3','Virtual travel',virtual);
-  const routes=virtualRoutesFrom(origin,catalog);
-  if(!routes.length)element('p','No published virtual routes from this airport.',virtual);
-  for(const route of routes)button('Virtual trip to '+route.destination,()=>{dialog.close();onVirtualRoute(route);},virtual);
+  const routes=virtualRoutesFrom(origin,catalog,routeCatalog);
+  if(!routes.length||typeof onVirtualRoute!=='function')element('p','Virtual travel connection unavailable at this counter.',virtual);
+  for(const route of routes)if(typeof onVirtualRoute==='function')button('Virtual trip to '+route.destination,()=>{dialog.close();onVirtualRoute(route);},virtual);
   const real=element('section','');element('h3','Real flight search',real);
   const form=element('form','',real);
   function field(name,type,value){
