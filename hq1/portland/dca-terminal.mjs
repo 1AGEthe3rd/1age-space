@@ -5,7 +5,7 @@
 export const dcaSpawn=Object.freeze({x:0,y:1.65,z:33});
 export const dcaGate=Object.freeze({x:0,z:-23,halfWidth:2.6,depth:2.8});
 export const dcaBounds=Object.freeze({minX:-13.7,maxX:13.7,minZ:-26.7,maxZ:36});
-const columns=Object.freeze([-22,-13,-4,5,14,23]);
+const columns=Object.freeze([-22.5,-13.5,-4.5,4.5,13.5,22.5]);
 export const dcaObstacles=Object.freeze([
  ...[-1,1].flatMap(side=>columns.map(z=>({x:side*11.8,z,w:.65,d:.65}))),
  ...[-1,1].flatMap(side=>[13,18].map(z=>({x:side*8.7,z,w:3.6,d:1.5}))),
