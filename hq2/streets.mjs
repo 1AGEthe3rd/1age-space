@@ -4,7 +4,8 @@ const wallTones = ['#ad735b', '#947365', '#ba8d6d', '#c1ac8b', '#9e6752', '#aa8b
 const pavement = ['motorway','trunk','primary','secondary','tertiary','residential','unclassified','living_street','service'];
 const materials = {
   opaque: new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}),
-  window: new THREE.MeshBasicMaterial({vertexColors:true, side:THREE.DoubleSide}),
+  window: new THREE.MeshStandardMaterial({vertexColors:true, side:THREE.DoubleSide, roughness:.31, metalness:.28, emissive:0x182329, emissiveIntensity:.17}),
+  trim: new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}),
   facade: new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide}),
   water: new THREE.MeshLambertMaterial({color:'#536f76', side:THREE.DoubleSide}),
 };
@@ -86,7 +87,15 @@ function instances(group,geometry,items) {
   group.add(mesh);
 }
 
-function building(shell,details,rings,id,design) {
+// Positive signed area means the existing left-hand normal points inward.
+// Rings can have either winding; choose an outward-facing facade consistently.
+export function facadeNormalSign(ring) {
+  let area=0;
+  for(let i=1;i<ring.length;i++) area+=ring[i-1][0]*ring[i][1]-ring[i][0]*ring[i-1][1];
+  return area>0?-1:1;
+}
+
+function building(shell,details,glass,rings,id,design) {
   const outer = rings[0];
   const width = Math.max(...outer.map(p=>p[0])) - Math.min(...outer.map(p=>p[0]));
   const depth = Math.max(...outer.map(p=>p[1])) - Math.min(...outer.map(p=>p[1]));
@@ -96,36 +105,49 @@ function building(shell,details,rings,id,design) {
   const color = design?.wall || wallTones[seed%wallTones.length];
   shell.polygon(rings,height,'#514e49');
   for (const ring of rings) {
+    const normalSign=facadeNormalSign(ring)*(ring===outer?1:-1);
     for (let i=1; i<ring.length; i++) {
       const [x,z] = ring[i-1];
       const [u,v] = ring[i];
       const length = Math.hypot(u-x,v-z);
       if (length < .32) continue;
       const dx=(u-x)/length, dz=(v-z)/length;
-      const wall = (batch, from, to, bottom, top, offset, paint) => batch.quad(
-        [x+dx*from-dz*offset,bottom,z+dz*from+dx*offset],
-        [x+dx*to-dz*offset,bottom,z+dz*to+dx*offset],
-        [x+dx*to-dz*offset,top,z+dz*to+dx*offset],
-        [x+dx*from-dz*offset,top,z+dz*from+dx*offset],paint,
-      );
+      const point=(along,y,offset)=>[x+dx*along-dz*offset*normalSign,y,z+dz*along+dx*offset*normalSign];
+      const wall=(batch,from,to,bottom,top,offset,paint)=>{
+        if(to<=from||top<=bottom) return;
+        const a=point(from,bottom,offset),b=point(to,bottom,offset),c=point(to,top,offset),d=point(from,top,offset);
+        // Keep normals toward the exterior for realistic lighting.
+        if(normalSign<0) batch.quad(a,b,c,d,paint); else batch.quad(d,c,b,a,paint);
+      };
+      const sill=(batch,from,to,y,back,front,paint)=>batch.quad(point(from,y,back),point(to,y,back),point(to,y,front),point(from,y,front),paint);
       wall(shell,0,length,0,height,0,color);
       wall(shell,0,length,0,.42,.012,'#6c6861');
       wall(shell,0,length,height-.34,height+.03,.04,design?.trim || '#c4b6a4');
+      wall(shell,0,length,height-.10,height+.09,.11,'#756c5f');
+      sill(shell,0,length,height+.09,0,.11,'#9d9486');
       if (length < 2.1 || width*depth < 35 || ring !== outer) continue;
       const bays = Math.floor(length/(design?.commercial ? 2.7 : 2.75)) || 1;
       const step = length/bays;
       for (let floor=0;floor<stories;floor++) {
         const shop = floor===0 && design?.commercial;
-      if (shop) wall(shell,0,length,2.69,2.9,.038,design.trim||'#6c6254');
+        if(shop) wall(shell,0,length,2.69,2.9,.038,design.trim||'#6c6254');
+        else if(floor>0) wall(details,0,length,floor*3.05+.14,floor*3.05+.23,.045,design?.trim||color);
         for (let bay=0;bay<bays;bay++) {
           const center=step*(bay+.5), half=step*(shop ? .40 : .255);
           const y=floor*3.05+(shop ? .22 : 1);
           const upper=y+(shop ? 2.22 : 1.45);
-          wall(details,center-half,center+half,y,upper,.033,shop ? '#413d35' : '#ddd0bb');
-          wall(details,center-half+.075,center+half-.075,y+.078,upper-.075,.055,
-            shop ? (bay%3===0 ? '#647b76' : '#344945') : (bay%3===0 ? '#627272' : '#3f545b'));
-          wall(details,center-.025,center+.025,y,upper,.066,shop ? '#b7af9b' : '#c0b5a6');
-          wall(details,center-half,center+half,upper-.41,upper-.365,.065,'#a5a899');
+          const a=center-half,b=center+half;
+          const frame=shop?'#4b4540':(design?.trim||'#c2b39e');
+          wall(details,a,b,y,upper,.034,frame);
+          wall(glass,a+.075,b-.075,y+.078,upper-.075,.055,
+            shop ? (bay%3===0 ? '#52696a' : '#263b42') : (bay%3===0 ? '#667c87' : '#405762'));
+          // A narrow upper reflection band and projecting mullions add depth without textures.
+          wall(glass,a+.075,b-.075,upper-.23,upper-.075,.059,'#81979f');
+          wall(details,center-.026,center+.026,y,upper,.078,frame);
+          wall(details,a,b,upper-.41,upper-.365,.078,frame);
+          wall(details,a-.055,b+.055,y-.075,y+.015,.105,frame);
+          sill(details,a-.055,b+.055,y+.015,.035,.105,frame);
+          if(!shop) wall(details,a-.045,b+.045,upper,upper+.075,.073,frame);
         }
       }
     }
@@ -232,7 +254,7 @@ function road(batch,kind,width,bridge,points,fixtures,decks) {
 
 export function makeTile(data,designs,detailed) {
   const group=new THREE.Group();
-  const ground=new Batch(), markings=new Batch(), shell=new Batch(), details=new Batch(), river=new Batch();
+  const ground=new Batch(), markings=new Batch(), shell=new Batch(), details=new Batch(), glass=new Batch(), river=new Batch();
   const fixtures=[], foliage=[], blockers=[], water=[], decks=[];
   for (const rings of data.osm.parks) ground.polygon(rings,.007,'#788053');
   for (const [kind,rings] of data.dc.surfaces) {
@@ -250,7 +272,7 @@ export function makeTile(data,designs,detailed) {
   for (const [id,rings] of data.dc.buildings) {
     const design=designs[id];
     if (!design?.open) blockers.push(collider(rings));
-    building(shell,details,rings,id,design);
+    building(shell,details,glass,rings,id,design);
   }
   for (const [kind,x,z] of data.osm.props) {
     if (kind==='tree') {
@@ -273,7 +295,12 @@ export function makeTile(data,designs,detailed) {
   ground.mesh(materials.opaque,group);
   markings.mesh(materials.opaque,group);
   shell.mesh(materials.facade,group);
-  const trim = detailed ? details.mesh(materials.window,group) : null;
+  const trim = detailed ? new THREE.Group() : null;
+  if(trim) {
+    details.mesh(materials.trim,trim);
+    glass.mesh(materials.window,trim);
+    group.add(trim);
+  }
   instances(group,box,fixtures);
   instances(group,crown,foliage);
   return {group,trim,blockers,water,decks};
