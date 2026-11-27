@@ -112,8 +112,8 @@ export function buildDcaTerminal(T,terminal,createBox,sign,destination){
  glazing(0,3.65,-27,28,7.3,.12);
  for(let x=-12;x<=12;x+=3)box(terminal,x,3.65,-27,.15,7.3,.15,metal);
  box(terminal,0,1.45,-26.85,5.4,2.9,.12,'#425a64');
- sign(terminal,'RONALD REAGAN WASHINGTON NATIONAL',0,4.75,27.18,12);
- sign(terminal,'DCA · Virtual National Hall',0,5.1,21,10);
+ sign(terminal,'DCA · REAGAN NATIONAL',0,3.75,27.18,3.5);
+ sign(terminal,'DCA · Virtual National Hall',0,4.6,21,6.2);
  sign(terminal,'Ticketing · Information',0,4.4,9,8);
  sign(terminal,'World Flight · '+destination,0,4,-23,8);
  // Raise terminal surfaces slightly above the existing shared ground to prevent z-fighting.
