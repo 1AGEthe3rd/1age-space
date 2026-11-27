@@ -12,7 +12,7 @@ export function localDate(now,timeZone){
 export function createTravelRequest(input,{now=Date.now(),catalog=createAirportCatalog()}={}){
   if(!input||typeof input!=='object'||!Number.isFinite(now))throw new TypeError('Invalid travel request');
   const origin=input.origin,destination=input.destination,airport=catalog.get(origin);
-  if(!airport||!airportCode.test(origin)||!airportCode.test(destination)||origin===destination)throw new TypeError('Choose distinct airports');
+  if(!airport||typeof origin!=='string'||typeof destination!=='string'||!airportCode.test(origin)||!airportCode.test(destination)||origin===destination)throw new TypeError('Choose distinct airports');
   // Unknown destination codes may be entered as search terms only; real providers must verify them.
   const outbound=input.outbound,returnDate=input.returnDate||null,adults=input.adults;
   if(!calendarDate(outbound)||outbound<localDate(now,airport.timeZone)||returnDate&&(!calendarDate(returnDate)||returnDate<outbound))throw new TypeError('Choose valid travel dates');
