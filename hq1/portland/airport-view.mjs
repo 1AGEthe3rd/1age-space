@@ -6,6 +6,8 @@ import {buildPdxTerminal,pdxSpawn,pdxWalkable,nearPdxGate} from './pdx-terminal.
 import {buildDcaTerminal,dcaSpawn,dcaWalkable,nearDcaGate} from './dca-terminal.mjs';
 import {detailPassengerCabin} from './passenger-cabin.mjs';
 import {createDcaLife} from './dca-life.mjs';
+import {createVirtualFlightBoard} from '../../world/gameplay/travel-flight-board.mjs';
+import {createTravelCounter} from '../../world/gameplay/travel-counter.mjs';
 
 export function enterAirport(origin){
   const trip=createJourney(origin),scene=new T.Scene(),camera=new T.PerspectiveCamera(68,1,.08,1600);
@@ -31,6 +33,11 @@ export function enterAirport(origin){
   const terminal=new T.Group();scene.add(terminal);
   if(origin==='pdx')buildPdxTerminal(T,terminal,box,sign,airports[trip.destination].code);
   else buildDcaTerminal(T,terminal,box,sign,airports[trip.destination].code);
+  const airportCode=airports[origin].code;
+  const flightBoard=createVirtualFlightBoard(T,{origin:airportCode});
+  const boardGeometry=new T.PlaneGeometry(6,3);
+  const boardFace=new T.Mesh(boardGeometry,flightBoard.material);
+  boardFace.position.set(4.6,3.05,origin==='pdx'?6:12);terminal.add(boardFace);
   const world=new T.Group();scene.add(world);
   const ground=new T.Group();world.add(ground);
   box(ground,0,-.6,0,1000,1,1600,'#82937b');
@@ -85,6 +92,7 @@ export function enterAirport(origin){
   const status=document.createElement('output');status.setAttribute('aria-live','polite');panel.append(status);
   const action=document.createElement('button');action.type='button';panel.append(action);
   const view=document.createElement('button');view.type='button';view.textContent='◉';view.setAttribute('aria-label','Switch passenger view');view.hidden=true;panel.append(view);
+  const travelButton=document.createElement('button');travelButton.type='button';travelButton.textContent='Travel services';panel.append(travelButton);
   const groundLink=document.createElement('a');panel.append(groundLink);
   document.body.append(panel);
   const title=document.querySelector('h1'),back=document.querySelector('header a');
@@ -97,8 +105,13 @@ export function enterAirport(origin){
   else camera.position.set(dcaSpawn.x,dcaSpawn.y,dcaSpawn.z);
   const keys=new Set(),reader=new PadReader();let input={move:{x:0,y:0},look:{x:0,y:0}};
   subscribeInput(v=>input=v);
+  const travelCounter=createTravelCounter({origin:airportCode,onVirtualRoute:()=>{keys.clear();reader.reset();travelButton.blur();action.focus({preventScroll:true});}});
+  travelButton.onclick=()=>{if(trip.status==='terminal'){keys.clear();reader.reset();travelCounter.open();}};
+  const modalOpen=()=>Boolean(document.querySelector('dialog[open]'));
+  addEventListener('pagehide',event=>{if(!event.persisted){travelCounter.dispose();flightBoard.dispose();boardGeometry.dispose();}});
   function nearGate(){return origin==='pdx'?nearPdxGate(camera.position.x,camera.position.z):nearDcaGate(camera.position.x,camera.position.z);}
   function board(){
+    if(modalOpen())return;
     if(trip.status==='terminal'&&nearGate()&&trip.board()){
       terminal.visible=false;plane.visible=true;camera.position.set(0,1.45,2);yaw=0;pitch=0;windowView=false;
     }else if(trip.status==='boarded'){trip.depart();}
@@ -107,13 +120,14 @@ export function enterAirport(origin){
     }
   }
   function switchView(){
+    if(modalOpen())return;
     if(trip.status==='terminal'||trip.status==='arrived')return;
     windowView=!windowView;
     camera.position.set(windowView?1.38:0,1.45,windowView?2.05:2);
     yaw=windowView?-Math.PI/2:0;pitch=windowView?-.13:0;
   }
   action.onclick=board;view.onclick=switchView;
-  addEventListener('keydown',e=>{if(e.target?.closest?.('button,a'))return;keys.add(e.code);if(!e.repeat&&e.code==='KeyE')board();if(!e.repeat&&e.code==='KeyV')switchView();});
+  addEventListener('keydown',e=>{if(modalOpen()||e.target?.closest?.('button,a,input,select'))return;keys.add(e.code);if(!e.repeat&&e.code==='KeyE')board();if(!e.repeat&&e.code==='KeyV')switchView();});
   addEventListener('keyup',e=>keys.delete(e.code));addEventListener('blur',()=>{keys.clear();reader.reset();});
   const canvas=renderer.domElement;let pointer=null;
   canvas.onpointerdown=e=>{if(e.button!==0||pointer!==null)return;pointer={id:e.pointerId,x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);};
@@ -124,11 +138,12 @@ export function enterAirport(origin){
   renderer.setAnimationLoop(now=>{
     const dt=Math.min(.05,Math.max(0,(now-(last||now))/1000));last=now;
     let pads=[];try{pads=navigator.getGamepads?.()||[];}catch{}
-    const pad=reader.sample(pads,!document.hidden&&document.hasFocus());
+    const modal=modalOpen();if(modal)keys.clear();
+    const pad=reader.sample(pads,!modal&&!document.hidden&&document.hasFocus());
     if(pad.edges.includes(0)&&!document.activeElement?.matches('button,a'))board();
     if(pad.edges.includes(10)||pad.edges.includes(11))switchView();
     trip.tick(dt);const phase=trip.sample();
-    const walking=trip.status==='terminal'||trip.status==='boarded';
+    const walking=!modal&&(trip.status==='terminal'||trip.status==='boarded');
     if(walking&&!windowView){
       const x=Number(keys.has('KeyD')||keys.has('ArrowRight'))-Number(keys.has('KeyA')||keys.has('ArrowLeft'))+input.move.x;
       const z=Number(keys.has('KeyS')||keys.has('ArrowDown'))-Number(keys.has('KeyW')||keys.has('ArrowUp'))+input.move.y;
@@ -146,7 +161,7 @@ export function enterAirport(origin){
         camera.position.z=T.MathUtils.clamp(nz,-9,9);
       }
     }
-    yaw-=input.look.x*dt*1.65;pitch=T.MathUtils.clamp(pitch-input.look.y*dt*1.3,-.8,.8);
+    if(!modal){yaw-=input.look.x*dt*1.65;pitch=T.MathUtils.clamp(pitch-input.look.y*dt*1.3,-.8,.8);}
     camera.rotation.set(pitch,yaw,0,'YXZ');
     const flying=trip.status==='flying',aboard=trip.status!=='terminal';
     dcaLife?.update(dt,!aboard);
@@ -162,7 +177,8 @@ export function enterAirport(origin){
     action.disabled=flying||(trip.status==='terminal'&&!nearGate());
     view.hidden=!aboard||trip.status==='arrived';
     groundLink.hidden=aboard;groundLink.href=origin==='pdx'?'?rail=red&station=portland-international-airport':'../hq2/?destination=dca-metro';groundLink.textContent=origin==='pdx'?'MAX Red Line':'Yellow Line · Metro';
-    back.hidden=aboard;
+    back.hidden=aboard;travelButton.hidden=aboard;
+    if(!aboard)flightBoard.paint();
     renderer.render(scene,camera);
   });
 }
