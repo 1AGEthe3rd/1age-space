@@ -1,5 +1,6 @@
 import * as T from '../../space/shared/three.module.js';
 import {stepVan} from './motor.mjs';
+import {attachWindshield} from './windshield.mjs';
 export function createVan(scene,x,z,heading,bodyColor) {
   const group=new T.Group();
   scene.add(group);
@@ -50,10 +51,11 @@ export function createVan(scene,x,z,heading,bodyColor) {
   part(0,0,.015,.09,.08,.045,'#424746',spokes);
   part(-.02,1.24,-.85,.06,.14,.06,'#262c29',cabin);
   part(0,1.82,-1.61,.25,.09,.06,'#282e2b',cabin);
+  const windshield=attachWindshield(T,cabin);
   function setCockpit(on){cabin.visible=on;shell.forEach(m=>m.visible=!on);}
   const beam=new T.SpotLight(0xffedc7,0,24,.48,.55,1);
   beam.position.set(0,.9,-1.9);beam.target.position.set(0,.02,-13);group.add(beam,beam.target);
-  const car={x,z,heading,speed:0,steer:0,reverse:false,lights:false,signal:0};
+  const car={x,z,heading,speed:0,steer:0,reverse:false,lights:false,signal:0,wiperMode:0};
   function paint(mat,color,on){mat.emissive.set(on?color:0x000000);}
   function update(dt,input,now,parked) {
     stepVan(car,input,dt,parked);
@@ -65,6 +67,7 @@ export function createVan(scene,x,z,heading,bodyColor) {
     }
     beam.intensity=car.lights?36:0;
     spokes.rotation.z=car.steer*2.4;rim.rotation.z=car.steer*2.4;
+    windshield.frame(dt,cabin.visible,!!input.wet,car.wiperMode,car.speed,car.lights);
   }
   group.position.set(car.x,0,car.z);group.rotation.y=heading;
   return {car,update,setCockpit};
