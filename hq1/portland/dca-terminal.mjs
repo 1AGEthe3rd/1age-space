@@ -22,7 +22,7 @@ export function nearDcaGate(x,z){
  return dcaWalkable(x,z)&&Math.abs(x-dcaGate.x)<dcaGate.halfWidth&&Math.abs(z-dcaGate.z)<dcaGate.depth;
 }
 export function buildDcaTerminal(T,terminal,createBox,sign,destination){
- const batches=new Map();
+ const batches=new Map(),beams=[];
  const gold='#c9a139',darkGold='#92702b',cream='#e8e2d1',metal='#64757b',stone='#363e43';
  function box(...args){
   const m=createBox(...args);if(!batches.has(m.material))batches.set(m.material,[]);
@@ -39,7 +39,7 @@ export function buildDcaTerminal(T,terminal,createBox,sign,destination){
   const start=new T.Vector3(...a),end=new T.Vector3(...b),v=end.clone().sub(start);
   const m=new T.Mesh(rod,beamMat);m.position.copy(start).addScaledVector(v,.5);
   m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),v.clone().normalize());
-  m.scale.set(r,v.length(),r);terminal.add(m);
+  m.scale.set(r,v.length(),r);m.updateMatrix();beams.push(m.matrix.clone());
  }
  // A polished dark public concourse with contrasting stone strips and original medallions.
  const floor=new T.Mesh(new T.BoxGeometry(28,.25,54),new T.MeshStandardMaterial({color:stone,roughness:.21,metalness:.12}));
@@ -112,10 +112,15 @@ export function buildDcaTerminal(T,terminal,createBox,sign,destination){
  glazing(0,3.65,-27,28,7.3,.12);
  for(let x=-12;x<=12;x+=3)box(terminal,x,3.65,-27,.15,7.3,.15,metal);
  box(terminal,0,1.45,-26.85,5.4,2.9,.12,'#425a64');
- sign(terminal,'RONALD REAGAN WASHINGTON NATIONAL',0,4.75,34.5,12);
+ sign(terminal,'RONALD REAGAN WASHINGTON NATIONAL',0,4.75,27.18,12);
  sign(terminal,'DCA · Virtual National Hall',0,5.1,21,10);
  sign(terminal,'Ticketing · Information',0,4.4,9,8);
  sign(terminal,'World Flight · '+destination,0,4,-23,8);
+ // Raise terminal surfaces slightly above the existing shared ground to prevent z-fighting.
+ terminal.position.y=.045;
+ const archBatch=new T.InstancedMesh(rod,beamMat,beams.length);
+ beams.forEach((matrix,i)=>archBatch.setMatrixAt(i,matrix));
+ archBatch.instanceMatrix.needsUpdate=true;terminal.add(archBatch);
  // Static opaque boxes are batched; no texture downloads or real-world floor plans.
  for(const [material,meshes] of batches){
   const batch=new T.InstancedMesh(meshes[0].geometry,material,meshes.length);
