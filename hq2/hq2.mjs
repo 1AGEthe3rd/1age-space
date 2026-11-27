@@ -569,7 +569,7 @@ function bind(canvas) {
     if(movementKeys.has(event.code)||(driver?.driving&&event.code==='Space')) {event.preventDefault();keys.add(event.code);}
     if(!event.repeat&&!indoor)driver?.toggle(event.code);
     if(event.code==='KeyE'&&!event.repeat) {
-      if(!indoor&&driver?.activate())return;
+      if(moving&&!indoor&&driver?.activate())return;
       if(metro&&indoor===metro) boardMetro();
       else if(current) activate(current);
     }
