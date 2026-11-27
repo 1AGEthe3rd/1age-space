@@ -27,10 +27,10 @@ export function createDriveAudio(){
       if(!context&&!init())return;
       enabled=true;const pending=context.resume();
       pending?.catch(()=>{enabled=false;silence();});
-    }catch{enabled=false;silence();}
+    }catch{enabled=false;silence();if(context){try{context.close().catch(()=>{});}catch{}context=null;engine=harmonic=road=filter=master=roadGain=null;}}
   }
   function frame(active,speed,gas,wet,cockpit){
-    if(!enabled||!active||!context||context.state!=='running'){silence();return;}
+    if(!enabled||!active||!context||!engine||!harmonic||!roadGain||!filter||!master||context.state!=='running'){silence();return;}
     const t=context.currentTime,v=Math.min(1,Math.abs(speed)/10.7),load=Math.max(0,Math.min(1,gas));
     const pitch=33+v*37+load*20;
     engine.frequency.setTargetAtTime(pitch,t,.09);harmonic.frequency.setTargetAtTime(pitch*2,t,.09);
