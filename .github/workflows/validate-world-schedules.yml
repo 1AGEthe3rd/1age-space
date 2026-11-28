@@ -19,4 +19,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test world/gameplay/schedules.test.mjs world/schedule-service/providers.test.mjs world/gameplay/travel.test.mjs world/gameplay/travel-flight.test.mjs
+      - run: node --test world/gameplay/schedules.test.mjs world/schedule-service/providers.test.mjs world/gameplay/travel.test.mjs world/gameplay/travel-flight.test.mjs world/schedule-service/live-server.test.mjs
